@@ -15,57 +15,9 @@
             "email": "hertzel@born-digital.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "library/openseadragon",
-                "version": "2.4.2",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/openseadragon/openseadragon/releases/download/v2.4.2/openseadragon-bin-2.4.2.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "library/pdf.js",
-                "version": "2.4.456",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/mozilla/pdf.js/releases/download/v2.4.456/pdfjs-2.4.456-dist.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "mjordan/islandora_workbench_integration",
-                "version": "1.0",
-                "type": "drupal-module",
-                "source": {
-                    "url": "https://github.com/mjordan/islandora_workbench_integration.git",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        }
-    ],
     "require": {
         "php": ">=7.2",
         "islandora/islandora_starter_theme": "*",
-        "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
         "drupal/admin_toolbar": "^2.4",
         "drupal/adminimal_theme": "1.x-dev",
@@ -139,41 +91,6 @@
         "drupal/drupal": "*"
     },
     "minimum-stability": "dev",
-    "config": {
-        "sort-packages": true,
-        "discard-changes": true
-    },
-    "autoload": {
-        "classmap": [
-            "scripts/composer/ScriptHandler.php"
-        ],
-        "files": [
-            "load.environment.php"
-        ]
-    },
-    "scripts": {
-        "pre-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "pre-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "post-install-cmd": [
-            "@composer drupal:scaffold",
-            "@create-symlinks",
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ],
-        "post-update-cmd": [
-            "@composer drupal:scaffold",
-            "@create-symlinks",
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ],
-        "create-symlinks": [
-            "mkdir -p web/sites/all/assets/vendor && ln -sf /var/www/drupal/web/libraries/openseadragon web/sites/all/assets/vendor/",
-            "mkdir -p web/sites/default/files/library-definitions",
-            "cp web/modules/contrib/openseadragon/openseadragon.json web/sites/default/files/library-definitions"
-        ]
-    },
     "extra": {
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
@@ -198,41 +115,6 @@
             "include": [
                 "web/modules/contrib/masonry/composer.libraries.json",
                 "web/modules/contrib/select2/select2.libraries.json"
-            ]
-        },
-        "installer-types": ["bower-asset", "npm-asset"],
-        "installer-paths": {
-            "web/core": [
-                "type:drupal-core"
-            ],
-            "web/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
-            ],
-            "web/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "web/modules/custom/{$name}": [
-                "type:drupal-module-custom"
-            ],
-            "web/modules/bd/{$name}": [
-                "type:drupal-module-bd"
-            ],
-            "web/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "web/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ],
-            "web/themes/custom/{$name}": [
-                "type:drupal-theme-custom"
-            ],
-            "drush/Commands/contrib/{$name}": [
-                "type:drupal-drush"
-            ],
-            "web/profiles/{$name}": [
-                "type:drupal-profile-custom"
             ]
         }
     }
