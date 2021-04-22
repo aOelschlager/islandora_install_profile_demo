@@ -17,9 +17,9 @@
     ],
     "require": {
         "php": ">=7.2",
+
         "cweagans/composer-patches": "^1.7",
         "drupal/admin_toolbar": "^2.4",
-        "drupal/adminimal_theme": "1.x-dev",
         "drupal/at_tools": "3.x-dev",
         "drupal/audit_log": "^2.0@alpha",
         "drupal/auto_entitylabel": "^3.0@beta",
