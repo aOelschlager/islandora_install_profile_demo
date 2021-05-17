@@ -2,8 +2,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.collection
     - core.entity_view_mode.node.rss
-    - core.entity_view_mode.node.teaser
   module:
     - node
     - user
@@ -26,28 +26,17 @@ display:
         options: {  }
       empty:
         area_text_custom:
-          admin_label: ''
-          content: 'No front page content has been created yet.<br/>Follow the <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">User Guide</a> to start building your site.'
-          empty: true
-          field: area_text_custom
-          group_type: group
           id: area_text_custom
-          label: ''
-          relationship: none
           table: views
-          tokenize: false
-          plugin_id: text_custom
-        node_listing_empty:
+          field: area_text_custom
+          relationship: none
+          group_type: group
           admin_label: ''
           empty: true
-          field: node_listing_empty
-          group_type: group
-          id: node_listing_empty
+          tokenize: false
+          content: 'No content in this repository created yet.<br/>Follow the <a target="_blank" href="https://islandora.github.io/documentation/">User Guide</a> to start building your site.'
           label: ''
-          relationship: none
-          table: node
-          plugin_id: node_listing_empty
-          entity_type: node
+          plugin_id: text_custom
         title:
           id: title
           table: views
@@ -55,9 +44,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: ''
           empty: true
           title: 'Welcome to [site:name]'
+          label: ''
           plugin_id: title
       exposed_form:
         type: basic
@@ -123,48 +112,6 @@ display:
           plugin_id: boolean
           entity_type: node
           entity_field: status
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value:
-            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: language
-          entity_type: node
-          entity_field: langcode
       pager:
         type: full
         options:
@@ -197,7 +144,8 @@ display:
       row:
         type: 'entity:node'
         options:
-          view_mode: teaser
+          relationship: none
+          view_mode: collection
       sorts:
         sticky:
           admin_label: ''
@@ -289,13 +237,13 @@ display:
         - user.permissions
       max-age: -1
       tags: {  }
-  page_1:
+  frontpage_1:
     display_options:
       path: node
       display_extenders: {  }
     display_plugin: page
     display_title: Page
-    id: page_1
+    id: frontpage_1
     position: 1
     cache_metadata:
       contexts:
