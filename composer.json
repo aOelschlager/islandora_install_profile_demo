@@ -58,7 +58,7 @@
         "drupal/entity_log": "^1.2",
         "drupal/environment_indicator": "4.x-dev",
         "drupal/eva": "^2.0",
-        "drupal/facets": "1.7",
+        "drupal/facets": "1.7 || 1.x-dev",
         "drupal/features": "^3.11",
 	"drupal/file_download_link": "^1.1",
 	"drupal/fixed_block_content": "^1.1",
