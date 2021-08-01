@@ -32,7 +32,6 @@
         "drupal/addtoany": "^1.9",
         "drupal/admin_toolbar": "*",
         "drupal/adminimal_theme": "1.x-dev",
-        "drupal/at_tools": "3.x-dev",
         "drupal/audit_log": "^2.0@alpha",
         "drupal/auto_entitylabel": "^3.0@beta",
         "drupal/backup_migrate": "^4.1",
