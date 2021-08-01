@@ -50,7 +50,6 @@
         "drupal/config_update": "1.x-dev",
         "drupal/console": "^1.9",
         "drupal/content_browser": "^1.0@alpha",
-        "drupal/content_sync": "2.x-dev",
         "drupal/core-composer-scaffold": "^9.3",
         "drupal/core-recommended": "^9.3",
         "drupal/devel": "4.x-dev",
