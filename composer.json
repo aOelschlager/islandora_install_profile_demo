@@ -19,7 +19,9 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        }
+        },
+	{ "type": "vcs", "url": "https://github.com/DiegoPino/islandora_iiif" },
+	{ "type": "vcs", "url": "https://github.com/uml-digitalinitiatives/islandora_solr_breadcrumbs" }
     ],
     "prefer-stable": true,
     "require": {
@@ -102,6 +104,9 @@
         "vlucas/phpdotenv": "4.2.0",
         "webflo/drupal-finder": "^1.2",
         "wikimedia/composer-merge-plugin": "^2.0",
-        "zaporylie/composer-drupal-optimizations": "^1.2"
+        "zaporylie/composer-drupal-optimizations": "^1.2",
+	"islandora/islandora": "8.x-1.x",
+	"islandora/islandora_iiif": "8.x-1.x",
+	"islandora/islandora_breadcrumbs": "8.x-1.x",
     }
 }
