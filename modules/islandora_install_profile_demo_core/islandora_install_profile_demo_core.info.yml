@@ -2,7 +2,7 @@ name: Islandora Install Profile Demo Core
 type: module
 description: 'Islandora install profile customizations'
 package: islandora_install_profile_demo
-core: 8.x
+core: 8.x || ^9
 dependencies:
  - block_class:block_class
  - twig_tweak:twig_tweak
