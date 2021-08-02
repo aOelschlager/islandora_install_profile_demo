@@ -61,6 +61,7 @@
         "drupal/facets": "1.7 || 1.x-dev",
         "drupal/features": "^3.11",
 	"drupal/file_download_link": "^1.1",
+	"drupal/filehash": "1.x-dev",
 	"drupal/fixed_block_content": "^1.1",
         "drupal/fontawesome": "^2.17",
         "drupal/form_options_attributes": "^1.2",
