@@ -643,9 +643,10 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
 
      $context_manager = \Drupal::service('context.manager');
     /** @codingStandardsIgnoreStart * */
-     //kpr($context_manager->getActiveContexts());
-     //\Drupal::messenger()->addStatus($view_mode);
-
+    //kpr($context_manager->getActiveContexts());
+    //\Drupal::messenger()->addStatus($view_mode);
+    //  Added to avoid error message.
+    $empty_field_resource_type = '';
     if ($display->getComponent('object_navigation') || ($entity->bundle() === 'extracted_text')) {
       if ($entity->bundle() != 'extracted_text') {
         $empty_field_resource_type = (!empty($entity->get('field_resource_type')->entity));
@@ -656,12 +657,12 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
         // Manually override for the OCR page.
         $nodeResourceModelType = "Text";
         $nodeModelType = "OCR";
-        if ($parentNode->hasField('field_member_of')) {
+        if (isset($parentNode) && $parentNode->hasField('field_member_of')) {
           $parent_nid = $parentNode->get('field_member_of')->first()->getString();
           $url_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $parent_nid);
         }
-        if ($parentNode->hasField('field_identifier')) {
-          if (strstr($parentNode->field_identifier->value, 'pdf-item01')) {
+        if (isset($parentNode) && $parentNode->hasField('field_identifier')) {
+          if (\Drupal\taxonomy\Entity\Term::load($parentNode->field_model->first()->getString())->name->value == 'Digital Document') {
             $pdfContentType = TRUE;
             $immediate_parent_id = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $nodeId);
           } else {
@@ -745,13 +746,16 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
             $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
             $build['object_navigation']['#links']['pages']['label'] = t('Pages');
           }else{
-            $build['object_navigation']['#links']['parent']['url'] = '/node/' . $node->get('field_member_of')->first()->getString();
-            $build['object_navigation']['#links']['parent']['label'] = t('Full View');
-            $build['object_navigation']['#links']['parent']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
-            // Siblings
-            $build['object_navigation']['#links']['pages']['url'] = '/node/' . $node->get('field_member_of')->first()->getString() . "/pages?display=grid";
-            $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
-            $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+            if (!empty($node->get('field_member_of'))) {
+              // prevent error from happening when no parent is defined
+              $build['object_navigation']['#links']['parent']['url'] = '/node/' . $node->get('field_member_of')->first()->getString();
+              $build['object_navigation']['#links']['parent']['label'] = t('Full View');
+              $build['object_navigation']['#links']['parent']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
+              // Siblings
+              $build['object_navigation']['#links']['pages']['url'] = '/node/' . $node->get('field_member_of')->first()->getString() . "/pages?display=grid";
+              $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
+              $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+            }
           }
             // Current Page, this one has NO link so just a placeholder
             $build['object_navigation']['#links']['me']['label'] = t('Page');
