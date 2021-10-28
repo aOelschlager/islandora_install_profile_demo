@@ -165,9 +165,7 @@
         "vlucas/phpdotenv": "4.2.0",
         "webflo/drupal-finder": "^1.2",
         "wikimedia/composer-merge-plugin": "^2.0",
-        "zaporylie/composer-drupal-optimizations": "^1.2",
-        "drupal/core": "^9.1",
-        "symfony/yaml": "^4.4"
+        "zaporylie/composer-drupal-optimizations": "^1.2"
     },
     "minimum-stability": "dev"
 }
