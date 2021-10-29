@@ -1,5 +1,5 @@
 {
-    "name": "aoelschlager/islandora_install_profile_demo",
+    "name": "islandora/islandora_install_profile_demo",
     "description": "Collection of Islandora D8 Profiles",
     "type": "drupal-profile",
     "license": "GPL-2.0-or-later",
