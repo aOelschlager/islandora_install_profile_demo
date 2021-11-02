@@ -43,9 +43,7 @@ install:
   - simple_sitemap:simple_sitemap
   - ctools:ctools
   - metatag:metatag
-  - devel
   - basic_auth
-  - devel
   - facets
   - matomo
   - syslog
