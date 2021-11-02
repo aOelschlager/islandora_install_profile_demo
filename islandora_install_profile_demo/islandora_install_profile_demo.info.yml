@@ -42,6 +42,7 @@ install:
   - redirect:redirect
   - simple_sitemap:simple_sitemap
   - ctools:ctools
+  - collapse_text
   - metatag:metatag
   - basic_auth
   - facets
