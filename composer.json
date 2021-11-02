@@ -106,7 +106,7 @@
         "webflo/drupal-finder": "^1.2",
         "wikimedia/composer-merge-plugin": "^2.0",
         "zaporylie/composer-drupal-optimizations": "^1.2",
-	"islandora/islandora": "8.x-1.x",
+	"islandora/islandora": "^2.0",
 	"islandora/islandora_iiif": "8.x-1.x",
 	"islandora/islandora_breadcrumbs": "8.x-1.x"
     }
