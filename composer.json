@@ -30,6 +30,19 @@
         }
     },
     {
+        "type": "package",
+        "package": {
+            "name": "aOelschlager/migrate_7x_claw",
+            "version": "dev-1.x",
+            "type": "drupal-module",
+            "source": {
+                "url": "https://github.com/aOelschlager/migrate_7x_claw.git",
+                "type": "git",
+                "reference": "drupal-9-patch"
+            }
+        }
+    },
+    {
         "type": "composer",
         "url": "https://packages.drupal.org/8"
     },
@@ -169,5 +182,6 @@
         "wikimedia/composer-merge-plugin": "^2.0",
         "zaporylie/composer-drupal-optimizations": "^1.2",
 	      "islandora/islandora": "^2.0"
+	"aoelschlager/migrate_7x_claw": "dev-1.x"
     }
 }
