@@ -181,7 +181,7 @@
         "webflo/drupal-finder": "^1.2",
         "wikimedia/composer-merge-plugin": "^2.0",
         "zaporylie/composer-drupal-optimizations": "^1.2",
-	      "islandora/islandora": "^2.0"
+	      "islandora/islandora": "^2.0",
 	"aoelschlager/migrate_7x_claw": "dev-1.x"
     }
 }
