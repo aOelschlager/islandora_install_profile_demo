@@ -30,10 +30,10 @@ reactions:
         label_display: visible
         views_label: ''
         items_per_page: none
-        region: content_suffix
+        region: content
         weight: '0'
         context_mapping: {  }
-        theme: bartik
+        theme: islandora_starter_theme
         css_class: ''
         unique: 0
         context_id: collection
