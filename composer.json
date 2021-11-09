@@ -113,7 +113,7 @@
         "drupal/config_suite": "1.x-dev",
         "drupal/config_update": "1.x-dev",
         "drupal/content_browser": "^1.0@alpha",
-        "drupal/content_sync": "2.x-dev",
+        "drupal/content_sync": "^3",
         "drupal/core-recommended": "^9.2",
 	      "drupal/ds": "^3.2",
         "drupal/entity_log": "^1.2",
