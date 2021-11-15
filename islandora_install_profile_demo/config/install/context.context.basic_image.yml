@@ -18,5 +18,9 @@ conditions:
     uri: 'http://purl.org/coar/resource_type/c_c513,http://purl.org/dc/dcmitype/StillImage'
     context_mapping:
       media: '@islandora.media_route_context_provider:media'
-reactions: {  }
+reactions:
+  view_mode_alter:
+    id: view_mode_alter
+    mode: node.open_seadragon
+    saved: false
 weight: -3
