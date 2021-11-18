@@ -664,10 +664,10 @@ function islandora_install_profile_demo_core_update_8230() {
 /**
  * Enables islandora_install_profile_demo_client_custom module.
  */
-function islandora_install_profile_demo_core_update_8231() {
-  $cmd = 'drush pm:enable -y islandora_install_profile_demo_client_custom';
-  drush_shell_exec_interactive($cmd);
-}
+//function islandora_install_profile_demo_core_update_8231() {
+//  $cmd = 'drush pm:enable -y islandora_install_profile_demo_client_custom';
+//  drush_shell_exec_interactive($cmd);
+//}
 
 /**
  * Enables views_bulk_edit module.
