@@ -1,11 +1,11 @@
 services:
   islandora_install_profile_demo.twig_extension:
     arguments: ['@renderer']
-    class: Drupal\islandora_install_profile_demo\Plugin\TwigExtention\CustomFilters
+    class: Drupal\islandora_install_profile_demo_core\TwigExtention\CustomFilters
     tags:
       - { name: twig.extension }
   islandora_install_profile_demo.compound_redirect:
-    class: Drupal\islandora_install_profile_demo\EventSubscriber\CompoundRedirectSubscriber
+    class: Drupal\islandora_install_profile_demo_core\EventSubscriber\CompoundRedirectSubscriber
     arguments: ['@islandora.utils']
     tags:
       - { name: event_subscriber }
