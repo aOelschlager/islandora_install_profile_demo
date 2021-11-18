@@ -115,11 +115,11 @@ function islandora_install_profile_demo_core_update_8202(){
 }
 
 /**
- *  Enables BD Client subtheme from BD Bootstrap SASS as the default theme and adminimal and sets it as the default
+ *  Enables islandora_starter_theme subtheme from islandora_base_theme as the default theme and adminimal and sets it as the default
  *
  */
 function islandora_install_profile_demo_core_update_8203(){
-  \Drupal::service('theme_installer')->install(['islandora_install_profile_demo_client_theme', 'adminimal_theme']);
+  \Drupal::service('theme_installer')->install(['islandora_starter_theme', 'adminimal_theme']);
   \Drupal::service('config.factory')->getEditable('system.theme')->set('admin', 'adminimal_theme')->save();
 }
 
