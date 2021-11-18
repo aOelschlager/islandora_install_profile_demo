@@ -16,3 +16,4 @@ dependencies:
  - drupal:form_options_attributes
  - drupal:facets
  - drupal:facets_summary
+ - drupal:islandora
