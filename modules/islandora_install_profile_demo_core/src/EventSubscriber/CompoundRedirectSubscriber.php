@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\islandora_install_profile_demo\EventSubscriber;
+namespace Drupal\islandora_install_profile_demo_core\EventSubscriber;
 
 use Drupal\Core\Url;
 use Drupal\islandora\IslandoraUtils;
