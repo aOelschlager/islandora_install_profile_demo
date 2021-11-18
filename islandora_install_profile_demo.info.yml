@@ -1,4 +1,4 @@
-name: islandora_install_profile-Demo
+name: islandora_install_profile-demo
 type: profile
 description: 'Base Islandora installation profile to be used on new sites'
 version: 1.0
@@ -106,6 +106,7 @@ dependencies:
   - drupal:user
   - drupal:layout_library
   - drupal:islandora_install_profile_demo_core
+themes:
   - bootstrap_barrio
   - adminimal_theme
   - islandora_starter_theme
