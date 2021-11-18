@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\islandora_install_profile_demo\Plugin\TwigExtention;
+namespace Drupal\islandora_install_profile_demo_core\Plugin\TwigExtention;
 
 // Twig\Extension\ExtensionInterface.
 
