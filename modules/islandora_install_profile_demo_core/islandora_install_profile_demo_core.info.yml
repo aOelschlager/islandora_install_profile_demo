@@ -1,7 +1,7 @@
-name: BD Core
+name: Islandora Install Profile Demo Core
 type: module
-description: 'Born-Digital customizations'
-package: Born-Digital
+description: 'Islandora install profile customizations'
+package: islandora_install_profile_demo
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
