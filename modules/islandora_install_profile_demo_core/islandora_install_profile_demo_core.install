@@ -277,8 +277,8 @@ function islandora_install_profile_demo_core_update_8215()
   ], PROFILE_PATH);
 
   islandora_install_profile_demo_core_import_yml_configs([
-    'block.block.islandora_install_profile_demo_client_theme_account_menu',
-    'block.block.islandora_install_profile_demo_client_theme_login'
+    'block.block.islandora_starter_theme_account_menu',
+    'block.block.islandora_starter_theme_login'
   ], PROFILE_PATH_OPTIONAL);
 }
 
@@ -287,7 +287,7 @@ function islandora_install_profile_demo_core_update_8215()
  */
 function islandora_install_profile_demo_core_update_8216() {} {
 islandora_install_profile_demo_core_import_yml_configs([
-  'block.block.islandora_install_profile_demo_client_theme_account_menu',
+  'block.block.islandora_starter_theme_account_menu',
 ], PROFILE_PATH, TRUE);
 }
 
@@ -415,7 +415,7 @@ function islandora_install_profile_demo_core_update_8223() {
   ], PROFILE_PATH);
 
   islandora_install_profile_demo_core_import_yml_configs([
-    'block.block.islandora_install_profile_demo_client_theme_account_menu',
+    'block.block.islandora_starter_theme_account_menu',
   ], PROFILE_PATH_OPTIONAL, TRUE);
 }
 
@@ -581,7 +581,7 @@ function islandora_install_profile_demo_core_update_8228() {
 
     // Updated configs, these are the ones that can be commented out if needed.
     //   islandora_install_profile_demo_core_import_yml_configs([
-    //     'block.block.islandora_install_profile_demo_client_theme_disclaimer',
+    //     'block.block.islandora_starter_theme_disclaimer',
     //     'block.block.useraccountmenu',
     //     'context.context.audio_original_file',
     //     'context.context.collection',

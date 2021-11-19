@@ -10,9 +10,9 @@ dependencies:
     - system
     - views
   theme:
-    - islandora_install_profile_demo_client_theme
+    - islandora_starter_theme
 id: views_block__home_page_featured_collections_block_2
-theme: islandora_install_profile_demo_client_theme
+theme: islandora_starter_theme
 region: content
 weight: 0
 provider: null
