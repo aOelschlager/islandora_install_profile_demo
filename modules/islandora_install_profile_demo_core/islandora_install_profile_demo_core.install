@@ -160,7 +160,7 @@ function islandora_install_profile_demo_core_update_8207(){
 function islandora_install_profile_demo_core_update_8208(){
   islandora_install_profile_demo_core_import_yml_configs([
     'views.view.home_page_featured_collections'
-  ], PROFILE_PATH, TRUE);
+  ], PROFILE_PATH);
 }
 /**
  * @see https://weareborndigital.teamwork.com/#/tasks/24565004
