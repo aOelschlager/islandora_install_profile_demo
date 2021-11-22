@@ -4,15 +4,15 @@ dependencies:
   config:
     - views.view.home_page_featured_collections
   module:
-    - islandora_install_profile_demo_core
+    - islandora_install_profile_demo
     - context
     - islandora
     - system
     - views
   theme:
-    - islandora_starter_theme
-id: views_block__home_page_featured_collections_block_2
-theme: islandora_starter_theme
+    - seven
+id: seven_views_block__home_page_featured_collections_block_2
+theme: seven
 region: content
 weight: 0
 provider: null
@@ -28,11 +28,11 @@ visibility:
   node_has_implicit_parent:
     id: node_has_implicit_parent
     negate: false
-    context_mapping: {  }
-    model_uri: null
     parent_reference_field: field_member_of
-    uri: null
+    model_uri: null
     logic: and
+    uri: null
+    context_mapping: {  }
   view_inclusion:
     id: view_inclusion
     negate: null
@@ -45,9 +45,9 @@ visibility:
     pages: ''
   media_source_mimetype:
     id: media_source_mimetype
+    mimetype: ''
     negate: false
     context_mapping: {  }
-    mimetype: ''
   request_path:
     id: request_path
     negate: false
