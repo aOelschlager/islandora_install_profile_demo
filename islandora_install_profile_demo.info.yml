@@ -1,4 +1,4 @@
-name: islandora_install_profile-demo
+name: islandora_install_profile_demo
 type: profile
 description: 'Base Islandora installation profile to be used on new sites'
 version: 1.0
@@ -45,7 +45,6 @@ install:
   - drupal:metatag
   - drupal:devel
   - drupal:basic_auth
-  - drupal:devel
   - drupal:matomo
   - drupal:syslog
   - drupal:twig_tweak
