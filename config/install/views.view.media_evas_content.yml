@@ -148,7 +148,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: 'items in Collection'
+            text: ' items in Collection'
             make_link: false
             path: ''
             absolute: false
