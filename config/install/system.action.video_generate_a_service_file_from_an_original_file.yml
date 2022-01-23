@@ -15,5 +15,5 @@ configuration:
   mimetype: video/mp4
   args: ''
   destination_media_type: video
-  scheme: public
+  scheme: fedora
   path: '[date:custom:Y]-[date:custom:m]/[node:nid]-[term:name].mp4'

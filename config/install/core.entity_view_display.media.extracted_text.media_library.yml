@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
+    - field.field.media.extracted_text.field_access_terms
     - field.field.media.extracted_text.field_edited_text
     - field.field.media.extracted_text.field_media_file
     - field.field.media.extracted_text.field_media_of
@@ -28,6 +29,7 @@ content:
     region: content
 hidden:
   created: true
+  field_access_terms: true
   field_edited_text: true
   field_media_file: true
   field_media_of: true

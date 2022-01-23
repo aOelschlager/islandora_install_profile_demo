@@ -3,7 +3,15 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
+    - field.field.media.remote_video.field_access_terms
+    - field.field.media.remote_video.field_author_name
     - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_media_of
+    - field.field.media.remote_video.field_media_use
+    - field.field.media.remote_video.field_original_name
+    - field.field.media.remote_video.field_tn_uri
+    - field.field.media.remote_video.field_video_height
+    - field.field.media.remote_video.field_video_width
     - media.type.remote_video
 id: media.remote_video.media_library
 targetEntityType: media
@@ -19,7 +27,16 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_access_terms: true
+  field_author_name: true
+  field_file_size: true
   field_media_oembed_video: true
+  field_media_of: true
+  field_media_use: true
+  field_original_name: true
+  field_tn_uri: true
+  field_video_height: true
+  field_video_width: true
   name: true
   path: true
   status: true

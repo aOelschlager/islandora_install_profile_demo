@@ -4,8 +4,8 @@ dependencies:
   module:
     - islandora
     - node
-name: basic_pages
 label: 'Basic Pages'
+name: basic_pages
 group: Display
 description: ''
 requireAllConditions: false
@@ -13,12 +13,11 @@ disabled: false
 conditions:
   node_type:
     id: node_type
-    bundles:
-      page: page
     negate: false
-    uuid: 585adfcd-8c6d-4696-9385-6ca9d41f46a3
     context_mapping:
       node: '@node.node_route_context:node'
+    bundles:
+      page: page
 reactions:
   view_mode_alter:
     id: view_mode_alter

@@ -7,8 +7,8 @@ dependencies:
 name: max_325x325
 label: 'Max 325x325'
 effects:
-  cb842cc8-682f-42a6-bd05-5a1ac726f0d8:
-    uuid: cb842cc8-682f-42a6-bd05-5a1ac726f0d8
+  cb842cc8-682f-42a6-islandora_install_profile_demo05-5a1ac726f0d8:
+    uuid: ''
     id: image_scale
     weight: 1
     data:

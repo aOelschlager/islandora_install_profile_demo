@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user_add_role_action.differential_access_limited
+label: 'Add the Differential access - limited role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: ''

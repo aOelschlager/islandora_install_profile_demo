@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - islandora
-name: large_image
 label: 'Large Image'
+name: large_image
 group: Display
 description: 'tiff, jp2, etc'
 requireAllConditions: false
@@ -12,11 +12,10 @@ disabled: false
 conditions:
   media_has_term:
     id: media_has_term
-    logic: and
     negate: false
-    uuid: fbe9d79d-34fd-46cc-ab38-3ed0b0301720
-    uri: 'http://purl.org/coar/resource_type/c_c513,http://purl.org/dc/dcmitype/StillImage'
     context_mapping:
       media: '@islandora.media_route_context_provider:media'
+    uri: 'http://purl.org/coar/resource_type/c_c513,http://purl.org/dc/dcmitype/StillImage'
+    logic: and
 reactions: {  }
 weight: -12

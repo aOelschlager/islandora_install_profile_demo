@@ -30,6 +30,7 @@ content:
       new_tab: true
       force_download: true
       custom_classes: 'button button-action fa-download'
+      link_title: null
     third_party_settings: {  }
     type: file_download_link
     weight: 0

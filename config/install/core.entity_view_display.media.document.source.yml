@@ -11,11 +11,11 @@ dependencies:
     - field.field.media.document.field_mime_type
     - field.field.media.document.field_original_name
     - media.type.document
+  module:
+    - file
   enforced:
     module:
       - islandora_core_feature
-  module:
-    - file
 id: media.document.source
 targetEntityType: media
 bundle: document

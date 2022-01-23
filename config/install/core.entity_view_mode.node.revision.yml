@@ -1,11 +1,11 @@
 langcode: en
 status: false
 dependencies:
+  module:
+    - node
   enforced:
     module:
       - node
-  module:
-    - node
 id: node.revision
 label: Revision
 targetEntityType: node

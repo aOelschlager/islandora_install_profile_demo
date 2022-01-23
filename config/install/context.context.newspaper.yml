@@ -1,10 +1,13 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - views.view.newspaper
   module:
     - islandora
-name: newspaper
+    - views
 label: Newspaper
+name: newspaper
 group: Display
 description: ''
 requireAllConditions: false
@@ -12,36 +15,33 @@ disabled: false
 conditions:
   node_has_term:
     id: node_has_term
-    logic: and
-    uri: 'http://purl.org/dc/dcmitype/Collection,https://schema.org/Newspaper'
     negate: false
-    uuid: e1e72d7f-8b38-49db-a19b-dd8638cb1698
     context_mapping:
       node: '@node.node_route_context:node'
+    uri: 'http://purl.org/dc/dcmitype/Collection,https://schema.org/Newspaper'
+    logic: and
 reactions:
   blocks:
+    id: blocks
     blocks:
       91c77937-7442-463e-935b-dda16a7c876a:
         id: 'views_block:newspaper-block_1'
         label: ''
         provider: views
         label_display: visible
-        views_label: ''
-        items_per_page: '48'
         region: content
         weight: '0'
-        context_mapping:
-          field_member_of_target_id: '@node.node_route_context:node'
         custom_id: views_block_newspaper_block_1
         theme: islandora_starter_theme
         css_class: ''
         unique: 0
         context_id: newspaper
-        uuid: 91c77937-7442-463e-935b-dda16a7c876a
-    id: blocks
-    saved: false
-    uuid: cd981921-aa83-4bb0-928b-3b1afd954ea9
+        context_mapping:
+          field_member_of_target_id: '@node.node_route_context:node'
+        views_label: ''
+        items_per_page: '48'
     include_default_blocks: 1
+    saved: false
   view_mode_alter:
     id: view_mode_alter
     mode: node.newspaper

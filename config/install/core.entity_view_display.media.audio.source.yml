@@ -10,12 +10,13 @@ dependencies:
     - field.field.media.audio.field_media_use
     - field.field.media.audio.field_mime_type
     - field.field.media.audio.field_original_name
+    - field.field.media.audio.field_track
     - media.type.audio
+  module:
+    - file
   enforced:
     module:
       - islandora_core_feature
-  module:
-    - file
 id: media.audio.source
 targetEntityType: media
 bundle: audio
@@ -42,6 +43,7 @@ hidden:
   field_media_use: true
   field_mime_type: true
   field_original_name: true
+  field_track: true
   langcode: true
   name: true
   search_api_excerpt: true

@@ -8,14 +8,13 @@ label: 'Islandora Content'
 type: 'canonical_entities:node'
 pattern: 'islandora/[node:title]'
 selection_criteria:
-  309d1fdb-d68f-4aef-99e0-e69604cb4801:
+  faad487b-af1b-4a87-8a87-3b9333cb07f8:
     id: node_type
     bundles:
       islandora_object: islandora_object
     negate: false
     context_mapping:
       node: node
-    uuid: 309d1fdb-d68f-4aef-99e0-e69604cb4801
 selection_logic: and
 weight: -5
 relationships: {  }

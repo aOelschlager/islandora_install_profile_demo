@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - islandora
-name: book
 label: 'Book or Page'
+name: book
 group: Display
 description: 'parent of pages'
 requireAllConditions: false
@@ -12,12 +12,11 @@ disabled: false
 conditions:
   node_has_term:
     id: node_has_term
-    logic: and
     negate: false
-    uuid: 871c44e1-2b22-4d84-bf4f-a8637ee1b1e5
-    uri: 'https://schema.org/Book,http://purl.org/dc/dcmitype/Collection'
     context_mapping:
       node: '@node.node_route_context:node'
+    uri: 'https://schema.org/Book,http://purl.org/dc/dcmitype/Collection'
+    logic: and
 reactions:
   view_mode_alter:
     id: view_mode_alter

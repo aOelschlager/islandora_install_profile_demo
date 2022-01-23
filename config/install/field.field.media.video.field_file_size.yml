@@ -4,9 +4,6 @@ dependencies:
   config:
     - field.storage.media.field_file_size
     - media.type.video
-  enforced:
-    module:
-      - islandora_core_feature
 id: media.video.field_file_size
 field_name: field_file_size
 entity_type: media
@@ -14,7 +11,7 @@ bundle: video
 label: 'File size'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

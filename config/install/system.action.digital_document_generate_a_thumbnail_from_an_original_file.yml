@@ -15,5 +15,5 @@ configuration:
   mimetype: image/png
   args: '-thumbnail 480x480'
   destination_media_type: image
-  scheme: public
+  scheme: fedora
   path: '[date:custom:Y]-[date:custom:m]/[node:nid]-[term:name].png'

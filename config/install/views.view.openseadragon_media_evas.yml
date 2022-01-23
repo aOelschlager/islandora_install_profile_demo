@@ -3,15 +3,16 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.open_seadragon
+    - media.type.audio
     - media.type.document
-  enforced:
-    module:
-      - islandora_defaults
   module:
     - eva
     - media
     - taxonomy
     - user
+  enforced:
+    module:
+      - islandora_defaults
 id: openseadragon_media_evas
 label: 'OpenSeadragon Media EVAs'
 module: views
@@ -258,6 +259,7 @@ display:
           admin_label: ''
           operator: 'not in'
           value:
+            audio: audio
             document: document
           group: 1
           exposed: false

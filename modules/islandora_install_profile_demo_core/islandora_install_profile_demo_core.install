@@ -3,6 +3,7 @@
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;
+use Drush\Drush;
 
 /**
  * Implements hook_install
@@ -12,8 +13,10 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Config\FileStorage;
 
-define("PROFILE_PATH", drupal_get_path('profile', 'islandora_install_profile_demo') . '/config/install');
-define("PROFILE_PATH_OPTIONAL", drupal_get_path('profile', 'islandora_install_profile_demo') . '/config/optional');
+define("PROFILE_PATH", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/install');
+define("PROFILE_PATH_OPTIONAL", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/optional');
+define("PROFILE_PATH_PATCHED", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/patched');
+define("PROFILE_PATH_REMOVE", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/deleted');
 
 /**
  * Helper function to import single config file.
@@ -37,11 +40,15 @@ function islandora_install_profile_demo_core_import_yml_configs(array $config_na
     foreach ($config_name as $single_config) {
       $config_storage->delete($single_config);
       if (!$delete) {
-        $config_storage->write($single_config, $source->read($single_config));
+        $config_array = $source->read($single_config);
+        // Do not act on a missing config key, this to prevent breaking updates
+        if ($config_array && is_array($config_array)) {
+          $config_storage->write($single_config, $source->read($single_config));
+        }
       }
     }
   } catch (Exception $e) {
-    watchdog_exception("update_error", $e, "Error importing/updating configuration", [], RfcLogLevel::ERROR);
+    watchdog_exception("update_error", $e, "Error importing/updating configuration");
   }
 }
 
@@ -108,11 +115,11 @@ function islandora_install_profile_demo_core_update_8202(){
 }
 
 /**
- *  Enables islandora_install_profile_demo Client subtheme from islandora_install_profile_demo Bootstrap SASS as the default theme and adminimal and sets it as the default
+ *  Enables BD Client subtheme from BD Bootstrap SASS as the default theme and adminimal and sets it as the default
  *
  */
 function islandora_install_profile_demo_core_update_8203(){
-  \Drupal::service('theme_installer')->install(['islandora_install_profile_demo_custom_theme', 'adminimal_theme']);
+  \Drupal::service('theme_installer')->install(['islandora_starter_theme', 'adminimal_theme']);
   \Drupal::service('config.factory')->getEditable('system.theme')->set('admin', 'adminimal_theme')->save();
 }
 
@@ -147,6 +154,7 @@ function islandora_install_profile_demo_core_update_8207(){
 }
 
 /**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565532
  * Makes sure collections without parents are listed under "Browse" collections page
  */
 function islandora_install_profile_demo_core_update_8208(){
@@ -155,6 +163,7 @@ function islandora_install_profile_demo_core_update_8208(){
   ], PROFILE_PATH);
 }
 /**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565004
  * Updates member of reference field, to use repository item sorted by created date as its default
  */
 function islandora_install_profile_demo_core_update_8209() {
@@ -165,6 +174,7 @@ function islandora_install_profile_demo_core_update_8209() {
 }
 
 /**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24563295
  * Changes global search to exclude compound object members and pages
  */
 function islandora_install_profile_demo_core_update_8210() {
@@ -175,6 +185,7 @@ function islandora_install_profile_demo_core_update_8210() {
 }
 
 /**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24566041
  * Changes global search to exclude compound object members and pages
  */
 function islandora_install_profile_demo_core_update_8211()
@@ -192,17 +203,18 @@ function islandora_install_profile_demo_core_update_8211()
 }
 
 /**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24523360
  * Programmatically create 'Terms of Use' node
  */
 function islandora_install_profile_demo_core_update_8212() {
   $path = '/terms-use';
-  $alias = \Drupal::service('path.alias_manager')->getAliasByPath($path, 'en');
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath($path, 'en');
   if (strcmp($alias, $path) == 0) {
     $node = Node::create([
       'type' => 'page',
       'langcode' => 'en',
-      'created' => REQUEST_TIME,
-      'changed' => REQUEST_TIME,
+      'created' => \Drupal::time()->getRequestTime(),
+      'changed' => \Drupal::time()->getRequestTime(),
       // The user ID.
       'uid' => 1,
       'title' => 'Terms of Use',
@@ -213,7 +225,7 @@ function islandora_install_profile_demo_core_update_8212() {
       ],
     ]);
     $node->save();
-    \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), $path, "en");
+    \Drupal::service('entity_type.manager')->getStorage('path_alias')->save("/node/" . $node->id(), $path, "en");
   };
 }
 
@@ -226,12 +238,458 @@ function islandora_install_profile_demo_core_update_8213() {} {
     'facets_summary.facets_summary.summary_block',
   ], PROFILE_PATH, TRUE);
 }
+/**
+ * Implements hook_update_N().
+ * Adds isMemberOf to remoteVideo
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565096
+ *
+ */
+
+function islandora_install_profile_demo_core_update_8214(&$sandbox) {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'language.content_settings.media.remote_video',
+    'field.storage.media.field_media_of',
+    'field.field.media.remote_video.field_media_of',
+    'core.entity_view_display.media.remote_video.media_library',
+    'core.entity_view_display.media.remote_video.default',
+    'core.entity_form_display.media.remote_video.media_library',
+    'media.type.remote_video'
+  ], PROFILE_PATH);
+}
 
 /**
- * Import frontpage just incase it has not already imported.
+ * Add current configs
  */
-function islandora_install_profile_demo_core_update_8214() {} {
+function islandora_install_profile_demo_core_update_8215()
+{
   islandora_install_profile_demo_core_import_yml_configs([
-    'views.view.frontpage.yml',
-  ], PROFILE_PATH, TRUE);
+    'editor.editor.full_html',
+    'filter.format.full_html',
+    'filter.format.plain_text',
+    'core.entity_view_display.node.islandora_object.basic',
+    'core.entity_view_display.node.islandora_object.binary',
+    'core.entity_view_display.node.islandora_object.default',
+    'core.entity_view_display.node.islandora_object.open_seadragon',
+    'core.entity_view_display.node.islandora_object.paged_content',
+    'core.entity_view_display.node.islandora_object.pdfjs',
+    'shortcut.set.default',
+    'views.view.islandora_object_metadata'
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.islandora_starter_theme_account_menu',
+    'block.block.islandora_starter_theme_login'
+  ], PROFILE_PATH_OPTIONAL);
+}
+
+/**
+ * Removed with config dump
+ */
+function islandora_install_profile_demo_core_update_8216() {} {
+islandora_install_profile_demo_core_import_yml_configs([
+  'block.block.islandora_starter_theme_account_menu',
+], PROFILE_PATH, TRUE);
+}
+
+// !-- NWS: removed this block 5-21 because these continued to fire when not
+// wanted --!
+// /**
+//  * Add most recent configs
+//  */
+// function islandora_install_profile_demo_core_update_8217() {} {
+//   islandora_install_profile_demo_core_import_yml_configs([
+//     'core.entity_view_display.node.islandora_object.pdfjs',
+//     'core.entity_view_display.node.islandora_object.paged_content',
+//     'core.entity_view_display.node.islandora_object.open_seadragon',
+//     'core.entity_view_display.node.islandora_object.default',
+//     'core.entity_view_display.node.islandora_object.binary',
+//     'core.entity_view_display.node.islandora_object.basic',
+//     'views.view.islandora_object_metadata'
+//   ], PROFILE_PATH);
+// }
+//
+// /**
+//  * Add most recent configs
+//  */
+// function islandora_install_profile_demo_core_update_8218() {} {
+//   islandora_install_profile_demo_core_import_yml_configs([
+//  'core.entity_view_display.node.islandora_object.basic',
+//   'core.entity_view_display.node.islandora_object.binary',
+//   'core.entity_view_display.node.islandora_object.default',
+//   'core.entity_view_display.node.islandora_object.open_seadragon',
+//   'core.entity_view_display.node.islandora_object.paged_content',
+//   'core.entity_view_display.node.islandora_object.pdfjs',
+//   'views.view.islandora_object_metadata',
+//    ], PROFILE_PATH);
+// }
+
+/**
+ * Add another round of configs - late May 2021. update_8219 used in Franco.
+ */
+function islandora_install_profile_demo_core_update_8220()
+{
+  islandora_install_profile_demo_core_import_yml_configs([
+    'rest.resource.entity.media_type',
+    'rest.resource.file.upload',
+    'views.view.islandora_object_metadata',
+  ], PROFILE_PATH);
+}
+
+
+/**
+ * Add access terms & install permissions by term, registration roles/related.
+ */
+function islandora_install_profile_demo_core_update_8221()
+{
+  $terms = array('Differential access - open', 'Admin-only access', 'Differential access - limited','Limited access', 'Open access');
+  $vocab = 'islandora_access';
+  foreach ($terms as $label) {
+    $term_check = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadByProperties(
+      ['name' => $label, 'vid' => $vocab]
+    );
+    if (empty($term_check)) {
+      Term::create(array(
+        'parent' => array(),
+        'name' => $label,
+        'vid' => $vocab,
+      ))->save();
+    }
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('registration_role')) {
+    \Drupal::service('module_installer')->install(['registration_role']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('permissions_by_term')) {
+    \Drupal::service('module_installer')->install(['permissions_by_term']);
+    \Drupal::service('module_installer')->install(['permissions_by_entity']);
+  }
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'editor.editor.basic_html',
+    'permissions_by_term.settings',
+    'registration_role.setting',
+    'system.action.user_add_role_action.differential_access_limited',
+    'system.action.user_add_role_action.differential_access_open',
+    'system.action.user_add_role_action.limited_access',
+    'system.action.user_remove_role_action.differential_access_limited',
+    'system.action.user_remove_role_action.differential_access_open',
+    'system.action.user_remove_role_action.limited_access',
+    'user.role.differential_access_limited',
+    'user.role.differential_access_open',
+    'user.role.limited_access',
+  ], PROFILE_PATH_OPTIONAL);
+}
+
+/**
+ * Add another round of configs - late May 2021. update_8219 used in Franco.
+ */
+function islandora_install_profile_demo_core_update_8222() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'views.view.duplicate_of_taxonomy_a_z_custom_vocab_view',
+    'views.view.taxonomy_a_z_custom_view',
+    'views.view.taxonomy_a_z_fancy_term_view',
+  ], PROFILE_PATH);
+}
+
+/**
+ * Add another round of configs -June 14 2021.
+ */
+function islandora_install_profile_demo_core_update_8223() {
+  // core.extension caused a huge problem. commenting out
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu',
+    'permissions_by_term.settings',
+    'views.view.duplicate_of_taxonomy_a_z_custom_vocab_view',
+    'views.view.taxonomy_a_z_custom_view',
+    'views.view.taxonomy_a_z_fancy_term_view',
+    'editor.editor.basic_html',
+    'field.field.node.islandora_object.field_access_terms',
+    'field.storage.node.field_access_terms',
+    'filter.format.basic_html',
+    'search_api.index.default_solr_index',
+    'user.role.anonymous',
+    'user.role.authenticated',
+    'views.view.openseadragon_media_evas',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.islandora_starter_theme_account_menu',
+  ], PROFILE_PATH_OPTIONAL, TRUE);
+}
+
+/**
+ * Add and remove modules.
+ */
+function islandora_install_profile_demo_core_update_8224() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu_2',
+    'registration_role.setting',
+    ],PROFILE_PATH_OPTIONAL, TRUE);
+
+    islandora_install_profile_demo_core_import_yml_configs([
+      'core.entity_view_display.node.islandora_object.basic',
+      'core.entity_view_display.node.islandora_object.binary',
+      'core.entity_view_display.node.islandora_object.default',
+      'core.entity_view_display.node.islandora_object.open_seadragon',
+      'core.entity_view_display.node.islandora_object.paged_content',
+      'core.entity_view_display.node.islandora_object.pdfjs',
+      'core.entity_view_display.node.islandora_object.search_index',
+      'field.field.node.islandora_object.field_description_long',
+      'field.field.node.islandora_object.field_description',
+      'field.storage.node.field_description',
+      'filter.format.plain_text',
+      'language.negotiation',
+      'user.role.anonymous',
+  ], PROFILE_PATH);
+
+  $cmd_pre = 'drush pm:uninstall -y registration_role permissions_by_entity';
+  $cmd = 'drush pm:enable -y devel_entity_updates permissions_by_term && drush -y dentup';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd_pre);
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+}
+
+/**
+ * Add configs for patched facets
+ */
+function islandora_install_profile_demo_core_update_8225() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.active_filters',
+    'facets_summary.facets_summary.facet_summary',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH_PATCHED);
+}
+
+/**
+ * This is an example for the next version release.
+ */
+/**
+ * function islandora_install_profile_demo_core_update_8xxx()
+ * {
+ *   islandora_install_profile_demo_core_import_yml_configs([
+ *     'example.config.test',
+ *   ], PROFILE_PATH_REMOVE, TRUE);
+ * }
+ */
+
+/**
+ * June 2021 release.
+ */
+function islandora_install_profile_demo_core_update_8226() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.active_filters',
+  ], PROFILE_PATH_OPTIONAL);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'context.context.audio_original_file',
+    'context.context.collection',
+    'context.context.newspaper',
+    'context.context.openseadragon_block',
+    'context.context.technical_metadata_on_ingest',
+    'context.context.video_original_file',
+    'core.entity_form_display.media.audio.default',
+    'core.entity_form_display.media.document.default',
+    'core.entity_form_display.media.file.default',
+    'core.entity_form_display.media.image.default',
+    'core.entity_form_display.media.remote_video.default',
+    'core.entity_form_display.media.remote_video.media_library',
+    'core.entity_form_display.media.video.default',
+    'core.entity_form_display.media.video.media_library',
+    'core.entity_view_display.media.remote_video.default',
+    'core.entity_view_display.media.remote_video.media_library',
+    'core.entity_view_display.media.video.default',
+    'field.field.media.remote_video.field_access_terms',
+    'field.field.media.remote_video.field_file_size',
+    'field.field.media.remote_video.field_media_use',
+    'field.field.media.remote_video.field_original_name',
+    'field.field.media.video.field_file_size',
+    'field.field.media.video.field_mime_type',
+    'field.storage.media.field_file_size',
+    'field.storage.media.field_media_use',
+    'field.storage.media.field_mime_type',
+    'field.storage.media.field_original_name',
+    'field.storage.media.field_width',
+    'filter.format.plain_text',
+    'language.negotiation',
+    'user.role.anonymous',
+    'user.role.authenticated',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.facet_summary',
+  ], PROFILE_PATH_PATCHED);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu_2',
+    'registration_role.setting',
+  ], PROFILE_PATH_REMOVE, TRUE);
+
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+}
+
+/**
+ * June 2021 release - PBT Hotfix.
+ */
+function islandora_install_profile_demo_core_update_8227() {
+  $cmd_pre = 'drush pm:uninstall -y permissions_by_term';
+  $cmd = 'drush pm:enable -y permissions_by_term && vendor/drupal/console/bin/drupal cis --file=/var/www/drupal/assets/sites/all/profiles/islandora_install_profile_demo/config/install/permissions_by_term.settings.yml';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd_pre);
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+}
+
+/**
+ * July 2021 release, remove to test new process.
+ */
+function islandora_install_profile_demo_core_update_8228() {
+  // Enable oembed providers.
+  $cmd = 'drush pm:enable -y oembed_providers';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+    // Removed configs.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'field.field.media.remote_video.field_file_size',
+    //   ], PROFILE_PATH_REMOVE, TRUE);
+
+    // New Configs.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'context.context.video',
+    //     'core.entity_view_display.node.islandora_object.video',
+    //     'core.entity_view_mode.media.video',
+    //     'core.entity_view_mode.node.video',
+    //     'field.field.media.remote_video.field_author_name',
+    //     'field.field.media.remote_video.field_tn_uri',
+    //     'field.field.media.remote_video.field_video_height',
+    //     'field.field.media.remote_video.field_video_width',
+    //     'field.storage.media.field_author_name',
+    //     'field.storage.media.field_tn_uri',
+    //     'field.storage.media.field_video_height',
+    //     'field.storage.media.field_video_width',
+    //     'language.content_settings.media.remote_video',
+    //     'oembed_providers.settings',
+    //     'views.view.video_media_evas',
+    //   ], PROFILE_PATH);
+
+    // Updated configs, these are the ones that can be commented out if needed.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'block.block.islandora_starter_theme_disclaimer',
+    //     'block.block.useraccountmenu',
+    //     'context.context.audio_original_file',
+    //     'context.context.collection',
+    //     'context.context.image_original_file',
+    //     'context.context.newspaper',
+    //     'context.context.openseadragon_block',
+    //     'context.context.pages',
+    //     'context.context.technical_metadata_on_ingest',
+    //     'context.context.video_original_file',
+    //     'core.entity_form_display.media.document.default',
+    //     'core.entity_form_display.media.extracted_text.default',
+    //     'core.entity_form_display.media.remote_video.default',
+    //     'core.entity_form_display.media.remote_video.media_library',
+    //     'core.entity_view_display.media.document.download',
+    //     'core.entity_view_display.media.extracted_text.default',
+    //     'core.entity_view_display.media.remote_video.default',
+    //     'core.entity_view_display.media.remote_video.media_library',
+    //     'core.entity_view_display.node.islandora_object.basic',
+    //     'core.entity_view_display.node.islandora_object.binary',
+    //     'core.entity_view_display.node.islandora_object.collection',
+    //     'core.entity_view_display.node.islandora_object.compound_member',
+    //     'core.entity_view_display.node.islandora_object.default',
+    //     'core.entity_view_display.node.islandora_object.newspaper',
+    //     'core.entity_view_display.node.islandora_object.open_seadragon',
+    //     'core.entity_view_display.node.islandora_object.paged_content',
+    //     'core.entity_view_display.node.islandora_object.pdfjs',
+    //     'core.entity_view_display.node.islandora_object.search_index',
+    //     'facets_summary.facets_summary.facet_summary',
+    //     'field.field.media.document.field_access_terms',
+    //     'field.field.media.extracted_text.field_access_terms',
+    //     'media.settings',
+    //     'media.type.remote_video',
+    //     'pathauto.pattern.islandora_content',
+    //     'permissions_by_term.settings',
+    //     'simple_sitemap.settings',
+    //     'user.role.anonymous',
+    //     'user.role.authenticated',
+    //     'views.view.pdfjs_media_evas',
+    //     'views.view.solr_search_content',
+    //   ], PROFILE_PATH);
+}
+
+/**
+ * 
+ */
+function islandora_install_profile_demo_core_update_8229()
+{
+  $terms = array('Remote Media');
+  $vocab = 'islandora_display';
+  
+  foreach ($terms as $label) {
+    $term_check = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadByProperties(
+      ['name' => $label, 'vid' => $vocab]
+    );
+    if (empty($term_check)) {
+      Term::create(array(
+        'parent' => array(),
+        'name' => $label,
+        'vid' => $vocab,
+        'field_external_uri' => [
+            'uri'=> 'https://github.com/Islandora/Crayfish/tree/dev/Homarus',
+            'title' => 'Remote Media',
+        ],
+      ))->save();
+    }
+  }
+}
+
+/**
+ * August 2021, release.
+ */
+function islandora_install_profile_demo_core_update_8230() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'context.context.files_in_fedora',
+    'system.action.delete_file_from_fedora',
+    'system.action.index_file_in_fedora',
+  ], PROFILE_PATH_REMOVE, TRUE);
+}
+
+/**
+ * Enables islandora_install_profile_demo_client_custom module.
+ */
+function islandora_install_profile_demo_core_update_8231() {
+  $cmd = 'drush pm:enable -y islandora_install_profile_demo_client_custom';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Enables views_bulk_edit module.
+ */
+function islandora_install_profile_demo_core_update_8232() {
+  $cmd = 'drush pm:enable -y views_bulk_edit';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Removing modules pre-D9 update.
+ */
+function islandora_install_profile_demo_core_update_8233() {
+  $cmd = 'drush pmu -y audit_log content_browser content_sync devel_php entity_log hook_post_action libraries_ui masonry rdfui sendgrid_integration';
+  drush_shell_exec_interactive($cmd);
+
+}
+
+/**
+ * Adding SMTP.
+ */
+function islandora_install_profile_demo_core_update_8234() {
+  $cmd = 'drush en -y smtp';
+  drush_shell_exec_interactive($cmd);
 }

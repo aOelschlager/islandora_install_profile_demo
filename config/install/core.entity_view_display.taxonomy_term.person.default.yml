@@ -6,6 +6,7 @@ dependencies:
     - field.field.taxonomy_term.person.field_authority_link
     - field.field.taxonomy_term.person.field_cat_date_begin
     - field.field.taxonomy_term.person.field_cat_date_end
+    - field.field.taxonomy_term.person.field_relationships
     - taxonomy.vocabulary.person
   module:
     - controlled_access_terms
@@ -65,5 +66,6 @@ content:
     type: edtf_default
     region: content
 hidden:
+  field_relationships: true
   langcode: true
   search_api_excerpt: true

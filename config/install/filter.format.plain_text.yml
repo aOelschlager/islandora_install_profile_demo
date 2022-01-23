@@ -1,8 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  module:
-    - collapse_text
+dependencies: {  }
 name: 'Plain text'
 format: plain_text
 weight: -8
@@ -26,14 +24,6 @@ filters:
     status: true
     weight: 0
     settings: {  }
-  filter_collapse_text:
-    id: filter_collapse_text
-    provider: collapse_text
-    status: false
-    weight: 0
-    settings:
-      default_title: 'Click here to expand or collapse this section'
-      form: '1'
   filter_html:
     id: filter_html
     provider: filter

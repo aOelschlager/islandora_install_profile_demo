@@ -16,7 +16,7 @@ plugin: 'fixed_block_content:carapace_fb_footer_social_media'
 settings:
   id: 'fixed_block_content:carapace_fb_footer_social_media'
   label: 'Footer: Social Media'
-  provider: fixed_block_content
   label_display: '0'
+  provider: fixed_block_content
   view_mode: ''
 visibility: {  }

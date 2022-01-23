@@ -4,15 +4,15 @@ dependencies:
   config:
     - field.storage.media.field_media_use
     - field.storage.media.field_mime_type
-  enforced:
-    module:
-      - islandora_core_feature
   module:
     - jsonld
     - media
     - rest
     - serialization
     - user
+  enforced:
+    module:
+      - islandora_core_feature
 id: media_of
 label: 'Manage media'
 module: views

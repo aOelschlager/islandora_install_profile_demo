@@ -1,13 +1,13 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - islandora
   enforced:
     module:
       - islandora_defaults
-  module:
-    - islandora
-name: binary
 label: Binary
+name: binary
 group: Display
 description: 'Binary Object Display'
 requireAllConditions: false
@@ -15,12 +15,11 @@ disabled: false
 conditions:
   node_has_term:
     id: node_has_term
-    logic: and
-    uri: 'http://purl.org/coar/resource_type/c_1843'
     negate: false
-    uuid: b1b8e4e3-f121-4563-a8e4-a676cd84a1db
     context_mapping:
       node: '@node.node_route_context:node'
+    uri: 'http://purl.org/coar/resource_type/c_1843'
+    logic: and
 reactions:
   view_mode_alter:
     id: view_mode_alter

@@ -13,6 +13,9 @@ use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\node\NodeInterface;
 use Drupal\islandora\IslandoraUtils;
+use Drupal\group\Entity\GroupContent;
+use Drupal\media\MediaInterface;
+
 
 /**
  * Implements hook_form_alter().
@@ -23,8 +26,20 @@ function islandora_install_profile_demo_core_form_alter(&$form, \Drupal\Core\For
     $form['sort_by']['#type'] = 'hidden';
     $form['sort_order']['#type'] = 'hidden';
     $form['items_per_page']['#type'] = 'hidden';
+    /*
+    $form['field_member_of'] = [
+      '#title' => "Collection",
+      '#type' => "select",
+      "#default_value" => "All",
+      "#options" => [
+        "All" => 'All collections',
+	4 => 'Test Collection'
+      ],
+    ];
+     */
   }
 }
+
 /**
  * Implements hook_theme().
  */
@@ -102,23 +117,26 @@ function islandora_install_profile_demo_core_preprocess_form_element(&$variables
  *
  * @return array
  */
-function _get_sort_options() {
+function _get_sort_options($unique_index = 1) {
   $defaultSelectedDirectionValue = (\Drupal::request()->query->get('sort_order') === 'ASC') ? 'up' : 'down';
-  $defaultSelectedFieldValue = (!empty(\Drupal::request()->query->get('sort_by'))) ? \Drupal::request()->query->get('sort_by') : 'field_edtf_date_created';
+  $defaultSelectedFieldValue = (!empty(\Drupal::request()->query->get('sort_by'))) ? \Drupal::request()->query->get('sort_by') : 'field_date_created';
   if ( ! \Drupal::service('router.admin_context')->isAdminRoute() ) {
     return  [
       '#type' => 'select',
-      '#title' => 'Sort Options',
-      '#label_attributes' => ['class' => ['visually-hidden']],
+      '#title' => t('Sort Options'),
+      '#label_attributes' => [
+        'class' => ['visually-hidden'],
+        'for' => "sort_order_$unique_index",
+      ],
       '#wrapper_attributes' => ['class' => ['sort__container']],
       '#options' =>
         [
           'relevance_up' => t('Relevance ↑'),
           'relevance_down' => t('Relevance ↓'),
-          'field_edtf_date_created_up' => 'Created ↑',
-          'field_edtf_date_created_down' => 'Created ↓',
-          'title_up' => 'Title ↑',
-          'title_down' => 'Title ↓',
+          'field_edtf_date_created_up' => t('Created ↑'),
+          'field_edtf_date_created_down' => t('Created ↓'),
+          'title_up' => t('Title ↑'),
+          'title_down' => t('Title ↓'),
         ],
       '#options_attributes' => [
         'relevance_up' => [
@@ -148,6 +166,7 @@ function _get_sort_options() {
       ],
       '#attributes' => [
         'autocomplete' => 'off',
+        'id' => "sort_order_$unique_index",
       ],
       '#name' => 'sort_order',
       '#value' => "{$defaultSelectedFieldValue}_{$defaultSelectedDirectionValue}",
@@ -183,8 +202,10 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
     $displays = [
       'members' => ['block_1'],
       'solr_search_content' => ['block_1', 'page_1'],
-      'home_page_featured_collections' => ['page_1', 'block_2'],
-      'manage_members' => ['page_3']
+      'home_page_featured_collections' => ['block_1', 'page_1', 'block_2'],
+      'manage_members' => ['page_3'],
+      'taxonomy_term' => ['page_1'],
+      'newspaper' => ['newsletter_block', 'block_1'],
     ];
     if (in_array($view->id(), array_keys($displays))) {
       if (in_array($view->current_display, $displays[$view->id()], TRUE)) {
@@ -211,7 +232,7 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
             ]);
         }
         // TODO replace this with the sort filter coming from the view
-        $sort = _get_sort_options();
+        $sort = _get_sort_options(1);
         //xdebug_break();
         // Hidden Search placeholder for form submit
         $activeDisplay = '';
@@ -465,27 +486,21 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
     $facetsource_id = ['views_block__solr_search_content__block_1', 'views_page__solr_search_content__page_1'];
     /** @var Drupal\facets\FacetManager\DefaultFacetManager $resources */
     $default_facets_namespace = 'search_api';
-    $variables['facets'] = [];
-    foreach($facetsource_id as $index => $frid) {
-      $facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId("$default_facets_namespace:$frid");
-        $variables['facets']['summary'][$frid]['global'] = [
-          'id' => 'facets_summary_block:active_filters',
-          'label' => 'Selections'
-        ];
-        $variables['facets']['summary'][$frid]['block'] = [
-          'id' => 'facets_summary_block:facet_summary',
-          'label' => 'Selections B'
-        ];
+    $variables['facets'] = null;
+    $view = $variables['view'];
+    $view->initHandlers();
+    $form_state = new FormState();
+    $form_state->setFormState([
+      'view' => $view,
+      'display' => $view->display_handler->display,
+      'exposed_form_plugin' => $view->display_handler->getPlugin('exposed_form'),
+      'method' => 'get',
+      'rerender' => TRUE,
+      'no_redirect' => TRUE,
+      'always_process' => TRUE,
+    ]);
+    $variables['facets'] = \Drupal::formBuilder()->buildForm('Drupal\views\Form\ViewsExposedForm', $form_state);
 
-        foreach ($facets as $facet) {
-          //Load facets into array and store it
-          /** @var \Drupal\facets\Entity\Facet $facet */
-          $variables['facets'][$frid][] = [
-            'id' => 'facet_block:' . $facet->id(),
-            'label' => $facet->getName()
-          ];
-        }
-    };
     // Set pager if we have more than 1 page
     if (!empty($variables['view']->getPager()->total_items) && !empty( $variables['view']->getPager()->options['items_per_page'] )) {
       if (($variables['view']->getPager()->total_items / $variables['view']->getPager()->options['items_per_page']) > 1) {
@@ -493,7 +508,7 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
       }
     }
     $variables['#attached']['library'][] = 'field_group/element.horizontal_tabs';
-    $variables['bottom_sort'] = _get_sort_options();
+    $variables['bottom_sort'] = _get_sort_options(2);
   }
 }
 
@@ -554,13 +569,27 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
   $ocrExist = FALSE;
   $route_match_item = \Drupal::routeMatch()->getParameters()->get($entity->getEntityTypeId());
   $node = \Drupal::routeMatch()->getParameter('node');
- if ($node instanceof \Drupal\node\NodeInterface) {
+  if ($node instanceof \Drupal\node\NodeInterface) {
     $nodeId = $node->id();
     $url_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $nodeId);
   } else {
     $current_path = \Drupal::service('path.current')->getPath();
     $nodeId = trim(trim($current_path, '/ocr'), 'node/');
-    $parentNode = \Drupal::entityTypeManager()->getStorage('node')->load($nodeId);
+    $parts = explode("/", $nodeId);
+    if ($parts[0] == 'media') {
+      $mediaId = $parts[1];
+      $media = \Drupal::service('entity_type.manager')->getStorage('media')->load($mediaId);
+      if ($media) {
+        $parentNode = \Drupal::service('islandora.utils')->getParentNode($media);
+      } else {
+        $parentNode = NULL;
+      }
+    } elseif (isset($parts[1]) && $parts[1] == 'pages') {
+      $nodeId = $parts[0];
+      $parentNode = \Drupal::entityTypeManager()->getStorage('node')->load($nodeId);
+    } else {
+      $parentNode = \Drupal::entityTypeManager()->getStorage('node')->load($nodeId);
+    }
   }
   // For certain entity types redirect
   if ($entity->bundle() == 'islandora_object') {
@@ -600,21 +629,6 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
     }
   }
 
-  if ($entity->bundle() == 'islandora_object' && $view_mode == 'compound') {
-    // get members of compound object sorted by weight
-    $members = views_get_view_result('reorder_children', 'page_1', $entity->id());
-    // Get first members and redirect to it
-    /**
-     * @var \Drupal\views\ResultRow $first
-     */
-    $first = array_shift($members);
-    if ($first !== NULL) {
-      $member_nid = $first->nid;
-      $response = new RedirectResponse(\Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $member_nid])->toString());
-      $response->send();
-    }
-  }
-
   // Ensure the entity matches the route.
   if (($entity === $route_match_item) || ($entity->bundle() === 'extracted_text')) {
     // Add check to see if OCR is available.
@@ -643,31 +657,38 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
 
      $context_manager = \Drupal::service('context.manager');
     /** @codingStandardsIgnoreStart * */
-     //kpr($context_manager->getActiveContexts());
-     //\Drupal::messenger()->addStatus($view_mode);
-
+    //kpr($context_manager->getActiveContexts());
+    //\Drupal::messenger()->addStatus($view_mode);
+    //  Added to avoid error message.
+    $empty_field_resource_type = '';
     if ($display->getComponent('object_navigation') || ($entity->bundle() === 'extracted_text')) {
       if ($entity->bundle() != 'extracted_text') {
         $empty_field_resource_type = (!empty($entity->get('field_resource_type')->entity));
-        $nodeResourceModelType = $entity->get('field_resource_type')->entity->getName();
-        $nodeModelType = $entity->get('field_model')->entity->getName();
-        $immediate_parent_id = ($entity->hasField('field_member_of') && $entity->field_member_of instanceof Drupal\node\Entity\Node) ? $entity->get('field_member_of')->entity->id() : FALSE;
+        if ($empty_field_resource_type) {
+          $nodeResourceModelType = $entity->get('field_resource_type')->entity->getName();
+          $nodeModelType = $entity->get('field_model')->entity->getName();
+          $immediate_parent_id = ($entity->hasField('field_member_of') && $entity->field_member_of instanceof Drupal\node\Entity\Node) ? $entity->get('field_member_of')->entity->id() : FALSE;
+        }
       } else {
         // Manually override for the OCR page.
         $nodeResourceModelType = "Text";
         $nodeModelType = "OCR";
-        if ($parentNode->hasField('field_member_of')) {
-          $parent_nid = $parentNode->get('field_member_of')->first()->getString();
-          $url_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $parent_nid);
-        }
-        if ($parentNode->hasField('field_identifier')) {
-          if (strstr($parentNode->field_identifier->value, 'pdf-item01')) {
-            $pdfContentType = TRUE;
-            $immediate_parent_id = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $nodeId);
-          } else {
-            $pdfContentType = FALSE;
-            $immediate_parent_id = ($entity->hasField('field_member_of') && $entity->field_member_of instanceof Drupal\node\Entity\Node) ? $entity->get('field_member_of')->entity->id() : $url_alias;
-          }
+        if (isset($parentNode) && $parentNode->hasField('field_member_of')) {
+          $grandparent = $parentNode->get('field_member_of')->first();
+	  if ($grandparent) {
+            $parent_nid = $grandparent->getString();
+            $url_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $parent_nid);
+            if (\Drupal\taxonomy\Entity\Term::load($parentNode->field_model->first()->getString())->name->value == 'Digital Document') {
+              $pdfContentType = TRUE;
+              $immediate_parent_id = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $nodeId);
+            } else {
+              $pdfContentType = FALSE;
+              $immediate_parent_id = ($entity->hasField('field_member_of') && $entity->field_member_of instanceof Drupal\node\Entity\Node) ? $entity->get('field_member_of')->entity->id() : $url_alias;
+            }
+	  }
+	  else {
+            $parent_nid = NULL;
+	  }
         }
       }
 
@@ -720,9 +741,11 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
             $build['object_navigation']['#links']['parent']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
             if ($pdfContentType == FALSE) {
               // Siblings
-              $build['object_navigation']['#links']['pages']['url'] = '/node/' . $parent_nid . "/pages?display=grid";
-              $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
-              $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+              if ($parent_nid) {
+                $build['object_navigation']['#links']['pages']['url'] = '/node/' . $parent_nid . "/pages?display=grid";
+                $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
+                $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+	      }
               // Current Page, this one has NO link so just a placeholder
               $build['object_navigation']['#links']['me']['label'] = t('Page');
               $build['object_navigation']['#links']['me']['url'] = '/node/' . $nodeId;
@@ -745,13 +768,16 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
             $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
             $build['object_navigation']['#links']['pages']['label'] = t('Pages');
           }else{
-            $build['object_navigation']['#links']['parent']['url'] = '/node/' . $node->get('field_member_of')->first()->getString();
-            $build['object_navigation']['#links']['parent']['label'] = t('Full View');
-            $build['object_navigation']['#links']['parent']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
-            // Siblings
-            $build['object_navigation']['#links']['pages']['url'] = '/node/' . $node->get('field_member_of')->first()->getString() . "/pages?display=grid";
-            $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
-            $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+            if (!empty($node->get('field_member_of')) && !empty($node->get('field_member_of')->first())) {
+              // prevent error from happening when no parent is defined
+              $build['object_navigation']['#links']['parent']['url'] = '/node/' . $node->get('field_member_of')->first()->getString();
+              $build['object_navigation']['#links']['parent']['label'] = t('Full View');
+              $build['object_navigation']['#links']['parent']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
+              // Siblings
+              $build['object_navigation']['#links']['pages']['url'] = '/node/' . $node->get('field_member_of')->first()->getString() . "/pages?display=grid";
+              $build['object_navigation']['#links']['pages']['attributes'] = new Attribute(['class' => ['horizontal-tab-button']]);
+              $build['object_navigation']['#links']['pages']['label'] = t('Pages');
+            }
           }
             // Current Page, this one has NO link so just a placeholder
             $build['object_navigation']['#links']['me']['label'] = t('Page');
@@ -868,4 +894,198 @@ function template_preprocess_views_view_carapace_details(&$variables) {
     '#attributes' => ['class' => 'myclass'],
     '#wrapper_attributes' => ['class' => 'my_list_container'],
   ];
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function islandora_install_profile_demo_core_node_insert(NodeInterface $node) {
+  // Exit early if it has no access terms
+  if (!$node->hasField('field_access_terms')) {
+    return;
+  }
+
+  $terms = $node->get('field_access_terms')->referencedEntities();
+  if (empty($terms)) {
+    return;
+  }
+
+  // Arrange groups keyed by their name so we can look them up later.
+  $groups = \Drupal::service('entity_type.manager')->getStorage('group')->loadMultiple();
+  $groups_by_name = [];
+  foreach ($groups as $group) {
+    $groups_by_name[$group->label()] = $group;
+  }
+
+  $term = reset($terms);
+  if (isset($groups_by_name[$term->label()])) {
+    $group = $groups_by_name[$term->label()];
+    $group->addContent($node, 'group_node:' . $node->bundle());
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function islandora_install_profile_demo_core_node_update(NodeInterface $node) {
+  // Exit early if it has no access terms
+  if (!$node->hasField('field_access_terms')) {
+    return;
+  }
+
+  // Arrange groups keyed by their name so we can look them up later.
+  $groups = \Drupal::service('entity_type.manager')->getStorage('group')->loadMultiple();
+  $groups_by_name = [];
+  foreach ($groups as $group) {
+    $groups_by_name[$group->label()] = $group;
+  }
+
+  // Get the access terms for the node.
+  $terms = $node->get('field_access_terms')->referencedEntities();
+
+  // Delete content from groups if there's no terms.
+  if (empty($terms)) {
+    foreach (GroupContent::loadByEntity($node) as $group_content) {
+      $group_content->delete();
+    }
+    foreach (\Drupal::service('islandora.utils')->getMedia($node) as $media) {
+      foreach (GroupContent::loadByEntity($media) as $group_content) {
+        $group_content->delete();
+      }
+    }
+    return;
+  }
+
+  $term = reset($terms);
+
+  $found = FALSE;
+  foreach (GroupContent::loadByEntity($node) as $group_content) {
+    $group = $group_content->getGroup();
+    if ($group->label() != $term->label()) {
+      $group_content->delete();
+    }
+    else {
+      $found = TRUE;
+    }
+  }
+
+  if (!$found && isset($groups_by_name[$term->label()])) {
+    $group = $groups_by_name[$term->label()];
+    $group->addContent($node, 'group_node:' . $node->bundle());
+  }
+
+  // Reindex media since things have changed.
+  foreach (\Drupal::service('islandora.utils')->getMedia($node) as $media) {
+    islandora_install_profile_demo_core_media_update($media);
+  }
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function islandora_install_profile_demo_core_node_delete(NodeInterface $node) {
+  // Remove content from all groups.
+  foreach (GroupContent::loadByEntity($node) as $group_content) {
+    $group_content->delete();
+  }
+}
+
+/**
+ * Implements hook_media_insert().
+ */
+function islandora_install_profile_demo_core_media_insert(MediaInterface $media) {
+  $node = \Drupal::service('islandora.utils')->getParentNode($media);
+
+  if (empty($node)) {
+    return;
+  }
+
+  // Exit early if it has no access terms
+  if (!$node->hasField('field_access_terms')) {
+    return;
+  }
+
+  $terms = $node->get('field_access_terms')->referencedEntities();
+  if (empty($terms)) {
+    return;
+  }
+
+  // Arrange groups keyed by their name so we can look them up later.
+  $groups = \Drupal::service('entity_type.manager')->getStorage('group')->loadMultiple();
+  $groups_by_name = [];
+  foreach ($groups as $group) {
+    $groups_by_name[$group->label()] = $group;
+  }
+
+  $term = reset($terms);
+  if (isset($groups_by_name[$term->label()])) {
+    $group = $groups_by_name[$term->label()];
+    $group->addContent($media, 'group_media:' . $media->bundle());
+  }
+}
+
+/**
+ * Implements hook_media_update().
+ */
+function islandora_install_profile_demo_core_media_update(MediaInterface $media) {
+  $node = \Drupal::service('islandora.utils')->getParentNode($media);
+
+  // Unindex if removed from a node.
+  if (empty($node)) {
+    foreach (GroupContent::loadByEntity($media) as $group_content) {
+      $group_content->delete();
+    }
+    return;
+  }
+
+  // Exit early if it has no access terms
+  if (!$node->hasField('field_access_terms')) {
+    return;
+  }
+
+  // Arrange groups keyed by their name so we can look them up later.
+  $groups = \Drupal::service('entity_type.manager')->getStorage('group')->loadMultiple();
+  $groups_by_name = [];
+  foreach ($groups as $group) {
+    $groups_by_name[$group->label()] = $group;
+  }
+
+
+  // Get the access terms for the node.
+  $terms = $node->get('field_access_terms')->referencedEntities();
+
+  // Delete content from groups if there's no terms.
+  if (empty($terms)) {
+    foreach (GroupContent::loadByEntity($media) as $group_content) {
+      $group_content->delete();
+    }
+    return;
+  }
+
+  $term = reset($terms);
+
+  $found = FALSE;
+  foreach (GroupContent::loadByEntity($media) as $group_content) {
+    $group = $group_content->getGroup();
+    if ($group->label() != $term->label()) {
+      $group_content->delete();
+    }
+    else {
+      $found = TRUE;
+    }
+  }
+
+  if (!$found && isset($groups_by_name[$term->label()])) {
+    $group = $groups_by_name[$term->label()];
+    $group->addContent($media, 'group_media:' . $media->bundle());
+  }
+}
+
+/**
+ * Implements hook_media_delete().
+ */
+function islandora_install_profile_demo_core_media_delete(MediaInterface $media) {
+  foreach (GroupContent::loadByEntity($media) as $group_content) {
+    $group_content->delete();
+  }
 }

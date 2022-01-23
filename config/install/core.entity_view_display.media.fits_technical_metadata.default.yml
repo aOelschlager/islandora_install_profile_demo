@@ -10,11 +10,11 @@ dependencies:
     - field.field.media.fits_technical_metadata.field_mime_type
     - field.field.media.fits_technical_metadata.fits_ois_file_information_md5che
     - media.type.fits_technical_metadata
+  module:
+    - islandora_fits
   enforced:
     module:
       - islandora_fits
-  module:
-    - islandora_fits
 id: media.fits_technical_metadata.default
 targetEntityType: media
 bundle: fits_technical_metadata

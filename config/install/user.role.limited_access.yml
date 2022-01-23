@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: limited_access
+label: 'Limited access'
+weight: 4
+is_admin: null
+permissions: {  }

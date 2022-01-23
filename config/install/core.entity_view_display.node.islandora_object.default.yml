@@ -2,11 +2,18 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.islandora_object.field_abstract
     - field.field.node.islandora_object.field_access_terms
+    - field.field.node.islandora_object.field_alt_title
     - field.field.node.islandora_object.field_alternative_title
     - field.field.node.islandora_object.field_classification
     - field.field.node.islandora_object.field_coordinates
     - field.field.node.islandora_object.field_coordinates_text
+    - field.field.node.islandora_object.field_copyright_date
+    - field.field.node.islandora_object.field_date_captured
+    - field.field.node.islandora_object.field_date_modified
+    - field.field.node.islandora_object.field_date_valid
+    - field.field.node.islandora_object.field_description
     - field.field.node.islandora_object.field_description_long
     - field.field.node.islandora_object.field_dewey_classification
     - field.field.node.islandora_object.field_display_hints
@@ -16,6 +23,8 @@ dependencies:
     - field.field.node.islandora_object.field_edtf_date_created
     - field.field.node.islandora_object.field_edtf_date_issued
     - field.field.node.islandora_object.field_extent
+    - field.field.node.islandora_object.field_frequency
+    - field.field.node.islandora_object.field_full_title
     - field.field.node.islandora_object.field_genre
     - field.field.node.islandora_object.field_geographic_subject
     - field.field.node.islandora_object.field_identifier
@@ -26,23 +35,23 @@ dependencies:
     - field.field.node.islandora_object.field_local_identifier
     - field.field.node.islandora_object.field_main_banner
     - field.field.node.islandora_object.field_member_of
+    - field.field.node.islandora_object.field_mode_of_issuance
     - field.field.node.islandora_object.field_model
     - field.field.node.islandora_object.field_note
     - field.field.node.islandora_object.field_oclc_number
     - field.field.node.islandora_object.field_physical_form
     - field.field.node.islandora_object.field_pid
     - field.field.node.islandora_object.field_place_published
+    - field.field.node.islandora_object.field_place_published_country
     - field.field.node.islandora_object.field_resource_type
     - field.field.node.islandora_object.field_rights
     - field.field.node.islandora_object.field_subject
+    - field.field.node.islandora_object.field_subject_general
     - field.field.node.islandora_object.field_subjects_name
     - field.field.node.islandora_object.field_table_of_contents
     - field.field.node.islandora_object.field_temporal_subject
     - field.field.node.islandora_object.field_weight
     - node.type.islandora_object
-  enforced:
-    module:
-      - islandora_defaults
   module:
     - controlled_access_terms
     - field_group
@@ -50,25 +59,29 @@ dependencies:
     - text
     - title_field_for_manage_display
     - user
+  enforced:
+    module:
+      - islandora_defaults
 third_party_settings:
   field_group:
     group_default_object_detail:
       children:
         - group_default_item_description
+      label: 'Default object detail'
       parent_name: ''
+      region: content
       weight: 6
       format_type: tabs
-      region: content
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         direction: horizontal
-      label: 'Default object detail'
     group_default_item_description:
       children:
         - field_alternative_title
-        - field_member_of
         - field_identifier
+        - field_resource_type
+        - field_genre
         - field_linked_agent
         - field_edtf_date_created
         - field_edtf_date_issued
@@ -76,8 +89,6 @@ third_party_settings:
         - field_edition
         - field_place_published
         - field_language
-        - field_resource_type
-        - field_genre
         - field_description_long
         - field_table_of_contents
         - field_physical_form
@@ -96,27 +107,31 @@ third_party_settings:
         - field_isbn
         - field_oclc_number
         - field_note
+        - field_member_of
         - field_gemini_uri
         - islandora_fits_checksum
+      label: 'Item Description'
       parent_name: group_default_object_detail
+      region: content
       weight: 20
       format_type: tab
-      region: content
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         formatter: open
-      label: 'Item Description'
+        description: ''
     group_download_options:
       children:
         - display_media_entity_view_2
         - permalink_uri
+      label: 'Download Options'
       parent_name: ''
+      region: content
       weight: 5
       format_type: html_element
-      region: content
       format_settings:
+        classes: media-download
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -124,92 +139,87 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: media-download
-      label: 'Download Options'
 id: node.islandora_object.default
 targetEntityType: node
 bundle: islandora_object
 mode: default
 content:
   addtoany:
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
     region: content
+  display_media_entity_view_2:
     settings: {  }
     third_party_settings: {  }
-  display_media_entity_view_2:
     weight: 5
     region: content
-    settings: {  }
-    third_party_settings: {  }
   field_alternative_title:
     type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 0
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_classification:
-    weight: 26
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 24
     region: content
   field_coordinates:
-    weight: 20
+    type: geolocation_latlng
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: geolocation_latlng
+    weight: 18
     region: content
   field_coordinates_text:
-    weight: 21
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 19
     region: content
   field_description_long:
-    weight: 13
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 11
     region: content
   field_dewey_classification:
-    weight: 24
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 22
     region: content
   field_display_title:
     type: title_value_field_formatter
-    weight: 0
-    region: content
     label: hidden
     settings:
       tag: h1
       classes: ''
       linked: 0
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_edition:
-    weight: 7
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 8
     region: content
   field_edtf_date:
     type: edtf_default
-    weight: 6
-    region: content
     label: above
     settings:
       date_separator: dash
@@ -217,10 +227,10 @@ content:
       month_format: mm
       day_format: dd
     third_party_settings: {  }
+    weight: 7
+    region: content
   field_edtf_date_created:
     type: edtf_default
-    weight: 4
-    region: content
     label: above
     settings:
       date_separator: dash
@@ -228,10 +238,10 @@ content:
       month_format: mm
       day_format: dd
     third_party_settings: {  }
-  field_edtf_date_issued:
-    type: edtf_default
     weight: 5
     region: content
+  field_edtf_date_issued:
+    type: edtf_default
     label: above
     settings:
       date_separator: dash
@@ -239,203 +249,217 @@ content:
       month_format: mm
       day_format: dd
     third_party_settings: {  }
+    weight: 6
+    region: content
   field_extent:
     type: string
-    weight: 16
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-  field_gemini_uri:
-    weight: 31
+    weight: 14
     region: content
+  field_gemini_uri:
     settings: {  }
     third_party_settings: {  }
+    weight: 30
+    region: content
   field_genre:
     type: entity_reference_label
-    weight: 11
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
     region: content
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
   field_geographic_subject:
-    weight: 19
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 17
     region: content
   field_identifier:
     type: string
-    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_isbn:
-    weight: 28
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 26
     region: content
   field_language:
     type: entity_reference_label
-    weight: 9
-    region: content
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 10
+    region: content
   field_lcc_classification:
-    weight: 25
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 23
     region: content
   field_linked_agent:
-    weight: 3
+    type: typed_relation_default
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: typed_relation_default
+    weight: 4
     region: content
   field_local_identifier:
-    weight: 27
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 25
     region: content
   field_member_of:
     type: entity_reference_label
-    weight: 1
-    region: content
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 29
+    region: content
   field_note:
-    weight: 30
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 28
     region: content
   field_oclc_number:
-    weight: 29
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 27
     region: content
   field_physical_form:
     type: entity_reference_label
-    weight: 15
-    region: content
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 13
+    region: content
   field_place_published:
-    weight: 8
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 9
     region: content
   field_resource_type:
-    weight: 10
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
   field_rights:
     type: string
-    weight: 17
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 15
+    region: content
   field_subject:
-    weight: 18
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 16
     region: content
   field_subjects_name:
-    weight: 23
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 21
     region: content
   field_table_of_contents:
-    weight: 14
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 12
     region: content
   field_temporal_subject:
-    weight: 22
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 20
     region: content
   islandora_fits_checksum:
-    weight: 32
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 31
+    region: content
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 4
     region: content
+  object_navigation:
     settings: {  }
     third_party_settings: {  }
-  object_navigation:
     weight: 3
     region: content
+  pdfjs_media_evas_entity_view_1:
     settings: {  }
     third_party_settings: {  }
-  pdfjs_media_evas_entity_view_1:
     weight: 2
     region: content
+  permalink_uri:
     settings: {  }
     third_party_settings: {  }
-  permalink_uri:
     weight: 6
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   display_media_entity_view_1: true
   display_media_service_file: true
   display_media_thumbnail: true
+  field_abstract: true
   field_access_terms: true
+  field_alt_title: true
+  field_copyright_date: true
+  field_date_captured: true
+  field_date_modified: true
+  field_date_valid: true
+  field_description: true
   field_display_hints: true
+  field_frequency: true
+  field_full_title: true
   field_main_banner: true
+  field_mode_of_issuance: true
   field_model: true
   field_pid: true
+  field_place_published_country: true
+  field_subject_general: true
   field_weight: true
   langcode: true
   media_evas_content_entity_view_1: true
@@ -450,3 +474,6 @@ hidden:
   pdfjs_media_evas_entity_view_2: true
   pdfjs_media_evas_service_file: true
   search_api_excerpt: true
+  video_media_evas_entity_view_1: true
+  video_media_evas_entity_view_2: true
+  video_media_evas_service_file: true

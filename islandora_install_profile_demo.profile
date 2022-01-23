@@ -2,7 +2,7 @@
 
 /**
  * @file
- * The islandora_install_profile_demo profile.
+ * The BD profile.
  */
 
 use Drupal\Core\Extension\Dependency;
@@ -27,7 +27,7 @@ function islandora_install_profile_demo_install_tasks() {
 }
 
 /**
- * Finish islandora_install_profile_demo installation process.
+ * Finish BD installation process.
  *
  * @param array $install_state
  *   The install state.
@@ -53,7 +53,7 @@ function islandora_install_profile_demo_modules_installed($modules) {
     /** @var \Drupal\Core\Extension\ModuleExtensionList $moduleExtensionList */
     $moduleExtensionList = \Drupal::service('extension.list.module');
     $thunder_features = array_filter($moduleExtensionList->getList(), function (Extension $module) {
-      return $module->info['package'] === 'islandora_install_profile_demo Optional';
+      return $module->info['package'] === 'BD Optional';
     });
 
     foreach ($thunder_features as $id => $extension) {
@@ -101,7 +101,7 @@ function islandora_install_profile_demo_set_default_theme() {
 
 function islandora_install_profile_demo_form_install_configure_form_alter(&$form, FormState $form_state) {
   // Add a value as example that one can choose an arbitrary site name.
-  $form['site_information']['site_name']['#placeholder'] = t('Islandora\'s Collections');
+  $form['site_information']['site_name']['#placeholder'] = t('Born-Digital\'s Collections');
 }
 
 

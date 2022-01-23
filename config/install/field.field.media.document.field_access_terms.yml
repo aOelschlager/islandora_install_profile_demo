@@ -10,7 +10,7 @@ field_name: field_access_terms
 entity_type: media
 bundle: document
 label: 'Access terms'
-description: 'Terms that define who has access to view/edit this resource.'
+description: ''
 required: false
 translatable: true
 default_value: {  }

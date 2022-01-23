@@ -1,14 +1,14 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - islandora_core_feature
   module:
     - file
     - filehash
     - rest
     - serialization
+  enforced:
+    module:
+      - islandora_core_feature
 id: file_checksum
 label: 'File Checksum'
 module: views

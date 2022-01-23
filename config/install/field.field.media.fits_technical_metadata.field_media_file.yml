@@ -4,11 +4,11 @@ dependencies:
   config:
     - field.storage.media.field_media_file
     - media.type.fits_technical_metadata
+  module:
+    - file
   enforced:
     module:
       - islandora_fits
-  module:
-    - file
 id: media.fits_technical_metadata.field_media_file
 field_name: field_media_file
 entity_type: media

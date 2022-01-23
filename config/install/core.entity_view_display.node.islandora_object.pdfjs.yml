@@ -3,11 +3,18 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.pdfjs
+    - field.field.node.islandora_object.field_abstract
     - field.field.node.islandora_object.field_access_terms
+    - field.field.node.islandora_object.field_alt_title
     - field.field.node.islandora_object.field_alternative_title
     - field.field.node.islandora_object.field_classification
     - field.field.node.islandora_object.field_coordinates
     - field.field.node.islandora_object.field_coordinates_text
+    - field.field.node.islandora_object.field_copyright_date
+    - field.field.node.islandora_object.field_date_captured
+    - field.field.node.islandora_object.field_date_modified
+    - field.field.node.islandora_object.field_date_valid
+    - field.field.node.islandora_object.field_description
     - field.field.node.islandora_object.field_description_long
     - field.field.node.islandora_object.field_dewey_classification
     - field.field.node.islandora_object.field_display_hints
@@ -17,6 +24,8 @@ dependencies:
     - field.field.node.islandora_object.field_edtf_date_created
     - field.field.node.islandora_object.field_edtf_date_issued
     - field.field.node.islandora_object.field_extent
+    - field.field.node.islandora_object.field_frequency
+    - field.field.node.islandora_object.field_full_title
     - field.field.node.islandora_object.field_genre
     - field.field.node.islandora_object.field_geographic_subject
     - field.field.node.islandora_object.field_identifier
@@ -27,23 +36,23 @@ dependencies:
     - field.field.node.islandora_object.field_local_identifier
     - field.field.node.islandora_object.field_main_banner
     - field.field.node.islandora_object.field_member_of
+    - field.field.node.islandora_object.field_mode_of_issuance
     - field.field.node.islandora_object.field_model
     - field.field.node.islandora_object.field_note
     - field.field.node.islandora_object.field_oclc_number
     - field.field.node.islandora_object.field_physical_form
     - field.field.node.islandora_object.field_pid
     - field.field.node.islandora_object.field_place_published
+    - field.field.node.islandora_object.field_place_published_country
     - field.field.node.islandora_object.field_resource_type
     - field.field.node.islandora_object.field_rights
     - field.field.node.islandora_object.field_subject
+    - field.field.node.islandora_object.field_subject_general
     - field.field.node.islandora_object.field_subjects_name
     - field.field.node.islandora_object.field_table_of_contents
     - field.field.node.islandora_object.field_temporal_subject
     - field.field.node.islandora_object.field_weight
     - node.type.islandora_object
-  enforced:
-    module:
-      - islandora_defaults
   module:
     - controlled_access_terms
     - field_group
@@ -51,6 +60,9 @@ dependencies:
     - text
     - title_field_for_manage_display
     - user
+  enforced:
+    module:
+      - islandora_defaults
 third_party_settings:
   field_group:
     group_pdfjs_object_detail:
@@ -68,8 +80,9 @@ third_party_settings:
     group_pdfjs_item_description:
       children:
         - field_alternative_title
-        - field_member_of
         - field_identifier
+        - field_resource_type
+        - field_genre
         - field_linked_agent
         - field_edtf_date_created
         - field_edtf_date_issued
@@ -77,8 +90,6 @@ third_party_settings:
         - field_edition
         - field_place_published
         - field_language
-        - field_resource_type
-        - field_genre
         - field_description_long
         - field_table_of_contents
         - field_physical_form
@@ -94,10 +105,11 @@ third_party_settings:
         - field_lcc_classification
         - field_classification
         - field_local_identifier
-        - field_gemini_uri
         - field_isbn
         - field_oclc_number
         - field_note
+        - field_member_of
+        - field_gemini_uri
         - islandora_fits_checksum
       parent_name: group_pdfjs_object_detail
       weight: 20
@@ -153,7 +165,7 @@ content:
     third_party_settings: {  }
   field_classification:
     type: string
-    weight: 30
+    weight: 28
     region: content
     label: above
     settings:
@@ -161,14 +173,14 @@ content:
     third_party_settings: {  }
   field_coordinates:
     type: geolocation_latlng
-    weight: 24
+    weight: 22
     region: content
     label: above
     settings: {  }
     third_party_settings: {  }
   field_coordinates_text:
     type: string
-    weight: 25
+    weight: 23
     region: content
     label: above
     settings:
@@ -176,14 +188,14 @@ content:
     third_party_settings: {  }
   field_description_long:
     type: text_default
-    weight: 17
+    weight: 15
     region: content
     label: above
     settings: {  }
     third_party_settings: {  }
   field_dewey_classification:
     type: string
-    weight: 28
+    weight: 26
     region: content
     label: above
     settings:
@@ -201,7 +213,7 @@ content:
     third_party_settings: {  }
   field_edition:
     type: string
-    weight: 11
+    weight: 12
     region: content
     label: above
     settings:
@@ -209,7 +221,7 @@ content:
     third_party_settings: {  }
   field_edtf_date:
     type: edtf_default
-    weight: 10
+    weight: 11
     region: content
     label: above
     settings:
@@ -220,7 +232,7 @@ content:
     third_party_settings: {  }
   field_edtf_date_created:
     type: edtf_default
-    weight: 8
+    weight: 9
     region: content
     label: above
     settings:
@@ -231,7 +243,7 @@ content:
     third_party_settings: {  }
   field_edtf_date_issued:
     type: edtf_default
-    weight: 9
+    weight: 10
     region: content
     label: above
     settings:
@@ -242,20 +254,20 @@ content:
     third_party_settings: {  }
   field_extent:
     type: string
-    weight: 20
+    weight: 18
     region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_gemini_uri:
-    weight: 32
+    weight: 34
     region: content
     settings: {  }
     third_party_settings: {  }
   field_genre:
     type: entity_reference_label
-    weight: 15
+    weight: 7
     region: content
     label: above
     settings:
@@ -263,7 +275,7 @@ content:
     third_party_settings: {  }
   field_geographic_subject:
     type: entity_reference_label
-    weight: 23
+    weight: 21
     region: content
     label: above
     settings:
@@ -271,7 +283,7 @@ content:
     third_party_settings: {  }
   field_identifier:
     type: string
-    weight: 6
+    weight: 5
     region: content
     label: above
     settings:
@@ -279,7 +291,7 @@ content:
     third_party_settings: {  }
   field_isbn:
     type: string
-    weight: 33
+    weight: 30
     region: content
     label: above
     settings:
@@ -287,7 +299,7 @@ content:
     third_party_settings: {  }
   field_language:
     type: entity_reference_label
-    weight: 13
+    weight: 14
     region: content
     label: above
     settings:
@@ -295,14 +307,14 @@ content:
     third_party_settings: {  }
   field_lcc_classification:
     type: string
-    weight: 29
+    weight: 27
     region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_linked_agent:
-    weight: 7
+    weight: 8
     label: above
     settings:
       link: true
@@ -311,7 +323,7 @@ content:
     region: content
   field_local_identifier:
     type: string
-    weight: 31
+    weight: 29
     region: content
     label: above
     settings:
@@ -319,7 +331,7 @@ content:
     third_party_settings: {  }
   field_member_of:
     type: entity_reference_label
-    weight: 5
+    weight: 33
     region: content
     label: above
     settings:
@@ -327,14 +339,14 @@ content:
     third_party_settings: {  }
   field_note:
     type: text_default
-    weight: 35
+    weight: 32
     region: content
     label: above
     settings: {  }
     third_party_settings: {  }
   field_oclc_number:
     type: string
-    weight: 34
+    weight: 31
     region: content
     label: above
     settings:
@@ -342,7 +354,7 @@ content:
     third_party_settings: {  }
   field_physical_form:
     type: entity_reference_label
-    weight: 19
+    weight: 17
     region: content
     label: above
     settings:
@@ -350,14 +362,14 @@ content:
     third_party_settings: {  }
   field_place_published:
     type: string
-    weight: 12
+    weight: 13
     region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_resource_type:
-    weight: 14
+    weight: 6
     label: above
     settings:
       link: true
@@ -366,14 +378,14 @@ content:
     region: content
   field_rights:
     type: string
-    weight: 21
+    weight: 19
     region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_subject:
-    weight: 22
+    weight: 20
     label: above
     settings:
       link: true
@@ -382,7 +394,7 @@ content:
     region: content
   field_subjects_name:
     type: entity_reference_label
-    weight: 27
+    weight: 25
     region: content
     label: above
     settings:
@@ -390,21 +402,21 @@ content:
     third_party_settings: {  }
   field_table_of_contents:
     type: text_default
-    weight: 18
+    weight: 16
     region: content
     label: above
     settings: {  }
     third_party_settings: {  }
   field_temporal_subject:
     type: entity_reference_label
-    weight: 26
+    weight: 24
     region: content
     label: above
     settings:
       link: true
     third_party_settings: {  }
   islandora_fits_checksum:
-    weight: 36
+    weight: 35
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -432,11 +444,23 @@ hidden:
   display_media_entity_view_1: true
   display_media_service_file: true
   display_media_thumbnail: true
+  field_abstract: true
   field_access_terms: true
+  field_alt_title: true
+  field_copyright_date: true
+  field_date_captured: true
+  field_date_modified: true
+  field_date_valid: true
+  field_description: true
   field_display_hints: true
+  field_frequency: true
+  field_full_title: true
   field_main_banner: true
+  field_mode_of_issuance: true
   field_model: true
   field_pid: true
+  field_place_published_country: true
+  field_subject_general: true
   field_weight: true
   langcode: true
   media_evas_content_entity_view_1: true
@@ -451,3 +475,6 @@ hidden:
   pdfjs_media_evas_entity_view_2: true
   pdfjs_media_evas_service_file: true
   search_api_excerpt: true
+  video_media_evas_entity_view_1: true
+  video_media_evas_entity_view_2: true
+  video_media_evas_service_file: true

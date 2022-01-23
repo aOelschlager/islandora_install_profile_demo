@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - islandora
-name: all_media
 label: 'All Media'
+name: all_media
 group: Indexing
 description: 'All media, regardless of where it lives'
 requireAllConditions: false

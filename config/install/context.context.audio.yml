@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - islandora
-name: audio
 label: Audio
+name: audio
 group: Display
 description: ''
 requireAllConditions: false
@@ -12,11 +12,10 @@ disabled: false
 conditions:
   media_has_term:
     id: media_has_term
-    logic: and
     negate: false
-    uuid: 54a10a4e-b866-4280-b726-d64863cc9598
-    uri: 'http://purl.org/coar/resource_type/c_18cc,http://purl.org/dc/dcmitype/Sound'
     context_mapping:
       media: '@islandora.media_route_context_provider:media'
+    uri: 'http://purl.org/coar/resource_type/c_18cc,http://purl.org/dc/dcmitype/Sound'
+    logic: and
 reactions: {  }
 weight: -13

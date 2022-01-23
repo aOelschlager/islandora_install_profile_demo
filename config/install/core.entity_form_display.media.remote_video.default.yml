@@ -2,7 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.remote_video.field_access_terms
+    - field.field.media.remote_video.field_author_name
     - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_media_of
+    - field.field.media.remote_video.field_media_use
+    - field.field.media.remote_video.field_original_name
+    - field.field.media.remote_video.field_tn_uri
+    - field.field.media.remote_video.field_video_height
+    - field.field.media.remote_video.field_video_width
     - media.type.remote_video
   module:
     - media
@@ -14,28 +22,45 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_media_oembed_video:
     type: oembed_textfield
-    weight: 0
+    weight: 1
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     region: content
-  langcode:
-    type: language_select
+  field_media_of:
     weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_media_use:
+    weight: 7
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  name:
+    type: string_textfield
+    weight: 0
     region: content
     settings:
-      include_locked: true
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -43,12 +68,12 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 100
+    weight: 6
     region: content
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 3
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -57,4 +82,11 @@ content:
     region: content
     third_party_settings: {  }
 hidden:
-  name: true
+  field_access_terms: true
+  field_author_name: true
+  field_file_size: true
+  field_original_name: true
+  field_tn_uri: true
+  field_video_height: true
+  field_video_width: true
+  langcode: true

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - islandora_install_profile_demo
+id: borndigital
+label: Born-Digital
+description: 'Migrations into Islandora'
+source_type: Anything
+module: null
+shared_configuration: null

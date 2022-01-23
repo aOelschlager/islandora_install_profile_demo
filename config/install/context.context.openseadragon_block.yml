@@ -3,8 +3,9 @@ status: true
 dependencies:
   module:
     - islandora
-name: openseadragon_block
+    - openseadragon
 label: 'Paged Content - Openseadragon'
+name: openseadragon_block
 group: Display
 description: 'Display a block for Paged Content'
 requireAllConditions: false
@@ -13,13 +14,13 @@ conditions:
   node_has_term:
     id: node_has_term
     negate: false
-    uuid: e5689bd5-7eec-4378-b329-2f35d5bb35b0
-    uri: 'http://openseadragon.github.io,https://schema.org/Book'
     context_mapping:
       node: '@node.node_route_context:node'
+    uri: 'http://openseadragon.github.io,https://schema.org/Book'
     logic: and
 reactions:
   blocks:
+    id: blocks
     blocks:
       4fe759c9-e1bf-4709-871c-7b8a407c840b:
         id: openseadragon_block
@@ -28,13 +29,12 @@ reactions:
         label_display: '0'
         region: content
         weight: '-1'
-        iiif_manifest_url: 'http://localhost:8000/node/[node:nid]/book-manifest'
-        context_mapping: {  }
         theme: bartik
         css_class: ''
         unique: 0
         context_id: openseadragon_block
-        uuid: 4fe759c9-e1bf-4709-871c-7b8a407c840b
+        context_mapping: {  }
+        iiif_manifest_url: 'http://localhost:8000/node/[node:nid]/book-manifest'
       16401a13-1031-4ffe-96b2-5909df309f6a:
         id: openseadragon_block
         label: 'Openseadragon block'
@@ -42,15 +42,12 @@ reactions:
         label_display: visible
         region: content
         weight: '0'
-        iiif_manifest_url: 'http://localhost:8000/node/[node:nid]/book-manifest'
-        context_mapping: {  }
         theme: bartik
         css_class: ''
         unique: 0
         context_id: openseadragon_block
-        uuid: 16401a13-1031-4ffe-96b2-5909df309f6a
-    id: blocks
-    saved: false
-    uuid: 50b9b25e-0836-4531-8a78-9698d71d81de
+        context_mapping: {  }
+        iiif_manifest_url: 'http://localhost:8000/node/[node:nid]/book-manifest'
     include_default_blocks: 1
+    saved: false
 weight: -1

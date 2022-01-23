@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - islandora
-name: compund_parent_object
 label: 'Compound Parent Object'
+name: compund_parent_object
 group: Display
 description: ''
 requireAllConditions: true
@@ -12,12 +12,11 @@ disabled: false
 conditions:
   node_has_term:
     id: node_has_term
-    logic: and
-    uri: 'http://purl.org/dc/dcmitype/Collection,http://vocab.getty.edu/aat/300242735'
     negate: false
-    uuid: 37d2a4bc-bb4d-4b3a-a71c-1c97e2ef9a77
     context_mapping:
       node: '@node.node_route_context:node'
+    uri: 'http://purl.org/dc/dcmitype/Collection,http://vocab.getty.edu/aat/300242735'
+    logic: and
 reactions:
   view_mode_alter:
     id: view_mode_alter

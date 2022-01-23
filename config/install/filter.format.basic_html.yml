@@ -1,8 +1,7 @@
 langcode: en
-status: false
+status: true
 dependencies:
   module:
-    - collapse_text
     - editor
 name: 'Basic HTML'
 format: basic_html
@@ -41,11 +40,3 @@ filters:
     status: true
     weight: 11
     settings: {  }
-  filter_collapse_text:
-    id: filter_collapse_text
-    provider: collapse_text
-    status: false
-    weight: 0
-    settings:
-      default_title: 'Click here to expand or collapse this section'
-      form: '1'

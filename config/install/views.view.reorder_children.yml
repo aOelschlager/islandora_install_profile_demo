@@ -1,13 +1,13 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - islandora_core_feature
   module:
     - islandora
     - node
     - user
+  enforced:
+    module:
+      - islandora_core_feature
 id: reorder_children
 label: 'Reorder children'
 module: views
@@ -182,6 +182,7 @@ display:
           exposed: false
           expose:
             label: ''
+            field_identifier: field_weight_value
           plugin_id: standard
       title: 'Reorder children'
       header: {  }

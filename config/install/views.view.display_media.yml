@@ -5,14 +5,14 @@ dependencies:
     - core.entity_view_mode.media.download
     - core.entity_view_mode.media.full
     - core.entity_view_mode.media.thumbnail
-  enforced:
-    module:
-      - islandora_core_feature
   module:
     - eva
     - media
     - taxonomy
     - user
+  enforced:
+    module:
+      - islandora_core_feature
 id: display_media
 label: 'Media EVAs'
 module: views

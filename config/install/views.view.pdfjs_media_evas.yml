@@ -7,16 +7,15 @@ dependencies:
     - media.type.document
     - media.type.file
     - media.type.image
-    - media.type.remote_video
     - media.type.video
-  enforced:
-    module:
-      - islandora_defaults
   module:
     - eva
     - media
     - taxonomy
     - user
+  enforced:
+    module:
+      - islandora_defaults
 id: pdfjs_media_evas
 label: 'PDFjs Media EVAs'
 module: views
@@ -267,7 +266,6 @@ display:
             document: document
             file: file
             image: image
-            remote_video: remote_video
             video: video
           group: 1
           exposed: false

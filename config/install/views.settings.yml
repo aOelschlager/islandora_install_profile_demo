@@ -37,7 +37,7 @@ field_rewrite_elements:
   pre: PRE
   var: VAR
   samp: SAMP
-  kbd: KBD
+  kislandora_install_profile_demo: KBD
   strong: STRONG
   em: EM
   del: DEL

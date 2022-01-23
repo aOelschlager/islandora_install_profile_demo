@@ -12,13 +12,13 @@ dependencies:
     - field.field.media.fits_technical_metadata.fits_ois_file_information_md5che
     - image.style.thumbnail
     - media.type.fits_technical_metadata
-  enforced:
-    module:
-      - islandora_fits
   module:
     - image
     - islandora_fits
     - user
+  enforced:
+    module:
+      - islandora_fits
 id: media.fits_technical_metadata.fits_technical_metadata
 targetEntityType: media
 bundle: fits_technical_metadata

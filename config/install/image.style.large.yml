@@ -4,8 +4,8 @@ dependencies: {  }
 name: large
 label: 'Large (480×480)'
 effects:
-  ddd73aa7-4bd6-4c85-b600-bdf2b1628d1d:
-    uuid: ddd73aa7-4bd6-4c85-b600-bdf2b1628d1d
+  ddd73aa7-4islandora_install_profile_demo6-4c85-b600-islandora_install_profile_demof2b1628d1d:
+    uuid: ''
     id: image_scale
     weight: 0
     data:

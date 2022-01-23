@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - fixed_block_content.fixed_block_content.carapace_fb_copyright
+  module:
+    - fixed_block_content
+  theme:
+    - seven
+id: seven_footercopyright
+theme: seven
+region: header
+weight: -6
+provider: null
+plugin: 'fixed_block_content:carapace_fb_copyright'
+settings:
+  id: 'fixed_block_content:carapace_fb_copyright'
+  label: 'Footer: Copyright'
+  label_display: '0'
+  provider: fixed_block_content
+  view_mode: ''
+visibility: {  }

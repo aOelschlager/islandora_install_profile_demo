@@ -2,7 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.remote_video.field_access_terms
+    - field.field.media.remote_video.field_author_name
     - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_media_of
+    - field.field.media.remote_video.field_media_use
+    - field.field.media.remote_video.field_original_name
+    - field.field.media.remote_video.field_tn_uri
+    - field.field.media.remote_video.field_video_height
+    - field.field.media.remote_video.field_video_width
     - media.type.remote_video
   module:
     - media
@@ -14,14 +22,23 @@ content:
   field_media_oembed_video:
     type: oembed
     weight: 0
-    label: hidden
+    label: visually_hidden
     settings:
-      max_width: 0
-      max_height: 0
+      max_width: 640
+      max_height: 480
     third_party_settings: {  }
     region: content
 hidden:
   created: true
+  field_access_terms: true
+  field_author_name: true
+  field_file_size: true
+  field_media_of: true
+  field_media_use: true
+  field_original_name: true
+  field_tn_uri: true
+  field_video_height: true
+  field_video_width: true
   langcode: true
   name: true
   search_api_excerpt: true

@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.extracted_text.field_access_terms
     - field.field.media.extracted_text.field_edited_text
     - field.field.media.extracted_text.field_media_file
     - field.field.media.extracted_text.field_media_of
@@ -23,6 +24,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_access_terms:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
   field_edited_text:
     type: text_textarea
     weight: 7

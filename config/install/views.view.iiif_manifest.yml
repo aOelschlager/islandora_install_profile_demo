@@ -273,6 +273,7 @@ display:
           exposed: false
           expose:
             label: ''
+            field_identifier: field_weight_value
           plugin_id: standard
       header: {  }
       footer: {  }

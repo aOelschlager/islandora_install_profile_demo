@@ -3,8 +3,9 @@ status: true
 dependencies:
   module:
     - islandora
-name: audio_original_file
+    - media
 label: 'Audio Derivatives'
+name: audio_original_file
 group: Derivatives
 description: 'Derivatives for Audio'
 requireAllConditions: true
@@ -13,17 +14,24 @@ conditions:
   media_has_term:
     id: media_has_term
     negate: false
-    uri: 'http://pcdm.org/use#OriginalFile'
     context_mapping:
       media: '@islandora.media_route_context_provider:media'
+    uri: 'http://pcdm.org/use#OriginalFile'
     logic: and
   parent_node_has_term:
     id: parent_node_has_term
     negate: false
-    uri: 'http://purl.org/coar/resource_type/c_18cc'
     context_mapping:
       media: '@islandora.media_route_context_provider:media'
+    uri: 'http://purl.org/coar/resource_type/c_18cc'
     logic: and
+  'entity_bundle:media':
+    id: 'entity_bundle:media'
+    negate: true
+    context_mapping:
+      media: '@islandora.media_route_context_provider:media'
+    bundles:
+      remote_video: remote_video
 reactions:
   derivative:
     id: derivative

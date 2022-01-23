@@ -137,11 +137,11 @@ display:
           id: field_external_uri_uri
           table: taxonomy_term__field_external_uri
           field: field_external_uri_uri
-          relationship: field_resource_type
+          relationship: field_model
           group_type: group
           admin_label: ''
           operator: '='
-          value: 'http://purl.org/dc/dcmitype/Collection'
+          value: 'http://purl.org/dc/dcmitype/Collection#Model'
           group: 1
           exposed: false
           expose:
@@ -231,6 +231,7 @@ display:
           exposed: false
           expose:
             label: ''
+            field_identifier: created
           granularity: second
       title: 'Home Page - Featured Collections'
       header: {  }

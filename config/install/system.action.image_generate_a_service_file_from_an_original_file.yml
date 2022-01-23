@@ -13,7 +13,7 @@ configuration:
   source_term_uri: 'http://pcdm.org/use#OriginalFile'
   derivative_term_uri: 'http://pcdm.org/use#ServiceFile'
   mimetype: image/jpeg
-  args: '-thumbnail 480x480'
-  scheme: public
+  args: '-thumbnail 480x480 -density 700 -append -quality 98 -background white -flatten'
+  scheme: fedora
   path: '[date:custom:Y]-[date:custom:m]/[node:nid]-[term:name].jpg'
   destination_media_type: image

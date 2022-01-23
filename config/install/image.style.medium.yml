@@ -4,8 +4,8 @@ dependencies: {  }
 name: medium
 label: 'Medium (220×220)'
 effects:
-  bddf0d06-42f9-4c75-a700-a33cafa25ea0:
-    uuid: bddf0d06-42f9-4c75-a700-a33cafa25ea0
+  islandora_install_profile_demodf0d06-42f9-4c75-a700-a33cafa25ea0:
+    uuid: ''
     id: image_scale
     weight: 0
     data:

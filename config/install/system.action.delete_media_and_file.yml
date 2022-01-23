@@ -1,12 +1,12 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - islandora
   module:
     - islandora
     - media
+  enforced:
+    module:
+      - islandora
 id: delete_media_and_file
 label: 'Delete media and file(s)'
 type: media

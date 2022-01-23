@@ -4,8 +4,8 @@ dependencies:
   module:
     - islandora_install_profile_demo_core
     - islandora
-name: compound_member_object
 label: 'Compound member object'
+name: compound_member_object
 group: Display
 description: ''
 requireAllConditions: true
@@ -17,7 +17,6 @@ conditions:
     parent_reference_field: field_member_of
     model_uri: 'http://vocab.getty.edu/aat/300242735'
     logic: and
-    uuid: 3eb4b4b6-0127-4e39-8def-e145999e4fbf
     uri: 'http://purl.org/dc/dcmitype/Collection'
     context_mapping:
       node: '@node.node_route_context:node'

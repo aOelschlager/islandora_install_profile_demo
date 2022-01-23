@@ -20,36 +20,36 @@ plugin: 'views_block:home_page_featured_collections-block_2'
 settings:
   id: 'views_block:home_page_featured_collections-block_2'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
   items_per_page: '48'
 visibility:
   node_has_implicit_parent:
     id: node_has_implicit_parent
     negate: false
-    parent_reference_field: field_member_of
-    model_uri: null
-    logic: and
-    uri: null
     context_mapping: {  }
+    model_uri: null
+    parent_reference_field: field_member_of
+    uri: null
+    logic: and
   view_inclusion:
     id: view_inclusion
     negate: null
-    view_inclusion: {  }
     context_mapping: {  }
+    view_inclusion: {  }
   request_path_exclusion:
     id: request_path_exclusion
-    pages: ''
     negate: null
     context_mapping: {  }
+    pages: ''
   media_source_mimetype:
     id: media_source_mimetype
-    mimetype: ''
     negate: false
     context_mapping: {  }
+    mimetype: ''
   request_path:
     id: request_path
-    pages: /browse-collections
     negate: false
     context_mapping: {  }
+    pages: /browse-collections
