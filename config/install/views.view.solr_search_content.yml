@@ -330,12 +330,157 @@ display:
           plugin_id: result
           empty: true
           content: 'Displaying results @start - @end of @total'
+      footer:
         views_block_area:
           id: views_block_area
           table: views
           field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facets Summary'
           plugin_id: views_block_area
-      footer: {  }
+          empty: false
+          block_id: 'facets_summary_block:facet_summary'
+        views_block_area_1:
+          id: views_block_area_1
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Agent By Role: Consultant (csl)'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:agent_by_role_consultant_csl_block'
+        views_block_area_2:
+          id: views_block_area_2
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Agent By Role: Contributor (ctb)'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:duplicate_of_agent_by_role_contributor_ctb_block'
+        views_block_area_3:
+          id: views_block_area_3
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Agent By Role: Creator (cre)'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:agent_by_role_creator_cre_block'
+        views_block_area_4:
+          id: views_block_area_4
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Agent By Role: Publisher (pbl)'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:agent_by_role_publisher_pbl_block'
+        views_block_area_5:
+          id: views_block_area_5
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Author Name'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:duplicate_of_author_name_block'
+        views_block_area_6:
+          id: views_block_area_6
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Date Created'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:duplicate_of_date_created_block'
+        views_block_area_7:
+          id: views_block_area_7
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Date Issued'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:date_issued_block'
+        views_block_area_8:
+          id: views_block_area_8
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Genre'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:genre_block'
+        views_block_area_9:
+          id: views_block_area_9
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Identifier'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:identifier_block'
+        views_block_area_10:
+          id: views_block_area_10
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Member Of'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:member_of_block'
+        views_block_area_11:
+          id: views_block_area_11
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Physical Form'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:physical_form_block'
+        views_block_area_12:
+          id: views_block_area_12
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Place Published'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:place_publishe_block'
+        views_block_area_13:
+          id: views_block_area_13
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Subject'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:subject_block'
+        views_block_area_14:
+          id: views_block_area_14
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facet - Subject Name'
+          plugin_id: views_block_area
+          empty: false
+          block_id: 'facet_block:subject_name_block'
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -743,156 +888,6 @@ display:
           plugin_id: result
           empty: true
           content: 'Displaying results @start - @end of @total'
-        views_block_area:
-          id: views_block_area
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facets Summary'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facets_summary_block:facet_summary'
-        views_block_area_1:
-          id: views_block_area_1
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Agent By Role: Consultant (csl)'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:agent_by_role_consultant_csl_block'
-        views_block_area_2:
-          id: views_block_area_2
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Agent By Role: Contributor (ctb)'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:duplicate_of_agent_by_role_contributor_ctb_block'
-        views_block_area_3:
-          id: views_block_area_3
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Agent By Role: Creator (cre)'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:agent_by_role_creator_cre_block'
-        views_block_area_4:
-          id: views_block_area_4
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Agent By Role: Publisher (pbl)'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:agent_by_role_publisher_pbl_block'
-        views_block_area_5:
-          id: views_block_area_5
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Author Name'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:duplicate_of_author_name_block'
-        views_block_area_6:
-          id: views_block_area_6
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Date Created'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:duplicate_of_date_created_block'
-        views_block_area_7:
-          id: views_block_area_7
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Date Issued'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:date_issued_block'
-        views_block_area_8:
-          id: views_block_area_8
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Genre'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:genre_block'
-        views_block_area_9:
-          id: views_block_area_9
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Identifier'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:identifier_block'
-        views_block_area_10:
-          id: views_block_area_10
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Language'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:language_block'
-        views_block_area_11:
-          id: views_block_area_11
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Member Of'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:member_of_block'
-        views_block_area_12:
-          id: views_block_area_12
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Physical Form'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:physical_form_block'
-        views_block_area_13:
-          id: views_block_area_13
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Subject'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:subject_block'
-        views_block_area_14:
-          id: views_block_area_14
-          table: views
-          field: views_block_area
-          relationship: none
-          group_type: group
-          admin_label: 'Facet - Subject Name'
-          plugin_id: views_block_area
-          empty: false
-          block_id: 'facet_block:subject_name_block'
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -1102,6 +1097,7 @@ display:
         filters: false
         filter_groups: false
         header: false
+        footer: false
       display_description: ''
       header:
         result:
@@ -1114,6 +1110,7 @@ display:
           plugin_id: result
           empty: true
           content: "<h1 class=\"view-title\">Search Results</h1>\r\nDisplaying results @start - @end of @total"
+      footer:
         views_block_area:
           id: views_block_area
           table: views
