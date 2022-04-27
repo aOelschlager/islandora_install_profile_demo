@@ -18,7 +18,7 @@
     "repositories" : [
         {
             "type": "vcs",
-            "url": "https://github.com/Islandora-Devops/islandora_base_theme.git",
+            "url": "https://github.com/aOelschlager/islandora_base_theme.git",
             "no-api": true
         },
         {
@@ -151,7 +151,7 @@
         "islandora/controlled_access_terms": "2.x-dev",
         "islandora/islandora_defaults": "2.x-dev",
         "islandora/openseadragon": "2.x-dev",
-        "islandora/islandora_base_theme": "dev-main",
+        "islandora/islandora_base_theme": "dev-main-dev as dev-main",
         "islandora/islandora_starter_theme": "dev-main-dev as dev-main",
         "mglaman/drupal-check": "1.1.10",
         "mjordan/islandora_workbench_integration": "^1.0",
