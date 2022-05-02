@@ -50,6 +50,7 @@ install:
   - drupal:syslog
   - drupal:twig_tweak
   - drupal:pdf
+  - drupal:paragraphs
   - drupal:rdf
   - drupal:automated_cron
   - drupal:ds

@@ -693,3 +693,11 @@ function islandora_install_profile_demo_core_update_8234() {
   $cmd = 'drush en -y smtp';
   drush_shell_exec_interactive($cmd);
 }
+
+/**
+ * Enables paragraghs module.
+ */
+function islandora_install_profile_demo_core_update_8235() {
+  $cmd = 'drush pm:enable -y paragraghs';
+  drush_shell_exec_interactive($cmd);
+}
