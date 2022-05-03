@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.overseas_vietnamese_communities.field_overseas_vietnamese_c_text
+    - field.field.paragraph.overseas_vietnamese_communities.field_overseas_vietnamese_commun
+    - paragraphs.paragraphs_type.overseas_vietnamese_communities
+  module:
+    - link
+    - text
+id: paragraph.overseas_vietnamese_communities.default
+targetEntityType: paragraph
+bundle: overseas_vietnamese_communities
+mode: default
+content:
+  field_overseas_vietnamese_c_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_overseas_vietnamese_commun:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

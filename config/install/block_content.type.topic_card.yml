@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: topic_card
+label: 'Topic Card'
+revision: 0
+description: 'Search specific topics from the homepage'

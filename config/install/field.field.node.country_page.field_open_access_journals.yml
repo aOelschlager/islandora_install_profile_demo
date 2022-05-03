@@ -1,0 +1,87 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_open_access_journals
+    - node.type.country_page
+    - paragraphs.paragraphs_type.open_access_journals
+  module:
+    - entity_reference_revisions
+id: node.country_page.field_open_access_journals
+field_name: field_open_access_journals
+entity_type: node
+bundle: country_page
+label: 'Open Access Journals'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      open_access_journals: open_access_journals
+    negate: 0
+    target_bundles_drag_drop:
+      books:
+        weight: 21
+        enabled: false
+      digital_collections:
+        weight: 22
+        enabled: false
+      e_journals:
+        weight: 23
+        enabled: false
+      films:
+        weight: 24
+        enabled: false
+      general_information:
+        weight: 25
+        enabled: false
+      genocide:
+        weight: 26
+        enabled: false
+      government_institutions:
+        weight: 27
+        enabled: false
+      history_culture_and_religion:
+        weight: 28
+        enabled: false
+      language:
+        weight: 29
+        enabled: false
+      links_list:
+        weight: 30
+        enabled: false
+      manuscripts:
+        weight: 31
+        enabled: false
+      miscellaneous:
+        weight: 32
+        enabled: false
+      news:
+        weight: 33
+        enabled: false
+      open_access_journals:
+        weight: 34
+        enabled: true
+      overseas_vietnamese_communities:
+        weight: 35
+        enabled: false
+      political_and_social_issues:
+        weight: 36
+        enabled: false
+      radio:
+        weight: 37
+        enabled: false
+      research_institutions:
+        weight: 38
+        enabled: false
+      travel_information:
+        weight: 39
+        enabled: false
+      vietnam_war:
+        weight: 40
+        enabled: false
+field_type: entity_reference_revisions

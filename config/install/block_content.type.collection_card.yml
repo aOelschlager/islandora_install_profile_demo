@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: collection_card
+label: 'Collection Card'
+revision: 0
+description: 'Card to display collection'

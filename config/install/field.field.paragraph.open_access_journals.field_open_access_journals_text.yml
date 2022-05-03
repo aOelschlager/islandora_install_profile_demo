@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_open_access_journals_text
+    - paragraphs.paragraphs_type.open_access_journals
+  module:
+    - text
+id: paragraph.open_access_journals.field_open_access_journals_text
+field_name: field_open_access_journals_text
+entity_type: paragraph
+bundle: open_access_journals
+label: 'Open Access Journals Text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: whats_new_card
+label: 'Whats New Card'
+revision: 0
+description: 'Card that shows what''s new'

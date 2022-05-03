@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_google_map_block
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.region_google_map_block.body
+field_name: body
+entity_type: block_content
+bundle: region_google_map_block
+label: Body
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: "<iframe src=\"https://www.google.com/maps/d/embed?mid=19g9sbI2gwlnrGpW89m8xcjs_DrGRbG1B&ehbc=2E312F\" width=\"640\" height=\"480\"></iframe>\r\n"
+    summary: ''
+    format: full_html
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

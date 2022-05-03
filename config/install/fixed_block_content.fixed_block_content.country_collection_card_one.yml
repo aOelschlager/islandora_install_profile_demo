@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.country_collection_one_card
+id: country_collection_card_one
+title: country_collection_card_one
+block_content_bundle: country_collection_one_card
+default_content: null
+auto_export: 1
+protected: false

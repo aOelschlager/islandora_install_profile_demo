@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_films_link
+    - paragraphs.paragraphs_type.films
+  module:
+    - link
+id: paragraph.films.field_films_link
+field_name: field_films_link
+entity_type: paragraph
+bundle: films
+label: 'Films Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

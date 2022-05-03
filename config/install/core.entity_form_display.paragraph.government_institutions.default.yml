@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.government_institutions.field_government_institutions_li
+    - field.field.paragraph.government_institutions.field_government_institutions_te
+    - paragraphs.paragraphs_type.government_institutions
+  module:
+    - link
+    - text
+id: paragraph.government_institutions.default
+targetEntityType: paragraph
+bundle: government_institutions
+mode: default
+content:
+  field_government_institutions_li:
+    type: link_default
+    weight: 0
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_government_institutions_te:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

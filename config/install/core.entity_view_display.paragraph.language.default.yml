@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.language.field_language_link
+    - field.field.paragraph.language.field_language_text
+    - paragraphs.paragraphs_type.language
+  module:
+    - link
+    - text
+id: paragraph.language.default
+targetEntityType: paragraph
+bundle: language
+mode: default
+content:
+  field_language_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_language_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

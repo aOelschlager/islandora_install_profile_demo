@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_card
+    - field.storage.node.field_regions_card
+    - node.type.home_page
+  content:
+    - 'block_content:region_card:31e8b77d-8b3d-4f60-8cde-c7d642b5b937'
+id: node.home_page.field_regions_card
+field_name: field_regions_card
+entity_type: node
+bundle: home_page
+label: 'Regions Card'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 31e8b77d-8b3d-4f60-8cde-c7d642b5b937
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      region_card: region_card
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

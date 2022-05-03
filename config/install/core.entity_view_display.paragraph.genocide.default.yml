@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.genocide.field_genocide_link
+    - field.field.paragraph.genocide.field_genocide_text
+    - paragraphs.paragraphs_type.genocide
+  module:
+    - link
+    - text
+id: paragraph.genocide.default
+targetEntityType: paragraph
+bundle: genocide
+mode: default
+content:
+  field_genocide_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_genocide_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

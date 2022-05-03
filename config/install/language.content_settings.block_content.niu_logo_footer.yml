@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.niu_logo_footer
+id: block_content.niu_logo_footer
+target_entity_type_id: block_content
+target_bundle: niu_logo_footer
+default_langcode: site_default
+language_alterable: false

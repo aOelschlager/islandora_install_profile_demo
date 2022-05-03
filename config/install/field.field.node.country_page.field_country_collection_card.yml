@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.indonesia_card_collection
+    - field.storage.node.field_country_collection_card
+    - node.type.country_page
+id: node.country_page.field_country_collection_card
+field_name: field_country_collection_card
+entity_type: node
+bundle: country_page
+label: 'Country Collection Card'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      indonesia_card_collection: indonesia_card_collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.large
+id: card_image
+label: 'Card Image'
+image_style_mappings: {  }
+breakpoint_group: responsive_image
+fallback_image_style: large

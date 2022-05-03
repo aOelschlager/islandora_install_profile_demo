@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.country_collection_three_card
+    - field.storage.node.field_country_collection_iii_car
+    - node.type.country_page
+id: node.country_page.field_country_collection_iii_car
+field_name: field_country_collection_iii_car
+entity_type: node
+bundle: country_page
+label: 'Country Collection III Card'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      country_collection_three_card: country_collection_three_card
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

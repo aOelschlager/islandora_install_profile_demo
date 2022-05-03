@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_general_information
+    - node.type.country_page
+  module:
+    - text
+id: node.country_page.field_general_information
+field_name: field_general_information
+entity_type: node
+bundle: country_page
+label: 'General Information'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 'General Information'
+    format: full_html
+default_value_callback: ''
+settings: {  }
+field_type: text

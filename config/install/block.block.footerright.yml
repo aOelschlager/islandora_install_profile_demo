@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-right
+  module:
+    - islandora
+    - islandora_install_profile_demo_core
+    - system
+  theme:
+    - islandora_starter_theme
+id: footerright
+theme: islandora_starter_theme
+region: footer_third
+weight: 0
+provider: null
+plugin: 'system_menu_block:footer-right'
+settings:
+  id: 'system_menu_block:footer-right'
+  label: 'Footer Right'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  media_source_mimetype:
+    id: media_source_mimetype
+    mimetype: ''
+    negate: false
+    context_mapping: {  }
+  node_has_implicit_parent:
+    id: node_has_implicit_parent
+    negate: false
+    context_mapping: {  }
+    model_uri: null
+    parent_reference_field: field_member_of
+    uri: null
+    logic: and

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.country_resource_card
+    - field.storage.block_content.field_country_resource_c_img_one
+    - media.type.image
+id: block_content.country_resource_card.field_country_resource_c_img_one
+field_name: field_country_resource_c_img_one
+entity_type: block_content
+bundle: country_resource_card
+label: 'Country Resource C Img One'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

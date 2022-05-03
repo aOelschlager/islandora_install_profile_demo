@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_overseas_vietnamese_commun
+    - paragraphs.paragraphs_type.overseas_vietnamese_communities
+  module:
+    - link
+id: paragraph.overseas_vietnamese_communities.field_overseas_vietnamese_commun
+field_name: field_overseas_vietnamese_commun
+entity_type: paragraph
+bundle: overseas_vietnamese_communities
+label: 'Overseas Vietnamese Communities Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_government_institutions_li
+    - paragraphs.paragraphs_type.government_institutions
+  module:
+    - link
+id: paragraph.government_institutions.field_government_institutions_li
+field_name: field_government_institutions_li
+entity_type: paragraph
+bundle: government_institutions
+label: 'Government Institutions Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.open_access_journals.field_open_access_journals_link
+    - field.field.paragraph.open_access_journals.field_open_access_journals_text
+    - paragraphs.paragraphs_type.open_access_journals
+  module:
+    - link
+    - text
+id: paragraph.open_access_journals.default
+targetEntityType: paragraph
+bundle: open_access_journals
+mode: default
+content:
+  field_open_access_journals_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_open_access_journals_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_country_text
+    - paragraphs.paragraphs_type.links_list
+  module:
+    - text
+id: paragraph.links_list.field_country_text
+field_name: field_country_text
+entity_type: paragraph
+bundle: links_list
+label: 'Country Text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

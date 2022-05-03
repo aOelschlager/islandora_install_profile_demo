@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_card
+id: region_card
+title: 'Region Card'
+block_content_bundle: region_card
+default_content: null
+auto_export: 1
+protected: false

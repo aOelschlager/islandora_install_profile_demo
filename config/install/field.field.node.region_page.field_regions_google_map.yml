@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_google_map_block
+    - field.storage.node.field_regions_google_map
+    - node.type.region_page
+  content:
+    - 'block_content:region_google_map_block:80e3bc50-4ceb-4d7f-acd0-1130d3f1404f'
+id: node.region_page.field_regions_google_map
+field_name: field_regions_google_map
+entity_type: node
+bundle: region_page
+label: 'Regions Google Map'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 80e3bc50-4ceb-4d7f-acd0-1130d3f1404f
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      region_google_map_block: region_google_map_block
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

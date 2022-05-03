@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: mobile-global-header
+label: 'Mobile Global Header'
+description: 'NIU''s Mobile Top Header Menu'
+locked: false

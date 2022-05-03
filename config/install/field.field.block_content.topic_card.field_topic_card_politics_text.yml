@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.topic_card
+    - field.storage.block_content.field_topic_card_politics_text
+  module:
+    - text
+id: block_content.topic_card.field_topic_card_politics_text
+field_name: field_topic_card_politics_text
+entity_type: block_content
+bundle: topic_card
+label: 'Topic Card Politics Text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

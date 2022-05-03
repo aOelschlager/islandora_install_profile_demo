@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_map_links_card
+    - field.storage.node.field_resource_map_links
+    - node.type.resource_page
+  content:
+    - 'block_content:region_map_links_card:b9273a12-aeee-4cfd-aafa-0a421e4175c1'
+id: node.resource_page.field_resource_map_links
+field_name: field_resource_map_links
+entity_type: node
+bundle: resource_page
+label: 'Resource Map Links'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: b9273a12-aeee-4cfd-aafa-0a421e4175c1
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      region_map_links_card: region_map_links_card
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

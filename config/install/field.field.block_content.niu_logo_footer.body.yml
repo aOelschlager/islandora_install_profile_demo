@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.niu_logo_footer
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.niu_logo_footer.body
+field_name: body
+entity_type: block_content
+bundle: niu_logo_footer
+label: Body
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: "<p class=\"text-center\">\r\n\t<a href=\"https://www.niu.edu/\" target=\"new\">\r\n\t\t<img src=\"https://niu.edu/masterto/themes/Theme_1_0/css/theme_images/niu_logo.png\" alt=\"NIU Logo\" />\r\n\t</a>\r\n</p>\r\n"
+    summary: ''
+    format: full_html
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

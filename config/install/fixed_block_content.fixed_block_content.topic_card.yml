@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.topic_card
+id: topic_card
+title: 'Topic Card'
+block_content_bundle: topic_card
+default_content: null
+auto_export: 1
+protected: false

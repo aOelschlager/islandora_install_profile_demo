@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.topic_card
+    - field.storage.block_content.field_topic_card_politics_link
+  module:
+    - link
+id: block_content.topic_card.field_topic_card_politics_link
+field_name: field_topic_card_politics_link
+entity_type: block_content
+bundle: topic_card
+label: 'Topic Card Politics Link'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    attributes: {  }
+    uri: 'https://islandora.traefik.me/solr-search/content?search_api_fulltext=%22Politics%22&sort_by=search_api_relevance&sort_order=ASC&items_per_page=10'
+    title: Politics
+    options: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

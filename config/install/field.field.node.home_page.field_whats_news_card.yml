@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.whats_new_card
+    - field.storage.node.field_whats_news_card
+    - node.type.home_page
+  content:
+    - 'block_content:whats_new_card:32f2404a-389c-4ef9-8a4d-290215851676'
+id: node.home_page.field_whats_news_card
+field_name: field_whats_news_card
+entity_type: node
+bundle: home_page
+label: 'Whats News Card'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 32f2404a-389c-4ef9-8a4d-290215851676
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      whats_new_card: whats_new_card
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.country_collection_two_card
+    - field.storage.block_content.field_card_col_ii_link_one
+  module:
+    - link
+id: block_content.country_collection_two_card.field_card_col_ii_link_one
+field_name: field_card_col_ii_link_one
+entity_type: block_content
+bundle: country_collection_two_card
+label: 'Card Col II Link One'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_political_and_social_issue
+    - paragraphs.paragraphs_type.political_and_social_issues
+  module:
+    - link
+id: paragraph.political_and_social_issues.field_political_and_social_issue
+field_name: field_political_and_social_issue
+entity_type: paragraph
+bundle: political_and_social_issues
+label: 'Political and Social Issues Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

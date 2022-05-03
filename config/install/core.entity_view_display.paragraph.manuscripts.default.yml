@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.manuscripts.field_manuscripts_link
+    - field.field.paragraph.manuscripts.field_manuscripts_text
+    - paragraphs.paragraphs_type.manuscripts
+  module:
+    - link
+    - text
+id: paragraph.manuscripts.default
+targetEntityType: paragraph
+bundle: manuscripts
+mode: default
+content:
+  field_manuscripts_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_manuscripts_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

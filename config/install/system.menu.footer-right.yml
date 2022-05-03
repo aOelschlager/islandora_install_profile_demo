@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: footer-right
+label: 'Footer Right'
+description: 'NIU footer on bottom right side'
+locked: false

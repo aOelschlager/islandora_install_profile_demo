@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: country_collection_two_card
+label: 'Country Collection Two Card'
+revision: 0
+description: 'A card to display 2 collections.'

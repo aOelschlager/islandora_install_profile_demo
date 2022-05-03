@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.region_map_links_card
+    - field.storage.block_content.field_region_map_card_links
+  module:
+    - link
+id: block_content.region_map_links_card.field_region_map_card_links
+field_name: field_region_map_card_links
+entity_type: block_content
+bundle: region_map_links_card
+label: 'Region Map Card Links'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

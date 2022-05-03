@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.research_institutions.field_research_institutions_link
+    - field.field.paragraph.research_institutions.field_research_institutions_text
+    - paragraphs.paragraphs_type.research_institutions
+  module:
+    - link
+    - text
+id: paragraph.research_institutions.default
+targetEntityType: paragraph
+bundle: research_institutions
+mode: default
+content:
+  field_research_institutions_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_research_institutions_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: indonesia_card_collection
+label: 'Indonesia Card Collection'
+revision: 0
+description: 'Card displaying collections from Indonesia.'

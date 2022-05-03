@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.indonesia_card
+id: indonesia_card
+title: indonesia_card
+block_content_bundle: indonesia_card
+default_content: null
+auto_export: 1
+protected: false

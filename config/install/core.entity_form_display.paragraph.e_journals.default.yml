@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.e_journals.field_e_journal_link
+    - field.field.paragraph.e_journals.field_e_journal_text
+    - paragraphs.paragraphs_type.e_journals
+  module:
+    - link
+    - text
+id: paragraph.e_journals.default
+targetEntityType: paragraph
+bundle: e_journals
+mode: default
+content:
+  field_e_journal_link:
+    type: link_default
+    weight: 0
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_e_journal_text:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

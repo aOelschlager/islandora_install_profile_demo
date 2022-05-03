@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: indonesia_card
+label: 'Indonesia Card'
+revision: 0
+description: 'Card for intro to Indonesia.'

@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: e_journals
+label: 'E Journals'
+icon_uuid: null
+icon_default: null
+description: 'Country Links'
+behavior_plugins: {  }

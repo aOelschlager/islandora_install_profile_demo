@@ -1,0 +1,89 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.topic_card
+    - field.field.block_content.topic_card.body
+    - field.field.block_content.topic_card.field_topic_card_art_text
+    - field.field.block_content.topic_card.field_topic_card_link
+    - field.field.block_content.topic_card.field_topic_card_politics_link
+    - field.field.block_content.topic_card.field_topic_card_politics_text
+    - field.field.block_content.topic_card.field_topic_card_religion_link
+    - field.field.block_content.topic_card.field_topic_card_religion_text
+  module:
+    - layout_builder
+    - layout_library
+    - link
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  layout_library:
+    enable: false
+id: block_content.topic_card.default
+targetEntityType: block_content
+bundle: topic_card
+mode: default
+content:
+  field_topic_card_art_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_topic_card_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_topic_card_politics_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_topic_card_politics_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_topic_card_religion_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_topic_card_religion_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  body: true
+  langcode: true
+  search_api_excerpt: true

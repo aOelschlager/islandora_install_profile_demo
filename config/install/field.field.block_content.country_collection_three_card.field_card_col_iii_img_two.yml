@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.country_collection_three_card
+    - field.storage.block_content.field_card_col_iii_img_two
+    - media.type.image
+id: block_content.country_collection_three_card.field_card_col_iii_img_two
+field_name: field_card_col_iii_img_two
+entity_type: block_content
+bundle: country_collection_three_card
+label: 'Card Col III img Two'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

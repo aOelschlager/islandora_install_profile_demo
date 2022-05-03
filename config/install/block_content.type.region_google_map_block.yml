@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: region_google_map_block
+label: 'Region Google Map'
+revision: 0
+description: 'A block for Google my maps. Will be replaces with leaflet map.'

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: region_map_links_card
+label: 'Region Map Links Card'
+revision: 0
+description: 'A card that displays a map with links to country pages.'
