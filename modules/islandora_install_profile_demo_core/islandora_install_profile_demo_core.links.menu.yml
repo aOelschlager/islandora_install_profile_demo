@@ -1,0 +1,36 @@
+islandora_install_profile_demo_core.item:
+  title: 'NIU.edu'
+  description: 'NIU Home'
+  url: https://www.niu.edu
+  weight: 0
+  menu_name: global-header-menu
+islandora_install_profile_demo_core.item2:
+  title: 'A-Z Index'
+  description: 'NIU A-Z Index'
+  url: https://www.niu.edu/web.shtml
+  weight: 100
+  menu_name: global-header-menu
+islandora_install_profile_demo_core.item3:
+  title: 'Calendar'
+  description: 'NIU Calendar'
+  url: https://calendar.niu.edu/
+  weight: 200
+  menu_name: global-header-menu
+islandora_install_profile_demo_core.item4:
+  title: 'Directory'
+  description: 'NIU Directory'
+  url: https://directory.niu.edu/app/directory/PeopleSearch.aspx
+  weight: 300
+  menu_name: global-header-menu
+islandora_install_profile_demo_core.item5:
+  title: 'Libraries'
+  description: 'NIU Libraries'
+  url: https://library.niu.edu/ulib/
+  weight: 400
+  menu_name: global-header-menu
+islandora_install_profile_demo_core.item6:
+  title: 'Make a Gift'
+  description: 'NIU Make a Gift'
+  url: https://foundation.myniu.com/
+  weight: 500
+  menu_name: global-header-menu
