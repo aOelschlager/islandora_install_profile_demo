@@ -40,10 +40,3 @@ islandora_install_profile_demo_core.item7:
   url: <button>
   weight: 600
   menu_name: global-header-menu
-islandora_install_profile_demo_core.item8:
-  title: 'Students'
-  parent: islandora_install_profile_demo_core.item7
-  description: 'NIU Students'
-  url: https://www.niu.edu/students.shtml
-  weight: 0
-  menu_name: global-header-menu
