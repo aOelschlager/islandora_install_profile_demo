@@ -34,3 +34,51 @@ islandora_install_profile_demo_core.item6:
   url: https://foundation.myniu.com/
   weight: 500
   menu_name: global-header-menu
+islandora_install_profile_demo_core.item7:
+  title: 'Apply to NIU'
+  description: 'Apply to NIU'
+  url: https://www.niu.edu/apply/index.shtml
+  weight: 0
+  menu_name: footer-left
+islandora_install_profile_demo_core.item8:
+  title: 'Visit Campus'
+  description: 'Visit Campus'
+  url: https://www.niu.edu/visit/index.shtml
+  weight: 100
+  menu_name: footer-left
+islandora_install_profile_demo_core.item9:
+  title: 'Directions/Maps'
+  description: 'Directions/Maps'
+  url: https://www.niu.edu/visit/maps/
+  weight: 200
+  menu_name: footer-left
+islandora_install_profile_demo_core.item10:
+  title: 'Contact Us'
+  description: 'Contact Us'
+  url: https://www.niu.edu/contactinfo.shtml
+  weight: 300
+  menu_name: footer-left
+islandora_install_profile_demo_core.item11:
+  title: 'Emergency Info'
+  description: 'Emergency Info'
+  url: https://www.niu.edu/publicsafety/emergency/index.shtml
+  weight: 0
+  menu_name: footer-right
+islandora_install_profile_demo_core.item12:
+  title: 'Accessibility'
+  description: 'Accessibility'
+  url: https://www.niu.edu/accessibility/
+  weight: 100
+  menu_name: footer-right
+islandora_install_profile_demo_core.item13:
+  title: 'Jobs @ NIU'
+  description: 'Jobs @ NIU'
+  url: https://www.niu.edu/employment/
+  weight: 200
+  menu_name: footer-right
+islandora_install_profile_demo_core.item14:
+  title: 'NIUHuskies.com'
+  description: 'NIUHuskies.com'
+  url: https://niuhuskies.com/
+  weight: 300
+  menu_name: footer-right
