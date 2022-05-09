@@ -47,6 +47,36 @@ islandora_install_profile_demo_core.item16:
   url: https://www.niu.edu/students.shtml
   parent: islandora_install_profile_demo_core.item7
   weight: 0
+islandora_install_profile_demo_core.item17:
+  title: 'Faculty and Staff'
+  description: 'NIU Faculty and Staff'
+  url: https://niu.edu/faculty-staff.shtml
+  parent: islandora_install_profile_demo_core.item7
+  weight: 100
+islandora_install_profile_demo_core.item18:
+  title: 'Parents and Families'
+  description: 'NIU Parents and Families'
+  url: https://niu.edu/parents.shtml
+  parent: islandora_install_profile_demo_core.item7
+  weight: 200
+islandora_install_profile_demo_core.item19:
+  title: 'Alumni and Friends'
+  description: 'NIU Alumni and Friends'
+  url: https://www.myniu.com/
+  parent: islandora_install_profile_demo_core.item7
+  weight: 300
+islandora_install_profile_demo_core.item20:
+  title: 'Community and Business'
+  description: 'Community and Business'
+  url: https://niu.edu/community/index.shtml
+  parent: islandora_install_profile_demo_core.item7
+  weight: 400
+islandora_install_profile_demo_core.item21:
+  title: 'Prospective Employees'
+  description: 'NIU Prospective Employees'
+  url: https://employment.niu.edu/
+  parent: islandora_install_profile_demo_core.item7
+  weight: 500
 islandora_install_profile_demo_core.item8:
   title: 'Apply to NIU'
   description: 'Apply to NIU'
