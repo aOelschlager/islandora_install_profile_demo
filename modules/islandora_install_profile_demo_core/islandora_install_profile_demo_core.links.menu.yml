@@ -41,6 +41,12 @@ islandora_install_profile_demo_core.item7:
   weight: 600
   menu_name: global-header-menu
   expanded: 1
+islandora_install_profile_demo_core.item16:
+  title: 'Students'
+  description: 'NIU Students'
+  url: https://www.niu.edu/students.shtml
+  parent: islandora_install_profile_demo_core.item7
+  weight: 0
 islandora_install_profile_demo_core.item8:
   title: 'Apply to NIU'
   description: 'Apply to NIU'
