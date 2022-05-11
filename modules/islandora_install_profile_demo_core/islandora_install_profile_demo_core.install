@@ -708,10 +708,7 @@ function islandora_install_profile_demo_core_update_8235() {
  */
 function islandora_install_profile_demo_core_update_8236() {
   islandora_install_profile_demo_core_import_yml_configs([
-    'block.block.footercopyrightleft.yml',
-    'block.block.footercopyrightright.yml',
     'block.block.footerleft.yml',
-    'block.block.footerniulogo.yml',
     'block.block.footerright.yml',
     'block.block.globalheader.yml',
     'block_content.type.collection_card.yml',
@@ -1231,5 +1228,16 @@ function islandora_install_profile_demo_core_update_8236() {
     'system.menu.global-header-menu.yml',
     'system.menu.mobile-footer.yml',
     'system.menu.mobile-global-header.yml',
+  ], PROFILE_PATH);
+}
+
+/**
+ * Testing new site configs for theme.
+ */
+function islandora_install_profile_demo_core_update_8237() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.islandora_starter_theme_footercopyrightleft.yml'
+    'block.block.islandora_starter_theme_footercopyrightright.yml'
+    'block.block.islandora_starter_theme_footerniulogo.yml'
   ], PROFILE_PATH);
 }
