@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - fixed_block_content.fixed_block_content.carapace_fb_copyright
