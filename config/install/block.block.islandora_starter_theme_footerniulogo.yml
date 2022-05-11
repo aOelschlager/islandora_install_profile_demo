@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - fixed_block_content.fixed_block_content.niu_home
+  module:
+    - fixed_block_content
+  theme:
+    - islandora_starter_theme
+id: islandora_starter_theme_footerniulogo
+theme: islandora_starter_theme
+region: footer_second
+weight: 0
+provider: null
+plugin: 'fixed_block_content:niu_home'
+settings:
+  id: 'fixed_block_content:niu_home'
+  label: 'Footer: NIU Logo'
+  label_display: '0'
+  provider: fixed_block_content
+  view_mode: ''
+visibility: { }
