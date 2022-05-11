@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - fixed_block_content.fixed_block_content.footer_copyright_right
+  module:
+    - fixed_block_content
+  theme:
+    - islandora_starter_theme
+id: islandora_starter_theme_footercopyrightright
+theme: islandora_starter_theme
+region: footer_fifth
+weight: -11
+provider: null
+plugin: 'fixed_block_content:footer_copyright_right'
+settings:
+  id: 'fixed_block_content:footer_copyright_right'
+  label: 'Footer: Copyright Right'
+  label_display: '0'
+  provider: fixed_block_content
+  view_mode: ''
+visibility: { }
