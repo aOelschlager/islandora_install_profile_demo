@@ -152,7 +152,7 @@
         "islandora/islandora_defaults": "2.x-dev",
         "islandora/openseadragon": "2.x-dev",
         "islandora/islandora_base_theme": "dev-main-dev as dev-main",
-        "islandora/islandora_starter_theme": "dev-main-dev as dev-main",
+        "islandora/islandora_starter_theme": "dev-main-dev-test as dev-main",
         "mglaman/drupal-check": "1.1.10",
         "mjordan/islandora_workbench_integration": "^1.0",
         "oomphinc/composer-installers-extender": "^2",
