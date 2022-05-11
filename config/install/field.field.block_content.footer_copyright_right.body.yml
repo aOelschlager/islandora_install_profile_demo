@@ -16,7 +16,7 @@ required: false
 translatable: true
 default_value:
   -
-    value: "<p>&lt;p&gt;<br />\r\n&nbsp; &lt;small&gt;</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp; 1425 W. Lincoln Hwy., DeKalb, IL 60115<br />\r\n&nbsp; &lt;/small&gt;<br />\r\n&lt;/p&gt;</p>\r\n"
+    value: "<p class=\"text-right\"><small>1425 W. Lincoln Hwy., DeKalb, IL 60115 </small></p>\r\n"
     summary: ''
     format: full_html
 default_value_callback: ''

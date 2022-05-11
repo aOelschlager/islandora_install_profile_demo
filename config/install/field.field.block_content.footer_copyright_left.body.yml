@@ -16,7 +16,7 @@ required: false
 translatable: true
 default_value:
   -
-    value: "<p>&lt;p&gt;<br />\r\n&nbsp; &lt;small&gt;</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp; &amp;#169;</p>\r\n\r\n<p>&lt;script&gt;// &lt;![CDATA[document.write(new Date().getFullYear())// ]]&gt;&lt;/script&gt;<br />\r\n&nbsp;&nbsp;&nbsp; Board of Trustees of Northern Illinois University. All rights reserved. &lt;a href=\"https://www.niu.edu/policies/policy-documents/website-privacy-policy.shtml\" rel=\"noopener noreferrer\" target=\"_blank\"&gt;Privacy Notice&lt;/a&gt;</p>\r\n\r\n<p>&nbsp; &lt;/small&gt;</p>\r\n\r\n<p>&lt;/p&gt;</p>\r\n"
+    value: "<p><small>©2022 Board of Trustees of Northern Illinois University. All rights reserved. <a href=\"https://www.niu.edu/policies/policy-documents/website-privacy-policy.shtml\" rel=\"noopener noreferrer\" target=\"_blank\">Privacy Notice</a> </small></p>\r\n"
     summary: ''
     format: full_html
 default_value_callback: ''
