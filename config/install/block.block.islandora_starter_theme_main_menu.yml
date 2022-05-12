@@ -9,7 +9,7 @@ dependencies:
     - islandora_starter_theme
 id: islandora_starter_theme_main_menu
 theme: islandora_starter_theme
-region: primary_menu
+region: header
 weight: -9
 provider: null
 plugin: 'system_menu_block:main'
