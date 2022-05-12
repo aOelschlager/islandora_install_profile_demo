@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies: {  }
 id: account
 label: 'User account menu'
