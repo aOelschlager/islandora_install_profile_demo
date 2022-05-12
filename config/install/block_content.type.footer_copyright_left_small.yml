@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: footer_copyright_left_small
+label: 'Footer:Copyright Left Small'
+revision: 0
+description: 'Copyright left hand side for mobile'

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: footer_logo_small
+label: 'Footer:Logo Small'
+revision: 0
+description: 'NIU footer logo for mobile'

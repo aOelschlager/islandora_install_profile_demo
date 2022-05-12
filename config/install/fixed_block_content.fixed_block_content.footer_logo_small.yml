@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.footer_logo_small
+id: footer_logo_small
+title: 'Footer:Logo Small'
+block_content_bundle: footer_logo_small
+default_content: null
+auto_export: 1
+protected: false
