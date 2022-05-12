@@ -1248,6 +1248,7 @@ function islandora_install_profile_demo_core_update_8237() {
     'language.content_settings.block_content.footer_copyright_left_small',
     'language.content_settings.block_content.footer_copyright_right_small',
     'language.content_settings.block_content.footer_logo_small',
+    'field.storage.block_content.field__niu_logo_link_small.yml',
     'field.field.block_content.footer_logo_small.field__niu_logo_link_small',
     'field.field.block_content.footer_logo_small.body',
     'field.field.block_content.footer_copyright_right_small.body',
