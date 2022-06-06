@@ -460,7 +460,7 @@ display:
           admin_label: 'Facet - Place Published'
           plugin_id: views_block_area
           empty: false
-          block_id: 'facet_block:place_publishe_block'
+          block_id: 'facet_block:place_published_block'
         views_block_area_13:
           id: views_block_area_13
           table: views

@@ -23,8 +23,8 @@ third_party_settings:
         layout_settings:
           label: Main
         components:
-          246ef0cf-cislandora_install_profile_democ-495a-bc56-c7468b172a81:
-            uuid: 246ef0cf-cislandora_install_profile_democ-495a-bc56-c7468b172a81
+          246ef0cf-cbdc-495a-bc56-c7468b172a81:
+            uuid: 246ef0cf-cbdc-495a-bc56-c7468b172a81
             region: content
             configuration:
               label_display: '0'
