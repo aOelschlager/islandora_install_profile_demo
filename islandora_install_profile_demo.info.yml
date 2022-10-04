@@ -28,6 +28,7 @@ install:
   - drupal:big_pipe
   - drupal:taxonomy
   - drupal:dblog
+  - drupal:entity
   - drupal:search
   - drupal:shortcut
   - drupal:toolbar
@@ -54,6 +55,7 @@ install:
   - drupal:rdf
   - drupal:automated_cron
   - drupal:ds
+  - drupal:fixed_block_content
   - drupal:islandora_workbench_integration
   - drupal:transliterate_filenames
   - drupal:serialization
