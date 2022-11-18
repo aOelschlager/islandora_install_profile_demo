@@ -79,6 +79,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.2",
+	"aws/aws-sdk-php": "3.226.0",
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
 	"drupal/addtoany": "^1.9",
