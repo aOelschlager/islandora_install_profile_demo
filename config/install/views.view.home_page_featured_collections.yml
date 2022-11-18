@@ -141,7 +141,7 @@ display:
           group_type: group
           admin_label: ''
           operator: '='
-          value: 'http://purl.org/dc/dcmitype/Collection#Model'
+          value: 'http://purl.org/ontology/bibo/Collection'
           group: 1
           exposed: false
           expose:
@@ -389,7 +389,7 @@ display:
           group_type: group
           admin_label: ''
           operator: '='
-          value: 'http://purl.org/dc/dcmitype/Collection#Model'
+          value: 'http://purl.org/ontology/bibo/Collection'
           group: 1
           exposed: false
           expose:
