@@ -128,6 +128,8 @@
         "drupal/registration_role": "^1.1",
         "drupal/rest_oai_pmh": "^1.0",
         "drupal/restui": "^1.20",
+	"drupal/s3fs": "^3.0",
+        "drupal/s3fs_cors": "^1.0@RC",
         "drupal/search_api": "^1.20",
         "drupal/search_api_autocomplete": "^1.5",
         "drupal/search_api_solr": "^4.2",
