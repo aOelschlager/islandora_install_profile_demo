@@ -22,7 +22,7 @@ conditions:
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
-    uri: 'http://purl.org/dc/dcmitype/Collection,http://purl.org/dc/dcmitype/Collection#Model'
+    uri: 'http://purl.org/dc/dcmitype/Collection,http://purl.org/ontology/bibo/Collection'
     logic: and
 reactions:
   blocks:
