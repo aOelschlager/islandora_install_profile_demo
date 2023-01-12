@@ -1,6 +1,14 @@
 <?php
 
+/**
+ * @file
+ */
+
+use Drupal\media\Entity\Media;
+use Drupal\file\Entity\File;
+use Drupal\node\Entity\Node;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
@@ -9,7 +17,6 @@ use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\views\ViewExecutable;
-use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\node\NodeInterface;
 use Drupal\islandora\IslandoraUtils;
@@ -20,7 +27,7 @@ use Drupal\media\MediaInterface;
 /**
  * Implements hook_form_alter().
  */
-function islandora_install_profile_demo_core_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+function islandora_install_profile_demo_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-solr-search-content'))  {
     // Remove un-wanted fields
     $form['sort_by']['#type'] = 'hidden';
@@ -63,12 +70,12 @@ function islandora_install_profile_demo_core_theme($existing, $type, $theme, $pa
     'views_view_carapace_section_grouping' => [
       'variables' => ['view' => NULL, 'grouping' => NULL, 'grouping_level' => NULL, 'rows' => NULL, 'title' => NULL],
     ],
-    'views_view_carapace_details' => array(
-      'variables' => array('view' => NULL, 'rows' => NULL),
-    ),
+    'views_view_carapace_details' => [
+      'variables' => ['view' => NULL, 'rows' => NULL],
+    ],
     'collection_ajax' => [],
     'islandora_object_links' => [
-      'variables' => ['links' => [], 'object' => NULL]
+      'variables' => ['links' => [], 'object' => NULL],
     ],
   ];
 }
@@ -91,7 +98,7 @@ function template_preprocess_views_view_carapace_section_grouping(&$variables) {
   $variables['content'] = $variables['view']->style_plugin->renderGroupingSets($variables['rows'], $variables['grouping_level']);
   $variables['#attached'] = [
     'library' => [
-      'islandora_install_profile_demo_core/mystic_behaviors'
+      'islandora_install_profile_demo_core/mystic_behaviors',
     ],
   ];
 }
@@ -120,8 +127,8 @@ function islandora_install_profile_demo_core_preprocess_form_element(&$variables
 function _get_sort_options($unique_index = 1) {
   $defaultSelectedDirectionValue = (\Drupal::request()->query->get('sort_order') === 'ASC') ? 'up' : 'down';
   $defaultSelectedFieldValue = (!empty(\Drupal::request()->query->get('sort_by'))) ? \Drupal::request()->query->get('sort_by') : 'field_date_created';
-  if ( ! \Drupal::service('router.admin_context')->isAdminRoute() ) {
-    return  [
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return [
       '#type' => 'select',
       '#title' => t('Sort Options'),
       '#label_attributes' => [
@@ -171,10 +178,12 @@ function _get_sort_options($unique_index = 1) {
       '#name' => 'sort_order',
       '#value' => "{$defaultSelectedFieldValue}_{$defaultSelectedDirectionValue}",
     ];
-  } else {
+  } 
+  else {
     return [];
   }
 }
+
 /**
  * Implements hook_views_pre_view().
  *
@@ -182,6 +191,7 @@ function _get_sort_options($unique_index = 1) {
  * @param $display_id
  * @param array $args
  */
+ 
 /**
  * Implements hook_views_pre_render().
  *
@@ -257,11 +267,11 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
         $currentDisplay = \Drupal::request()->query->get('display');
         if (in_array($currentDisplay, ['list', 'grid'])) {
           $urls[strtolower($currentDisplay)]['class'] = "view-{$currentDisplay}__link--is-active active";
-        } else {
+        } 
+	else {
           //Set default active class to "list"
           $urls['list']['class'] = "view-list__link--is-active active";
         }
-
 
         /**
          * Renderable array options
@@ -294,7 +304,7 @@ function islandora_install_profile_demo_core_preprocess_views_view_grid(&$variab
   $horizontal = $options['alignment'] === 'horizontal';
   $col = 0;
   $row = 0;
-  $items = array();
+  $items = [];
   $remainders = count($variables['rows']) % $options['columns'];
   $num_rows = floor(count($variables['rows']) / $options['columns']);
 
@@ -313,9 +323,9 @@ function islandora_install_profile_demo_core_preprocess_views_view_grid(&$variab
 
     // Create attributes for rows.
     if (!$horizontal || ($horizontal && empty($items[$row]['attributes']))) {
-      $row_attributes = array(
-        'class' => array(),
-      );
+      $row_attributes = [
+        'class' => [],
+      ];
 
       // Add custom row classes.
       $row_class = array_filter(explode(' ', $variables['view']->style_plugin->getCustomClass($result_index, 'row')));
@@ -334,9 +344,9 @@ function islandora_install_profile_demo_core_preprocess_views_view_grid(&$variab
 
     // Create attributes for columns.
     if ($horizontal || (!$horizontal && empty($items[$col]['attributes']))) {
-      $col_attributes = array(
-        'class' => array(),
-      );
+      $col_attributes = [
+        'class' => [],
+      ];
 
       // Add default views column classes.
       // Add custom column classes.
@@ -347,11 +357,11 @@ function islandora_install_profile_demo_core_preprocess_views_view_grid(&$variab
       // Get current node
       $node = \Drupal::routeMatch()->getParameter('node');
       if ($node) {
-        if (!($node instanceof \Drupal\node\NodeInterface)) {
-          $node = \Drupal\node\Entity\Node::load($node);
+        if (!($node instanceof NodeInterface)) {
+          $node = Node::load($node);
         }
         if ($item['content']['#row']->nid == $node->id()) {
-          $col_attributes['class'] =  array_merge($col_attributes['class'], [ 'view-members__item--is-active']);
+          $col_attributes['class'] = array_merge($col_attributes['class'], ['view-members__item--is-active']);
         }
         // Add automatic width for columns.
         if ($options['automatic_width']) {
@@ -412,6 +422,7 @@ function islandora_install_profile_demo_core_preprocess_html(&$variables) {
 
 /**
  * Implements hook_theme_registry_alter().
+ *
  * @param $theme_registry
  */
 function islandora_install_profile_demo_core_theme_registry_alter(&$theme_registry) {
@@ -421,11 +432,15 @@ function islandora_install_profile_demo_core_theme_registry_alter(&$theme_regist
   }
 }
 
+/**
+ * Implements template_preprocess_row().
+ */
 function islandora_install_profile_demo_core_preprocess_row(&$variables) {
   /**  @var  Drupal\node\Entity\Node $node */
   $node = \Drupal::routeMatch()->getParameter('node');
   $variables['node'] = $node;
 }
+
 /**
  * Implements template_preprocess_region().
  */
@@ -434,6 +449,7 @@ function islandora_install_profile_demo_core_preprocess_region(&$variables) {
   $node = \Drupal::routeMatch()->getParameter('node');
   $variables['node'] = $node;
 }
+
 /**
  * Implements hook_preprocess_HOOK().
  */
@@ -442,12 +458,13 @@ function islandora_install_profile_demo_core_preprocess_page(&$variables) {
   $node = \Drupal::routeMatch()->getParameter('node');
   $variables['node'] = $node;
   // Get Image banner, make it available in the template
-  if ($node instanceof NodeInterface ) {
-    if ( $node->hasField('field_main_banner') && $node->field_main_banner->entity instanceof \Drupal\file\Entity\File) {
+  if ($node instanceof NodeInterface) {
+    if ($node->hasField('field_main_banner') && $node->field_main_banner->entity instanceof File) {
       $variables['banner_image'] = $node->field_main_banner->entity->uri->value;
     }
   }
 }
+
 /**
  * Overrides theme to add additional classes for styling
  *
@@ -463,15 +480,15 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
 
     $node = \Drupal::routeMatch()->getParameter('node');
     if ($node) {
-      if (!($node instanceof \Drupal\node\NodeInterface)) {
-        $node = \Drupal\node\Entity\Node::load($node);
+      if (!($node instanceof NodeInterface)) {
+        $node = Node::load($node);
       }
     }
     foreach ($variables['rows'] as $result_index => $item) {
       // Create attributes for rows.
       if ($variables['rows'][$result_index]['attributes']) {
         $row_attributes = [
-          'class' => []
+          'class' => [],
         ];
       }
       if (isset($variables['rows'][$result_index]['content']['#row'])) {
@@ -486,7 +503,7 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
     $facetsource_id = ['views_block__solr_search_content__block_1', 'views_page__solr_search_content__page_1'];
     /** @var Drupal\facets\FacetManager\DefaultFacetManager $resources */
     $default_facets_namespace = 'search_api';
-    $variables['facets'] = null;
+    $variables['facets'] = NULL;
     $view = $variables['view'];
     $view->initHandlers();
     $form_state = new FormState();
@@ -502,7 +519,7 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
     $variables['facets'] = \Drupal::formBuilder()->buildForm('Drupal\views\Form\ViewsExposedForm', $form_state);
 
     // Set pager if we have more than 1 page
-    if (!empty($variables['view']->getPager()->total_items) && !empty( $variables['view']->getPager()->options['items_per_page'] )) {
+    if (!empty($variables['view']->getPager()->total_items) && !empty($variables['view']->getPager()->options['items_per_page'])) {
       if (($variables['view']->getPager()->total_items / $variables['view']->getPager()->options['items_per_page']) > 1) {
         $variables['bottom_pager'] = $variables['view']->renderPager($variables['view']->getExposedInput());
       }
@@ -511,7 +528,6 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
     $variables['bottom_sort'] = _get_sort_options(2);
   }
 }
-
 
 /**
  * Implements hook_views_query_alter().
@@ -525,6 +541,7 @@ function islandora_install_profile_demo_core_views_query_alter(ViewExecutable $v
 /**
  * Implements hook_entity_extra_field_info
  * Defines Permalink field
+ *
  * @return array
  */
 function islandora_install_profile_demo_core_entity_extra_field_info() {
@@ -569,10 +586,11 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
   $ocrExist = FALSE;
   $route_match_item = \Drupal::routeMatch()->getParameters()->get($entity->getEntityTypeId());
   $node = \Drupal::routeMatch()->getParameter('node');
-  if ($node instanceof \Drupal\node\NodeInterface) {
+  if ($node instanceof NodeInterface) {
     $nodeId = $node->id();
     $url_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'. $nodeId);
-  } else {
+  } 
+  else {
     $current_path = \Drupal::service('path.current')->getPath();
     $nodeId = trim(trim($current_path, '/ocr'), 'node/');
     $parts = explode("/", $nodeId);
@@ -581,13 +599,16 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
       $media = \Drupal::service('entity_type.manager')->getStorage('media')->load($mediaId);
       if ($media) {
         $parentNode = \Drupal::service('islandora.utils')->getParentNode($media);
-      } else {
+      } 
+      else {
         $parentNode = NULL;
       }
-    } elseif (isset($parts[1]) && $parts[1] == 'pages') {
+    } 
+    elseif (isset($parts[1]) && $parts[1] == 'pages') {
       $nodeId = $parts[0];
       $parentNode = \Drupal::entityTypeManager()->getStorage('node')->load($nodeId);
-    } else {
+    } 
+    else {
       $parentNode = \Drupal::entityTypeManager()->getStorage('node')->load($nodeId);
     }
   }
@@ -596,15 +617,17 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
     if ($view_mode == 'pdfjs' || $view_mode == 'compound_member') {
       $islandoraUtils = \Drupal::service('islandora.utils');
       $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['field_external_uri' => 'http://pcdm.org/use#OriginalFile', 'vid' => 'islandora_media_use']);
-      /**
-       * @var $allMedia Drupal\media\Entity\Media
-       */
-      $allMedia = $islandoraUtils->getMediaWithTerm($entity, array_pop($terms));
-      if ($allMedia instanceof Drupal\media\Entity\Media) {
-        if ($allMedia->hasField('field_mime_type')) {
-          if (strstr($allMedia->field_mime_type->value, 'image')) {
-            // Default media is an image, we DO not need the PDF viewer attached to this display, removing it.
-            unset($build['pdfjs_media_evas_entity_view_1']);
+      if (count($terms) > 0) {
+      	/**
+       	* @var $allMedia Drupal\media\Entity\Media
+       	*/
+      	$allMedia = $islandoraUtils->getMediaWithTerm($entity, array_pop($terms));
+      	if ($allMedia instanceof Media) {
+          if ($allMedia->hasField('field_mime_type')) {
+            if (strstr($allMedia->field_mime_type->value, 'image')) {
+              // Default media is an image, we DO not need the PDF viewer attached to this display, removing it.
+              unset($build['pdfjs_media_evas_entity_view_1']);
+            }
           }
         }
       }
@@ -614,16 +637,19 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
   if ($entity->bundle() == 'islandora_object') {
     $islandoraUtil = \Drupal::service('islandora.utils');
     $ocr_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['field_external_uri' => 'http://pcdm.org/use#ExtractedText', 'vid' => 'islandora_media_use']);
-    /**
-     * @var $transcriptMedia Drupal\media\Entity\Media
-     */
-    $transcriptMedia = $islandoraUtil->getMediaWithTerm($entity, array_pop($ocr_terms));
-    if ($transcriptMedia instanceof Drupal\media\Entity\Media) {
-      if ($transcriptMedia->hasField('field_mime_type')) {
-        if (strstr($transcriptMedia->field_mime_type->value, 'text/plain')) {
-          $ocrExist = TRUE;
-        } else {
-          $ocrExist = FALSE;
+    if (count($ocr_terms) > 0) {
+      /**
+       * @var $transcriptMedia Drupal\media\Entity\Media
+      */
+      $transcriptMedia = $islandoraUtil->getMediaWithTerm($entity, array_pop($ocr_terms));
+      if ($transcriptMedia instanceof Media) {
+        if ($transcriptMedia->hasField('field_mime_type')) {
+          if (strstr($transcriptMedia->field_mime_type->value, 'text/plain')) {
+            $ocrExist = TRUE;
+          } 
+	  else {
+            $ocrExist = FALSE;
+          }
         }
       }
     }
@@ -632,20 +658,20 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
   // Ensure the entity matches the route.
   if (($entity === $route_match_item) || ($entity->bundle() === 'extracted_text')) {
     // Add check to see if OCR is available.
-    if($display->getComponent('openseadragon')) {
+    if ($display->getComponent('openseadragon')) {
       // Load block instance and set the correct manifest for openseadragon, extra fields don't allow an interface to set parameters
       // http://localhost/node/[node:nid]/manifest
       $block = \Drupal::service('plugin.manager.block')->createInstance('openseadragon_block', [
-        'iiif_manifest_url' => \Drupal::request()->getSchemeAndHttpHost() . "/node/[node:nid]/manifest"
+        'iiif_manifest_url' => \Drupal::request()->getSchemeAndHttpHost() . "/node/[node:nid]/manifest",
       ]);
       if (is_object($block)) {
-        $build['openseadragon'] =  $block->build();
+        $build['openseadragon'] = $block->build();
       }
     }
-    if($display->getComponent('metadata')) {
+    if ($display->getComponent('metadata')) {
       $block = \Drupal::service('plugin.manager.block')->createInstance('quicktabs_block:compound_object_metadata');
       if (is_object($block)) {
-        $build['metadata'] =  $block->build();
+        $build['metadata'] = $block->build();
       }
     }
     if($display->getComponent('metadata_pages')) {
@@ -655,7 +681,7 @@ function islandora_install_profile_demo_core_entity_view(array &$build, EntityIn
       }
     }
 
-     $context_manager = \Drupal::service('context.manager');
+    $context_manager = \Drupal::service('context.manager');
     /** @codingStandardsIgnoreStart * */
     //kpr($context_manager->getActiveContexts());
     //\Drupal::messenger()->addStatus($view_mode);
