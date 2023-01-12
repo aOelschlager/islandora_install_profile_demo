@@ -18,7 +18,6 @@ function islandora_install_profile_demo_install_tasks() {
   $tasks = [];
 
   $tasks['islandora_install_profile_demo_grant_shortcut_access'] = [];
-  $tasks['islandora_install_profile_demo_set_default_theme'] = [];
   $tasks['islandora_install_profile_demo_finish_install'] = [
     'display_name' => t('After install tasks')
   ];
@@ -35,9 +34,6 @@ function islandora_install_profile_demo_install_tasks() {
  */
 
 function islandora_install_profile_demo_finish_install(array &$install_state) {
-  // Try to install optional configs
-  \Drupal::service('config.installer')->installOptionalConfig();
-
   // Assign user 1 the "administrator" role.
   $user = \Drupal\user\Entity\User::load(1);
   $user->addRole('administrator');
@@ -80,37 +76,9 @@ function islandora_install_profile_demo_grant_shortcut_access() {
   }
 }
 
-/**
- * Sets the default and administration themes.
- */
-function islandora_install_profile_demo_set_default_theme() {
-  Drupal::configFactory()
-    ->getEditable('system.theme')
-    ->set('default', 'islandora_starter_theme')
-    ->set('admin', 'adminimal_theme')
-    ->save(TRUE);
 
-  // Use the admin theme for creating content.
-  if (Drupal::moduleHandler()->moduleExists('node')) {
-    Drupal::configFactory()
-      ->getEditable('node.settings')
-      ->set('use_admin_theme', TRUE)
-      ->save(TRUE);
-  }
-}
 
 function islandora_install_profile_demo_form_install_configure_form_alter(&$form, FormState $form_state) {
   // Add a value as example that one can choose an arbitrary site name.
   $form['site_information']['site_name']['#placeholder'] = t('Born-Digital\'s Collections');
-}
-
-
-
-/**
- * Implements hook_install().
- */
-function islandora_install_profile_demo_install($is_syncing) {
-  // First, do everything in standard profile.
-  include_once DRUPAL_ROOT . '/core/profiles/standard/standard.install';
-  standard_install();
 }
