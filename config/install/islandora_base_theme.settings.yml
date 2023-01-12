@@ -32,7 +32,7 @@ features:
   favicon: 1
 logo:
   use_default: 1
-  path: 'fedora://bd-logo-1.png'
+  path: 'public://bd-logo-1.png'
 favicon:
   use_default: 1
 bootstrap_barrio_source: '0'
