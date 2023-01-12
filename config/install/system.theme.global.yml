@@ -9,6 +9,6 @@ features:
   favicon: true
   node_user_picture: true
 logo:
-  path: 'fedora://full_horizontal_on-dark_rgb_800px_1.png'
+  path: 'public://full_horizontal_on-dark_rgb_800px_1.png'
   url: ''
   use_default: false
