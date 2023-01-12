@@ -131,7 +131,7 @@ display:
           group_type: group
           admin_label: ''
           operator: not_starts
-          value: 'fedora://'
+          value: 'public://'
           group: 1
           exposed: false
           expose:
