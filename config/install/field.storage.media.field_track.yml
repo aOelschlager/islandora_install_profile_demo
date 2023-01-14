@@ -14,7 +14,7 @@ field_name: field_track
 entity_type: media
 type: media_track
 settings:
-  uri_scheme: fedora
+  uri_scheme: public
   target_type: file
   display_field: false
   display_default: false
