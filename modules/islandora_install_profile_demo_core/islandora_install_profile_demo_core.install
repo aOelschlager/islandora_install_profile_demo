@@ -1,1 +1,1263 @@
 <?php
+
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\Node;
+use Drush\Drush;
+//use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+/**
+ * Implements hook_install
+ * Adds default taxonomy term to the Islandora Resource Type Vocabulary
+ */
+
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Config\FileStorage;
+
+define("PROFILE_PATH", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/install');
+define("PROFILE_PATH_OPTIONAL", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/optional');
+define("PROFILE_PATH_PATCHED", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/patched');
+define("PROFILE_PATH_REMOVE", \Drupal::service('extension.list.profile')->getPathname('islandora_install_profile_demo') . '/config/deleted');
+
+/**
+ * Helper function to import single config file.
+ *
+ * @param array $config_name
+ *   The names of the config items to import from the config sync folder.
+ *    items MUST be in order based on dependencies
+ * @param string $config_path
+ *  path from where to look for files to import, defaults to config/sync or whatever is configured in drupal
+ */
+function islandora_install_profile_demo_core_import_yml_configs(array $config_name, string $config_path, bool $delete = FALSE) {
+  if (empty($config_path)) {
+    $config_path = Settings::get('config_sync_directory');
+  }
+  try {
+    if (!is_array($config_name) && !empty($config_name)) {
+      throw new \Exception(t('Argument must be a valid list of configuration files'));
+    }
+    $source = new FileStorage($config_path);
+    $config_storage = \Drupal::service('config.storage');
+    foreach ($config_name as $single_config) {
+      $config_storage->delete($single_config);
+      if (!$delete) {
+        $config_array = $source->read($single_config);
+        // Do not act on a missing config key, this to prevent breaking updates
+        if ($config_array && is_array($config_array)) {
+          $config_storage->write($single_config, $source->read($single_config));
+        }
+      }
+    }
+  } catch (Exception $e) {
+    watchdog_exception("update_error", $e, "Error importing/updating configuration");
+  }
+}
+
+
+/**
+ * Implements hook_install().
+ * @param $is_syncing
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function islandora_install_profile_demo_core_install($is_syncing) {
+  // Machine name of the Taxonomy vocabulary.
+  $vocab = 'resource_types';
+
+  // We add the compound object taxonomy
+  $items = [
+    'Compound Object',
+  ];
+
+  foreach ($items as $item) {
+   Term::create(array(
+      'parent' => array(),
+      'name' => $item,
+      'vid' => $vocab,
+    ))->save();
+  }
+}
+
+
+/**
+ * Add Periodical
+ * Implements hook_update_N().
+ * @param $sandbox
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function islandora_install_profile_demo_core_update_8101(&$sandbox) {
+  // We add the compound object taxonomy
+  $items = [
+    'Periodical',
+  ];
+  $vocab = 'islandora_models';
+  foreach ($items as $item) {
+    Term::create(array(
+      'parent' => array(),
+      'name' => $item,
+      'vid' => $vocab,
+    ))->save();
+  }
+}
+
+/**
+ *  Enables pathauto
+ *
+ */
+function islandora_install_profile_demo_core_update_8201(){
+  \Drupal::service('module_installer')->install(['ctools', 'pathauto']);
+}
+
+/**
+ *  Enables fontawesome
+ *
+ */
+function islandora_install_profile_demo_core_update_8202(){
+  \Drupal::service('module_installer')->install(['fontawesome']);
+}
+
+/**
+ *  Enables BD Client subtheme from BD Bootstrap SASS as the default theme and adminimal and sets it as the default
+ *
+ */
+function islandora_install_profile_demo_core_update_8203(){
+  \Drupal::service('theme_installer')->install(['islandora_starter_theme', 'adminimal_theme']);
+  \Drupal::service('config.factory')->getEditable('system.theme')->set('admin', 'adminimal_theme')->save();
+}
+
+/**
+ *  Enables layout_library
+ *
+ */
+function islandora_install_profile_demo_core_update_8204(){
+  \Drupal::service('module_installer')->install(['layout_library']);
+}
+/**
+ *  Enables config_suite
+ *
+ */
+function islandora_install_profile_demo_core_update_8205(){
+  \Drupal::service('module_installer')->install(['config_suite']);
+}
+
+/**
+ *  Uninstall field_name
+ *
+ */
+function islandora_install_profile_demo_core_update_8206(){
+  \Drupal::service('module_installer')->uninstall(['name']);
+}
+
+/**
+ * Change module's weight to be able to update build array after EVAs are added
+ */
+function islandora_install_profile_demo_core_update_8207(){
+  module_set_weight('islandora_install_profile_demo_core', 9999);
+}
+
+/**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565532
+ * Makes sure collections without parents are listed under "Browse" collections page
+ */
+function islandora_install_profile_demo_core_update_8208(){
+  islandora_install_profile_demo_core_import_yml_configs([
+    'views.view.home_page_featured_collections'
+  ], PROFILE_PATH);
+}
+/**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565004
+ * Updates member of reference field, to use repository item sorted by created date as its default
+ */
+function islandora_install_profile_demo_core_update_8209() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'field.storage.node.field_member_of',
+    'field.field.node.islandora_object.field_member_of'
+  ], PROFILE_PATH);
+}
+
+/**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24563295
+ * Changes global search to exclude compound object members and pages
+ */
+function islandora_install_profile_demo_core_update_8210() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'search_api.index.default_solr_index',
+    'views.view.solr_search_content'
+  ], PROFILE_PATH_OPTIONAL);
+}
+
+/**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24566041
+ * Changes global search to exclude compound object members and pages
+ */
+function islandora_install_profile_demo_core_update_8211()
+{
+  islandora_install_profile_demo_core_import_yml_configs([
+    'user.role.administrator',
+    'user.role.authenticated'
+  ], PROFILE_PATH);
+  // Add admin role to user
+  $user = user_load_by_name('admin');
+  if ($user) {
+    $user->addRole('administrator');
+    $user->save();
+  }
+}
+
+/**
+ * @see https://weareborndigital.teamwork.com/#/tasks/24523360
+ * Programmatically create 'Terms of Use' node
+ */
+function islandora_install_profile_demo_core_update_8212() {
+  $path = '/terms-use';
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath($path, 'en');
+  if (strcmp($alias, $path) == 0) {
+    $node = Node::create([
+      'type' => 'page',
+      'langcode' => 'en',
+      'created' => \Drupal::time()->getRequestTime(),
+      'changed' => \Drupal::time()->getRequestTime(),
+      // The user ID.
+      'uid' => 1,
+      'title' => 'Terms of Use',
+      'body' => [
+        'summary' => 'Summary of terms',
+        'value' => '<p>The body of terms.</p>',
+        'format' => 'full_html',
+      ],
+    ]);
+    $node->save();
+    \Drupal::service('entity_type.manager')->getStorage('path_alias')->save("/node/" . $node->id(), $path, "en");
+  };
+}
+
+/**
+ * Deletes duplicated summary facets that are no longer used
+ */
+function islandora_install_profile_demo_core_update_8213() {} {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.summary',
+    'facets_summary.facets_summary.summary_block',
+  ], PROFILE_PATH, TRUE);
+}
+/**
+ * Implements hook_update_N().
+ * Adds isMemberOf to remoteVideo
+ * @see https://weareborndigital.teamwork.com/#/tasks/24565096
+ *
+ */
+
+function islandora_install_profile_demo_core_update_8214(&$sandbox) {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'language.content_settings.media.remote_video',
+    'field.storage.media.field_media_of',
+    'field.field.media.remote_video.field_media_of',
+    'core.entity_view_display.media.remote_video.media_library',
+    'core.entity_view_display.media.remote_video.default',
+    'core.entity_form_display.media.remote_video.media_library',
+    'media.type.remote_video'
+  ], PROFILE_PATH);
+}
+
+/**
+ * Add current configs
+ */
+function islandora_install_profile_demo_core_update_8215()
+{
+  islandora_install_profile_demo_core_import_yml_configs([
+    'editor.editor.full_html',
+    'filter.format.full_html',
+    'filter.format.plain_text',
+    'core.entity_view_display.node.islandora_object.basic',
+    'core.entity_view_display.node.islandora_object.binary',
+    'core.entity_view_display.node.islandora_object.default',
+    'core.entity_view_display.node.islandora_object.open_seadragon',
+    'core.entity_view_display.node.islandora_object.paged_content',
+    'core.entity_view_display.node.islandora_object.pdfjs',
+    'shortcut.set.default',
+    'views.view.islandora_object_metadata'
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.islandora_starter_theme_account_menu',
+    'block.block.islandora_starter_theme_login'
+  ], PROFILE_PATH_OPTIONAL);
+}
+
+/**
+ * Removed with config dump
+ */
+function islandora_install_profile_demo_core_update_8216() {} {
+islandora_install_profile_demo_core_import_yml_configs([
+  'block.block.islandora_starter_theme_account_menu',
+], PROFILE_PATH, TRUE);
+}
+
+// !-- NWS: removed this block 5-21 because these continued to fire when not
+// wanted --!
+// /**
+//  * Add most recent configs
+//  */
+// function islandora_install_profile_demo_core_update_8217() {} {
+//   islandora_install_profile_demo_core_import_yml_configs([
+//     'core.entity_view_display.node.islandora_object.pdfjs',
+//     'core.entity_view_display.node.islandora_object.paged_content',
+//     'core.entity_view_display.node.islandora_object.open_seadragon',
+//     'core.entity_view_display.node.islandora_object.default',
+//     'core.entity_view_display.node.islandora_object.binary',
+//     'core.entity_view_display.node.islandora_object.basic',
+//     'views.view.islandora_object_metadata'
+//   ], PROFILE_PATH);
+// }
+//
+// /**
+//  * Add most recent configs
+//  */
+// function islandora_install_profile_demo_core_update_8218() {} {
+//   islandora_install_profile_demo_core_import_yml_configs([
+//  'core.entity_view_display.node.islandora_object.basic',
+//   'core.entity_view_display.node.islandora_object.binary',
+//   'core.entity_view_display.node.islandora_object.default',
+//   'core.entity_view_display.node.islandora_object.open_seadragon',
+//   'core.entity_view_display.node.islandora_object.paged_content',
+//   'core.entity_view_display.node.islandora_object.pdfjs',
+//   'views.view.islandora_object_metadata',
+//    ], PROFILE_PATH);
+// }
+
+/**
+ * Add another round of configs - late May 2021. update_8219 used in Franco.
+ */
+function islandora_install_profile_demo_core_update_8220()
+{
+  islandora_install_profile_demo_core_import_yml_configs([
+    'rest.resource.entity.media_type',
+    'rest.resource.file.upload',
+    'views.view.islandora_object_metadata',
+  ], PROFILE_PATH);
+}
+
+
+/**
+ * Add access terms & install permissions by term, registration roles/related.
+ */
+function islandora_install_profile_demo_core_update_8221()
+{
+  $terms = array('Differential access - open', 'Admin-only access', 'Differential access - limited','Limited access', 'Open access');
+  $vocab = 'islandora_access';
+  foreach ($terms as $label) {
+    $term_check = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadByProperties(
+      ['name' => $label, 'vid' => $vocab]
+    );
+    if (empty($term_check)) {
+      Term::create(array(
+        'parent' => array(),
+        'name' => $label,
+        'vid' => $vocab,
+      ))->save();
+    }
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('registration_role')) {
+    \Drupal::service('module_installer')->install(['registration_role']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('permissions_by_term')) {
+    \Drupal::service('module_installer')->install(['permissions_by_term']);
+    \Drupal::service('module_installer')->install(['permissions_by_entity']);
+  }
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'editor.editor.basic_html',
+    'permissions_by_term.settings',
+    'registration_role.setting',
+    'system.action.user_add_role_action.differential_access_limited',
+    'system.action.user_add_role_action.differential_access_open',
+    'system.action.user_add_role_action.limited_access',
+    'system.action.user_remove_role_action.differential_access_limited',
+    'system.action.user_remove_role_action.differential_access_open',
+    'system.action.user_remove_role_action.limited_access',
+    'user.role.differential_access_limited',
+    'user.role.differential_access_open',
+    'user.role.limited_access',
+  ], PROFILE_PATH_OPTIONAL);
+}
+
+/**
+ * Add another round of configs - late May 2021. update_8219 used in Franco.
+ */
+function islandora_install_profile_demo_core_update_8222() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'views.view.duplicate_of_taxonomy_a_z_custom_vocab_view',
+    'views.view.taxonomy_a_z_custom_view',
+    'views.view.taxonomy_a_z_fancy_term_view',
+  ], PROFILE_PATH);
+}
+
+/**
+ * Add another round of configs -June 14 2021.
+ */
+function islandora_install_profile_demo_core_update_8223() {
+  // core.extension caused a huge problem. commenting out
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu',
+    'permissions_by_term.settings',
+    'views.view.duplicate_of_taxonomy_a_z_custom_vocab_view',
+    'views.view.taxonomy_a_z_custom_view',
+    'views.view.taxonomy_a_z_fancy_term_view',
+    'editor.editor.basic_html',
+    'field.field.node.islandora_object.field_access_terms',
+    'field.storage.node.field_access_terms',
+    'filter.format.basic_html',
+    'search_api.index.default_solr_index',
+    'user.role.anonymous',
+    'user.role.authenticated',
+    'views.view.openseadragon_media_evas',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.islandora_starter_theme_account_menu',
+  ], PROFILE_PATH_OPTIONAL, TRUE);
+}
+
+/**
+ * Add and remove modules.
+ */
+function islandora_install_profile_demo_core_update_8224() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu_2',
+    'registration_role.setting',
+    ],PROFILE_PATH_OPTIONAL, TRUE);
+
+    islandora_install_profile_demo_core_import_yml_configs([
+      'core.entity_view_display.node.islandora_object.basic',
+      'core.entity_view_display.node.islandora_object.binary',
+      'core.entity_view_display.node.islandora_object.default',
+      'core.entity_view_display.node.islandora_object.open_seadragon',
+      'core.entity_view_display.node.islandora_object.paged_content',
+      'core.entity_view_display.node.islandora_object.pdfjs',
+      'core.entity_view_display.node.islandora_object.search_index',
+      'field.field.node.islandora_object.field_description_long',
+      'field.field.node.islandora_object.field_description',
+      'field.storage.node.field_description',
+      'filter.format.plain_text',
+      'language.negotiation',
+      'user.role.anonymous',
+  ], PROFILE_PATH);
+
+  $cmd_pre = 'drush pm:uninstall -y registration_role permissions_by_entity';
+  $cmd = 'drush pm:enable -y devel_entity_updates permissions_by_term && drush -y dentup';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd_pre);
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+}
+
+/**
+ * Add configs for patched facets
+ */
+function islandora_install_profile_demo_core_update_8225() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.active_filters',
+    'facets_summary.facets_summary.facet_summary',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH_PATCHED);
+}
+
+/**
+ * This is an example for the next version release.
+ */
+/**
+ * function islandora_install_profile_demo_core_update_8xxx()
+ * {
+ *   islandora_install_profile_demo_core_import_yml_configs([
+ *     'example.config.test',
+ *   ], PROFILE_PATH_REMOVE, TRUE);
+ * }
+ */
+
+/**
+ * June 2021 release.
+ */
+function islandora_install_profile_demo_core_update_8226() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.active_filters',
+  ], PROFILE_PATH_OPTIONAL);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'context.context.audio_original_file',
+    'context.context.collection',
+    'context.context.newspaper',
+    'context.context.openseadragon_block',
+    'context.context.technical_metadata_on_ingest',
+    'context.context.video_original_file',
+    'core.entity_form_display.media.audio.default',
+    'core.entity_form_display.media.document.default',
+    'core.entity_form_display.media.file.default',
+    'core.entity_form_display.media.image.default',
+    'core.entity_form_display.media.remote_video.default',
+    'core.entity_form_display.media.remote_video.media_library',
+    'core.entity_form_display.media.video.default',
+    'core.entity_form_display.media.video.media_library',
+    'core.entity_view_display.media.remote_video.default',
+    'core.entity_view_display.media.remote_video.media_library',
+    'core.entity_view_display.media.video.default',
+    'field.field.media.remote_video.field_access_terms',
+    'field.field.media.remote_video.field_file_size',
+    'field.field.media.remote_video.field_media_use',
+    'field.field.media.remote_video.field_original_name',
+    'field.field.media.video.field_file_size',
+    'field.field.media.video.field_mime_type',
+    'field.storage.media.field_file_size',
+    'field.storage.media.field_media_use',
+    'field.storage.media.field_mime_type',
+    'field.storage.media.field_original_name',
+    'field.storage.media.field_width',
+    'filter.format.plain_text',
+    'language.negotiation',
+    'user.role.anonymous',
+    'user.role.authenticated',
+    'views.view.solr_search_content',
+  ], PROFILE_PATH);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'facets_summary.facets_summary.facet_summary',
+  ], PROFILE_PATH_PATCHED);
+
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.useraccountmenu_2',
+    'registration_role.setting',
+  ], PROFILE_PATH_REMOVE, TRUE);
+
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+}
+
+/**
+ * June 2021 release - PBT Hotfix.
+ */
+function islandora_install_profile_demo_core_update_8227() {
+  $cmd_pre = 'drush pm:uninstall -y permissions_by_term';
+  $cmd = 'drush pm:enable -y permissions_by_term && vendor/drupal/console/bin/drupal cis --file=/var/www/drupal/assets/sites/all/profiles/islandora_install_profile_demo/config/install/permissions_by_term.settings.yml';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd_pre);
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+}
+
+/**
+ * July 2021 release, remove to test new process.
+ */
+function islandora_install_profile_demo_core_update_8228() {
+  // Enable oembed providers.
+  $cmd = 'drush pm:enable -y oembed_providers';
+  $cmd_post = 'drush state:set system.maintenance_mode 0 --input-format=integer &&  drush cache:rebuild';
+  drush_shell_exec_interactive($cmd);
+  drush_shell_exec_interactive($cmd_post);
+  drush_shell_exec_interactive("drush php-eval 'node_access_rebuild()'");
+    // Removed configs.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'field.field.media.remote_video.field_file_size',
+    //   ], PROFILE_PATH_REMOVE, TRUE);
+
+    // New Configs.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'context.context.video',
+    //     'core.entity_view_display.node.islandora_object.video',
+    //     'core.entity_view_mode.media.video',
+    //     'core.entity_view_mode.node.video',
+    //     'field.field.media.remote_video.field_author_name',
+    //     'field.field.media.remote_video.field_tn_uri',
+    //     'field.field.media.remote_video.field_video_height',
+    //     'field.field.media.remote_video.field_video_width',
+    //     'field.storage.media.field_author_name',
+    //     'field.storage.media.field_tn_uri',
+    //     'field.storage.media.field_video_height',
+    //     'field.storage.media.field_video_width',
+    //     'language.content_settings.media.remote_video',
+    //     'oembed_providers.settings',
+    //     'views.view.video_media_evas',
+    //   ], PROFILE_PATH);
+
+    // Updated configs, these are the ones that can be commented out if needed.
+    //   islandora_install_profile_demo_core_import_yml_configs([
+    //     'block.block.islandora_starter_theme_disclaimer',
+    //     'block.block.useraccountmenu',
+    //     'context.context.audio_original_file',
+    //     'context.context.collection',
+    //     'context.context.image_original_file',
+    //     'context.context.newspaper',
+    //     'context.context.openseadragon_block',
+    //     'context.context.pages',
+    //     'context.context.technical_metadata_on_ingest',
+    //     'context.context.video_original_file',
+    //     'core.entity_form_display.media.document.default',
+    //     'core.entity_form_display.media.extracted_text.default',
+    //     'core.entity_form_display.media.remote_video.default',
+    //     'core.entity_form_display.media.remote_video.media_library',
+    //     'core.entity_view_display.media.document.download',
+    //     'core.entity_view_display.media.extracted_text.default',
+    //     'core.entity_view_display.media.remote_video.default',
+    //     'core.entity_view_display.media.remote_video.media_library',
+    //     'core.entity_view_display.node.islandora_object.basic',
+    //     'core.entity_view_display.node.islandora_object.binary',
+    //     'core.entity_view_display.node.islandora_object.collection',
+    //     'core.entity_view_display.node.islandora_object.compound_member',
+    //     'core.entity_view_display.node.islandora_object.default',
+    //     'core.entity_view_display.node.islandora_object.newspaper',
+    //     'core.entity_view_display.node.islandora_object.open_seadragon',
+    //     'core.entity_view_display.node.islandora_object.paged_content',
+    //     'core.entity_view_display.node.islandora_object.pdfjs',
+    //     'core.entity_view_display.node.islandora_object.search_index',
+    //     'facets_summary.facets_summary.facet_summary',
+    //     'field.field.media.document.field_access_terms',
+    //     'field.field.media.extracted_text.field_access_terms',
+    //     'media.settings',
+    //     'media.type.remote_video',
+    //     'pathauto.pattern.islandora_content',
+    //     'permissions_by_term.settings',
+    //     'simple_sitemap.settings',
+    //     'user.role.anonymous',
+    //     'user.role.authenticated',
+    //     'views.view.pdfjs_media_evas',
+    //     'views.view.solr_search_content',
+    //   ], PROFILE_PATH);
+}
+
+/**
+ * 
+ */
+function islandora_install_profile_demo_core_update_8229()
+{
+  $terms = array('Remote Media');
+  $vocab = 'islandora_display';
+  
+  foreach ($terms as $label) {
+    $term_check = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadByProperties(
+      ['name' => $label, 'vid' => $vocab]
+    );
+    if (empty($term_check)) {
+      Term::create(array(
+        'parent' => array(),
+        'name' => $label,
+        'vid' => $vocab,
+        'field_external_uri' => [
+            'uri'=> 'https://github.com/Islandora/Crayfish/tree/dev/Homarus',
+            'title' => 'Remote Media',
+        ],
+      ))->save();
+    }
+  }
+}
+
+/**
+ * August 2021, release.
+ */
+function islandora_install_profile_demo_core_update_8230() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'context.context.files_in_fedora',
+    'system.action.delete_file_from_fedora',
+    'system.action.index_file_in_fedora',
+  ], PROFILE_PATH_REMOVE, TRUE);
+}
+
+/**
+ * Enables islandora_install_profile_demo_client_custom module.
+ */
+function islandora_install_profile_demo_core_update_8231() {
+  $cmd = 'drush pm:enable -y islandora_install_profile_demo_client_custom';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Enables views_bulk_edit module.
+ */
+function islandora_install_profile_demo_core_update_8232() {
+  $cmd = 'drush pm:enable -y views_bulk_edit';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Removing modules pre-D9 update.
+ */
+function islandora_install_profile_demo_core_update_8233() {
+  $cmd = 'drush pmu -y audit_log content_browser content_sync devel_php entity_log hook_post_action libraries_ui masonry rdfui sendgrid_integration';
+  drush_shell_exec_interactive($cmd);
+
+}
+
+/**
+ * Adding SMTP.
+ */
+function islandora_install_profile_demo_core_update_8234() {
+  $cmd = 'drush en -y smtp';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Enables paragraghs module.
+ */
+function islandora_install_profile_demo_core_update_8235() {
+  $cmd = 'drush pm:enable -y paragraghs';
+  drush_shell_exec_interactive($cmd);
+}
+
+/**
+ * Testing new site configs.
+ */
+function islandora_install_profile_demo_core_update_8236() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block.block.footercopyrightleft.yml',
+    'block.block.footercopyrightright.yml',
+    'block.block.footerleft.yml',
+    'block.block.footerniulogo.yml',
+    'block.block.footerright.yml',
+    'block.block.globalheader.yml',
+    'block_content.type.collection_card.yml',
+    'block_content.type.country_collection_one_card.yml',
+    'block_content.type.country_collection_three_card.yml',
+    'block_content.type.country_collection_two_card.yml',
+    'block_content.type.country_resource_card.yml',
+    'block_content.type.essay.yml',
+    'block_content.type.footer_copyright_left.yml',
+    'block_content.type.footer_copyright_right.yml',
+    'block_content.type.indonesia_card.yml',
+    'block_content.type.indonesia_card_collection.yml',
+    'block_content.type.lesson_plans.yml',
+    'block_content.type.niu_logo_footer.yml',
+    'block_content.type.region_card.yml',
+    'block_content.type.region_google_map_block.yml',
+    'block_content.type.region_map_links_card.yml',
+    'block_content.type.topic_card.yml',
+    'block_content.type.whats_new_card.yml',
+    'core.entity_form_display.block_content.collection_card.default.yml',
+    'core.entity_form_display.block_content.country_collection_one_card.default.yml',
+    'core.entity_form_display.block_content.country_collection_three_card.default.yml',
+    'core.entity_form_display.block_content.country_collection_two_card.default.yml',
+    'core.entity_form_display.block_content.country_resource_card.default.yml',
+    'core.entity_form_display.block_content.essay.default.yml',
+    'core.entity_form_display.block_content.footer_copyright_left.default.yml',
+    'core.entity_form_display.block_content.footer_copyright_right.default.yml',
+    'core.entity_form_display.block_content.indonesia_card.default.yml',
+    'core.entity_form_display.block_content.indonesia_card_collection.default.yml',
+    'core.entity_form_display.block_content.lesson_plans.default.yml',
+    'core.entity_form_display.block_content.niu_logo_footer.default.yml',
+    'core.entity_form_display.block_content.region_card.default.yml',
+    'core.entity_form_display.block_content.region_google_map_block.default.yml',
+    'core.entity_form_display.block_content.region_map_links_card.default.yml',
+    'core.entity_form_display.block_content.topic_card.default.yml',
+    'core.entity_form_display.block_content.whats_new_card.default.yml',
+    'core.entity_form_display.node.country_page.default.yml',
+    'core.entity_form_display.node.region_page.default.yml',
+    'core.entity_form_display.node.resource_page.default.yml',
+    'core.entity_form_display.paragraph.books.default.yml',
+    'core.entity_form_display.paragraph.digital_collections.default.yml',
+    'core.entity_form_display.paragraph.e_journals.default.yml',
+    'core.entity_form_display.paragraph.films.default.yml',
+    'core.entity_form_display.paragraph.general_information.default.yml',
+    'core.entity_form_display.paragraph.genocide.default.yml',
+    'core.entity_form_display.paragraph.government_institutions.default.yml',
+    'core.entity_form_display.paragraph.history_culture_and_religion.default.yml',
+    'core.entity_form_display.paragraph.language.default.yml',
+    'core.entity_form_display.paragraph.links_list.default.yml',
+    'core.entity_form_display.paragraph.manuscripts.default.yml',
+    'core.entity_form_display.paragraph.miscellaneous.default.yml',
+    'core.entity_form_display.paragraph.news.default.yml',
+    'core.entity_form_display.paragraph.open_access_journals.default.yml',
+    'core.entity_form_display.paragraph.overseas_vietnamese_communities.default.yml',
+    'core.entity_form_display.paragraph.political_and_social_issues.default.yml',
+    'core.entity_form_display.paragraph.radio.default.yml',
+    'core.entity_form_display.paragraph.research_institutions.default.yml',
+    'core.entity_form_display.paragraph.travel_information.default.yml',
+    'core.entity_form_display.paragraph.vietnam_war.default.yml',
+    'core.entity_view_display.block_content.collection_card.card.yml',
+    'core.entity_view_display.block_content.collection_card.default.yml',
+    'core.entity_view_display.block_content.collection_card.full.yml',
+    'core.entity_view_display.block_content.collection_card.token.yml',
+    'core.entity_view_display.block_content.country_collection_one_card.card.yml',
+    'core.entity_view_display.block_content.country_collection_one_card.default.yml',
+    'core.entity_view_display.block_content.country_collection_three_card.card.yml',
+    'core.entity_view_display.block_content.country_collection_three_card.default.yml',
+    'core.entity_view_display.block_content.country_collection_two_card.card.yml',
+    'core.entity_view_display.block_content.country_collection_two_card.default.yml',
+    'core.entity_view_display.block_content.country_resource_card.default.yml',
+    'core.entity_view_display.block_content.essay.default.yml',
+    'core.entity_view_display.block_content.footer_copyright_left.default.yml',
+    'core.entity_view_display.block_content.footer_copyright_right.default.yml',
+    'core.entity_view_display.block_content.indonesia_card.default.yml',
+    'core.entity_view_display.block_content.indonesia_card_collection.card.yml',
+    'core.entity_view_display.block_content.indonesia_card_collection.default.yml',
+    'core.entity_view_display.block_content.lesson_plans.default.yml',
+    'core.entity_view_display.block_content.niu_logo_footer.default.yml',
+    'core.entity_view_display.block_content.region_card.default.yml',
+    'core.entity_view_display.block_content.region_card.full.yml',
+    'core.entity_view_display.block_content.region_google_map_block.default.yml',
+    'core.entity_view_display.block_content.region_map_links_card.default.yml',
+    'core.entity_view_display.block_content.topic_card.card.yml',
+    'core.entity_view_display.block_content.topic_card.default.yml',
+    'core.entity_view_display.block_content.whats_new_card.default.yml',
+    'core.entity_view_display.media.image.card.yml',
+    'core.entity_view_display.node.country_page.default.yml',
+    'core.entity_view_display.node.country_page.teaser.yml',
+    'core.entity_view_display.node.region_page.default.yml',
+    'core.entity_view_display.node.region_page.teaser.yml',
+    'core.entity_view_display.node.resource_page.default.yml',
+    'core.entity_view_display.node.resource_page.teaser.yml',
+    'core.entity_view_display.paragraph.books.default.yml',
+    'core.entity_view_display.paragraph.digital_collections.default.yml',
+    'core.entity_view_display.paragraph.e_journals.default.yml',
+    'core.entity_view_display.paragraph.films.default.yml',
+    'core.entity_view_display.paragraph.general_information.default.yml',
+    'core.entity_view_display.paragraph.genocide.default.yml',
+    'core.entity_view_display.paragraph.government_institutions.default.yml',
+    'core.entity_view_display.paragraph.history_culture_and_religion.default.yml',
+    'core.entity_view_display.paragraph.language.default.yml',
+    'core.entity_view_display.paragraph.links_list.default.yml',
+    'core.entity_view_display.paragraph.manuscripts.default.yml',
+    'core.entity_view_display.paragraph.miscellaneous.default.yml',
+    'core.entity_view_display.paragraph.news.default.yml',
+    'core.entity_view_display.paragraph.open_access_journals.default.yml',
+    'core.entity_view_display.paragraph.overseas_vietnamese_communities.default.yml',
+    'core.entity_view_display.paragraph.political_and_social_issues.default.yml',
+    'core.entity_view_display.paragraph.radio.default.yml',
+    'core.entity_view_display.paragraph.research_institutions.default.yml',
+    'core.entity_view_display.paragraph.travel_information.default.yml',
+    'core.entity_view_display.paragraph.vietnam_war.default.yml',
+    'core.entity_view_mode.block_content.card.yml',
+    'core.entity_view_mode.media.card.yml',
+    'core.entity_view_mode.paragraph.preview.yml',
+    'field.field.block_content.collection_card.field_col_card_link_term.yml',
+    'field.field.block_content.collection_card.field_collection_card_image.yml',
+    'field.field.block_content.collection_card.field_collection_card_image_four.yml',
+    'field.field.block_content.collection_card.field_collection_card_image_thre.yml',
+    'field.field.block_content.collection_card.field_collection_card_image_two.yml',
+    'field.field.block_content.collection_card.field_collection_card_link.yml',
+    'field.field.block_content.collection_card.field_collection_card_link_four.yml',
+    'field.field.block_content.collection_card.field_collection_card_link_three.yml',
+    'field.field.block_content.collection_card.field_collection_card_link_two.yml',
+    'field.field.block_content.country_collection_one_card.field_card_col_i_img_one.yml',
+    'field.field.block_content.country_collection_one_card.field_card_col_i_link_one.yml',
+    'field.field.block_content.country_collection_one_card.field_card_col_i_link_term.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_img_one.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_img_three.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_img_two.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_link_one.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_link_term.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_link_three.yml',
+    'field.field.block_content.country_collection_three_card.field_card_col_iii_link_two.yml',
+    'field.field.block_content.country_collection_two_card.field_card_col_ii_img_one.yml',
+    'field.field.block_content.country_collection_two_card.field_card_col_ii_img_two.yml',
+    'field.field.block_content.country_collection_two_card.field_card_col_ii_link_one.yml',
+    'field.field.block_content.country_collection_two_card.field_card_col_ii_link_term.yml',
+    'field.field.block_content.country_collection_two_card.field_card_col_ii_link_two.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_img_one.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_img_thr.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_img_two.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_link_on.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_link_th.yml',
+    'field.field.block_content.country_resource_card.field_country_resource_c_link_tw.yml',
+    'field.field.block_content.country_resource_card.field_crc_body_one.yml',
+    'field.field.block_content.country_resource_card.field_crc_body_three.yml',
+    'field.field.block_content.country_resource_card.field_crc_body_two.yml',
+    'field.field.block_content.country_resource_card.field_crc_title_one.yml',
+    'field.field.block_content.country_resource_card.field_crc_title_three.yml',
+    'field.field.block_content.country_resource_card.field_crc_title_two.yml',
+    'field.field.block_content.essay.field_essay_body_one.yml',
+    'field.field.block_content.essay.field_essay_body_three.yml',
+    'field.field.block_content.essay.field_essay_body_two.yml',
+    'field.field.block_content.essay.field_essay_link_three.yml',
+    'field.field.block_content.essay.field_essay_link_two.yml',
+    'field.field.block_content.essay.field_essay_media_one.yml',
+    'field.field.block_content.essay.field_essay_media_three.yml',
+    'field.field.block_content.essay.field_essay_media_two.yml',
+    'field.field.block_content.essay.field_essay_plan_links_one.yml',
+    'field.field.block_content.essay.field_essay_title_one.yml',
+    'field.field.block_content.essay.field_essay_title_three.yml',
+    'field.field.block_content.essay.field_essay_title_two.yml',
+    'field.field.block_content.footer_copyright_left.body.yml',
+    'field.field.block_content.footer_copyright_right.body.yml',
+    'field.field.block_content.indonesia_card.body.yml',
+    'field.field.block_content.indonesia_card.field_indonesia_card_media.yml',
+    'field.field.block_content.indonesia_card.field_indonesia_card_text.yml',
+    'field.field.block_content.indonesia_card_collection.field_indo_card_col_link_term.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_four.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_link_four.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_link_one.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_link_thre.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_link_two.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_three.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_c_two.yml',
+    'field.field.block_content.indonesia_card_collection.field_indonesia_card_collection_.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_body_one.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_body_three.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_body_two.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_links_one.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_links_three.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_links_two.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_media_one.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_media_three.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_media_two.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_title_one.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_title_three.yml',
+    'field.field.block_content.lesson_plans.field_lesson_plan_title_two.yml',
+    'field.field.block_content.niu_logo_footer.body.yml',
+    'field.field.block_content.niu_logo_footer.field_niu_logo_link.yml',
+    'field.field.block_content.region_card.body.yml',
+    'field.field.block_content.region_card.field_region_card_image.yml',
+    'field.field.block_content.region_card.field_region_card_link.yml',
+    'field.field.block_content.region_google_map_block.body.yml',
+    'field.field.block_content.region_map_links_card.body.yml',
+    'field.field.block_content.region_map_links_card.field_region_map_card_links.yml',
+    'field.field.block_content.topic_card.body.yml',
+    'field.field.block_content.topic_card.field_topic_card_art_text.yml',
+    'field.field.block_content.topic_card.field_topic_card_link.yml',
+    'field.field.block_content.topic_card.field_topic_card_politics_link.yml',
+    'field.field.block_content.topic_card.field_topic_card_politics_text.yml',
+    'field.field.block_content.topic_card.field_topic_card_religion_link.yml',
+    'field.field.block_content.topic_card.field_topic_card_religion_text.yml',
+    'field.field.block_content.whats_new_card.body.yml',
+    'field.field.block_content.whats_new_card.field_whats_new_card_image.yml',
+    'field.field.block_content.whats_new_card.field_whats_new_card_link.yml',
+    'field.field.node.country_page.field_books.yml',
+    'field.field.node.country_page.field_country_card.yml',
+    'field.field.node.country_page.field_country_collection_card.yml',
+    'field.field.node.country_page.field_country_collection_i_card.yml',
+    'field.field.node.country_page.field_country_collection_ii_card.yml',
+    'field.field.node.country_page.field_country_collection_iii_car.yml',
+    'field.field.node.country_page.field_country_resource_card.yml',
+    'field.field.node.country_page.field_digital_collections.yml',
+    'field.field.node.country_page.field_display_title.yml',
+    'field.field.node.country_page.field_e_journals.yml',
+    'field.field.node.country_page.field_films.yml',
+    'field.field.node.country_page.field_general_information.yml',
+    'field.field.node.country_page.field_general_information_par.yml',
+    'field.field.node.country_page.field_genocide.yml',
+    'field.field.node.country_page.field_government_institutions.yml',
+    'field.field.node.country_page.field_history_cunture_and_religi.yml',
+    'field.field.node.country_page.field_language_par.yml',
+    'field.field.node.country_page.field_manuscripts.yml',
+    'field.field.node.country_page.field_miscellaneous.yml',
+    'field.field.node.country_page.field_news.yml',
+    'field.field.node.country_page.field_online_research_resources.yml',
+    'field.field.node.country_page.field_open_access_journals.yml',
+    'field.field.node.country_page.field_overseas_vietnamese_commun.yml',
+    'field.field.node.country_page.field_political_and_social_issue.yml',
+    'field.field.node.country_page.field_radio.yml',
+    'field.field.node.country_page.field_research_institutions.yml',
+    'field.field.node.country_page.field_travel_information.yml',
+    'field.field.node.country_page.field_vietnam_war.yml',
+    'field.field.node.home_page.field_collections_card.yml',
+    'field.field.node.home_page.field_regions_card.yml',
+    'field.field.node.home_page.field_topics_card.yml',
+    'field.field.node.home_page.field_whats_news_card.yml',
+    'field.field.node.region_page.field_digital_collections.yml',
+    'field.field.node.region_page.field_display_title.yml',
+    'field.field.node.region_page.field_region_general_information.yml',
+    'field.field.node.region_page.field_regions_google_map.yml',
+    'field.field.node.region_page.field_regions_map_links_card.yml',
+    'field.field.node.region_page.field_research_institutions.yml',
+    'field.field.node.resource_page.field_display_title.yml',
+    'field.field.node.resource_page.field_essay_card.yml',
+    'field.field.node.resource_page.field_lesson_plan_card.yml',
+    'field.field.node.resource_page.field_resource_map_links.yml',
+    'field.field.paragraph.books.field_book_links.yml',
+    'field.field.paragraph.books.field_book_text.yml',
+    'field.field.paragraph.digital_collections.field_digital_collections_link.yml',
+    'field.field.paragraph.digital_collections.field_digital_collections_text.yml',
+    'field.field.paragraph.e_journals.field_e_journal_link.yml',
+    'field.field.paragraph.e_journals.field_e_journal_text.yml',
+    'field.field.paragraph.films.field_films_link.yml',
+    'field.field.paragraph.films.field_films_text.yml',
+    'field.field.paragraph.general_information.field_general_information_link.yml',
+    'field.field.paragraph.general_information.field_general_information_text.yml',
+    'field.field.paragraph.genocide.field_genocide_link.yml',
+    'field.field.paragraph.genocide.field_genocide_text.yml',
+    'field.field.paragraph.government_institutions.field_government_institutions_li.yml',
+    'field.field.paragraph.government_institutions.field_government_institutions_te.yml',
+    'field.field.paragraph.history_culture_and_religion.field_history_culture_and_religi.yml',
+    'field.field.paragraph.history_culture_and_religion.field_history_culture_and_text.yml',
+    'field.field.paragraph.language.field_language_link.yml',
+    'field.field.paragraph.language.field_language_text.yml',
+    'field.field.paragraph.links_list.field_country_link.yml',
+    'field.field.paragraph.links_list.field_country_text.yml',
+    'field.field.paragraph.manuscripts.field_manuscripts_link.yml',
+    'field.field.paragraph.manuscripts.field_manuscripts_text.yml',
+    'field.field.paragraph.miscellaneous.field_miscellaneous_link.yml',
+    'field.field.paragraph.miscellaneous.field_miscellaneous_text.yml',
+    'field.field.paragraph.news.field_news_link.yml',
+    'field.field.paragraph.news.field_news_text.yml',
+    'field.field.paragraph.open_access_journals.field_open_access_journals_link.yml',
+    'field.field.paragraph.open_access_journals.field_open_access_journals_text.yml',
+    'field.field.paragraph.overseas_vietnamese_communities.field_overseas_vietnamese_c_text.yml',
+    'field.field.paragraph.overseas_vietnamese_communities.field_overseas_vietnamese_commun.yml',
+    'field.field.paragraph.political_and_social_issues.field_political_and_social_issue.yml',
+    'field.field.paragraph.political_and_social_issues.field_political_and_social_text.yml',
+    'field.field.paragraph.radio.field_radio_links.yml',
+    'field.field.paragraph.radio.field_radio_text.yml',
+    'field.field.paragraph.research_institutions.field_research_institutions_link.yml',
+    'field.field.paragraph.research_institutions.field_research_institutions_text.yml',
+    'field.field.paragraph.travel_information.field_travel_information_link.yml',
+    'field.field.paragraph.travel_information.field_travel_information_text.yml',
+    'field.field.paragraph.vietnam_war.field_vietnam_war_link.yml',
+    'field.field.paragraph.vietnam_war.field_vietnam_war_text.yml',
+    'field.storage.block_content.field_card_col_i_img_one.yml',
+    'field.storage.block_content.field_card_col_i_link_one.yml',
+    'field.storage.block_content.field_card_col_i_link_term.yml',
+    'field.storage.block_content.field_card_col_ii_img_one.yml',
+    'field.storage.block_content.field_card_col_ii_img_two.yml',
+    'field.storage.block_content.field_card_col_ii_link_one.yml',
+    'field.storage.block_content.field_card_col_ii_link_term.yml',
+    'field.storage.block_content.field_card_col_ii_link_two.yml',
+    'field.storage.block_content.field_card_col_iii_img_one.yml',
+    'field.storage.block_content.field_card_col_iii_img_three.yml',
+    'field.storage.block_content.field_card_col_iii_img_two.yml',
+    'field.storage.block_content.field_card_col_iii_link_one.yml',
+    'field.storage.block_content.field_card_col_iii_link_term.yml',
+    'field.storage.block_content.field_card_col_iii_link_three.yml',
+    'field.storage.block_content.field_card_col_iii_link_two.yml',
+    'field.storage.block_content.field_col_card_link_term.yml',
+    'field.storage.block_content.field_collection_card_image.yml',
+    'field.storage.block_content.field_collection_card_image_four.yml',
+    'field.storage.block_content.field_collection_card_image_thre.yml',
+    'field.storage.block_content.field_collection_card_image_two.yml',
+    'field.storage.block_content.field_collection_card_link.yml',
+    'field.storage.block_content.field_collection_card_link_four.yml',
+    'field.storage.block_content.field_collection_card_link_three.yml',
+    'field.storage.block_content.field_collection_card_link_two.yml',
+    'field.storage.block_content.field_country_resource_c_img_one.yml',
+    'field.storage.block_content.field_country_resource_c_img_thr.yml',
+    'field.storage.block_content.field_country_resource_c_img_two.yml',
+    'field.storage.block_content.field_country_resource_c_link_on.yml',
+    'field.storage.block_content.field_country_resource_c_link_th.yml',
+    'field.storage.block_content.field_country_resource_c_link_tw.yml',
+    'field.storage.block_content.field_crc_body_one.yml',
+    'field.storage.block_content.field_crc_body_three.yml',
+    'field.storage.block_content.field_crc_body_two.yml',
+    'field.storage.block_content.field_crc_title_one.yml',
+    'field.storage.block_content.field_crc_title_three.yml',
+    'field.storage.block_content.field_crc_title_two.yml',
+    'field.storage.block_content.field_essay_body_one.yml',
+    'field.storage.block_content.field_essay_body_three.yml',
+    'field.storage.block_content.field_essay_body_two.yml',
+    'field.storage.block_content.field_essay_link_three.yml',
+    'field.storage.block_content.field_essay_link_two.yml',
+    'field.storage.block_content.field_essay_media_one.yml',
+    'field.storage.block_content.field_essay_media_three.yml',
+    'field.storage.block_content.field_essay_media_two.yml',
+    'field.storage.block_content.field_essay_plan_links_one.yml',
+    'field.storage.block_content.field_essay_title_one.yml',
+    'field.storage.block_content.field_essay_title_three.yml',
+    'field.storage.block_content.field_essay_title_two.yml',
+    'field.storage.block_content.field_indo_card_col_link_term.yml',
+    'field.storage.block_content.field_indonesia_card_c_four.yml',
+    'field.storage.block_content.field_indonesia_card_c_link_four.yml',
+    'field.storage.block_content.field_indonesia_card_c_link_one.yml',
+    'field.storage.block_content.field_indonesia_card_c_link_thre.yml',
+    'field.storage.block_content.field_indonesia_card_c_link_two.yml',
+    'field.storage.block_content.field_indonesia_card_c_three.yml',
+    'field.storage.block_content.field_indonesia_card_c_two.yml',
+    'field.storage.block_content.field_indonesia_card_collection_.yml',
+    'field.storage.block_content.field_indonesia_card_media.yml',
+    'field.storage.block_content.field_indonesia_card_text.yml',
+    'field.storage.block_content.field_lesson_plan_body_one.yml',
+    'field.storage.block_content.field_lesson_plan_body_three.yml',
+    'field.storage.block_content.field_lesson_plan_body_two.yml',
+    'field.storage.block_content.field_lesson_plan_links_one.yml',
+    'field.storage.block_content.field_lesson_plan_links_three.yml',
+    'field.storage.block_content.field_lesson_plan_links_two.yml',
+    'field.storage.block_content.field_lesson_plan_media_one.yml',
+    'field.storage.block_content.field_lesson_plan_media_three.yml',
+    'field.storage.block_content.field_lesson_plan_media_two.yml',
+    'field.storage.block_content.field_lesson_plan_title_one.yml',
+    'field.storage.block_content.field_lesson_plan_title_three.yml',
+    'field.storage.block_content.field_lesson_plan_title_two.yml',
+    'field.storage.block_content.field_niu_logo_link.yml',
+    'field.storage.block_content.field_region_card_image.yml',
+    'field.storage.block_content.field_region_card_link.yml',
+    'field.storage.block_content.field_region_map_card_links.yml',
+    'field.storage.block_content.field_topic_card_art_text.yml',
+    'field.storage.block_content.field_topic_card_link.yml',
+    'field.storage.block_content.field_topic_card_politics_link.yml',
+    'field.storage.block_content.field_topic_card_politics_text.yml',
+    'field.storage.block_content.field_topic_card_religion_link.yml',
+    'field.storage.block_content.field_topic_card_religion_text.yml',
+    'field.storage.block_content.field_whats_new_card_image.yml',
+    'field.storage.block_content.field_whats_new_card_link.yml',
+    'field.storage.node.field_books.yml',
+    'field.storage.node.field_collections_card.yml',
+    'field.storage.node.field_country_card.yml',
+    'field.storage.node.field_country_collection_card.yml',
+    'field.storage.node.field_country_collection_i_card.yml',
+    'field.storage.node.field_country_collection_ii_card.yml',
+    'field.storage.node.field_country_collection_iii_car.yml',
+    'field.storage.node.field_country_resource_card.yml',
+    'field.storage.node.field_digital_collections.yml',
+    'field.storage.node.field_e_journals.yml',
+    'field.storage.node.field_essay_card.yml',
+    'field.storage.node.field_films.yml',
+    'field.storage.node.field_general_information.yml',
+    'field.storage.node.field_general_information_par.yml',
+    'field.storage.node.field_genocide.yml',
+    'field.storage.node.field_government_institutions.yml',
+    'field.storage.node.field_history_cunture_and_religi.yml',
+    'field.storage.node.field_language_par.yml',
+    'field.storage.node.field_lesson_plan_card.yml',
+    'field.storage.node.field_manuscripts.yml',
+    'field.storage.node.field_miscellaneous.yml',
+    'field.storage.node.field_news.yml',
+    'field.storage.node.field_online_research_resources.yml',
+    'field.storage.node.field_open_access_journals.yml',
+    'field.storage.node.field_overseas_vietnamese_commun.yml',
+    'field.storage.node.field_political_and_social_issue.yml',
+    'field.storage.node.field_radio.yml',
+    'field.storage.node.field_region_general_information.yml',
+    'field.storage.node.field_regions_card.yml',
+    'field.storage.node.field_regions_google_map.yml',
+    'field.storage.node.field_regions_map_links_card.yml',
+    'field.storage.node.field_research_institutions.yml',
+    'field.storage.node.field_resource_map_links.yml',
+    'field.storage.node.field_topics_card.yml',
+    'field.storage.node.field_travel_information.yml',
+    'field.storage.node.field_vietnam_war.yml',
+    'field.storage.node.field_whats_news_card.yml',
+    'field.storage.paragraph.field_book_links.yml',
+    'field.storage.paragraph.field_book_text.yml',
+    'field.storage.paragraph.field_country_link.yml',
+    'field.storage.paragraph.field_country_text.yml',
+    'field.storage.paragraph.field_digital_collections_link.yml',
+    'field.storage.paragraph.field_digital_collections_text.yml',
+    'field.storage.paragraph.field_e_journal_link.yml',
+    'field.storage.paragraph.field_e_journal_text.yml',
+    'field.storage.paragraph.field_films_link.yml',
+    'field.storage.paragraph.field_films_text.yml',
+    'field.storage.paragraph.field_general_information_link.yml',
+    'field.storage.paragraph.field_general_information_text.yml',
+    'field.storage.paragraph.field_genocide_link.yml',
+    'field.storage.paragraph.field_genocide_text.yml',
+    'field.storage.paragraph.field_government_institutions_li.yml',
+    'field.storage.paragraph.field_government_institutions_te.yml',
+    'field.storage.paragraph.field_history_culture_and_religi.yml',
+    'field.storage.paragraph.field_history_culture_and_text.yml',
+    'field.storage.paragraph.field_language_link.yml',
+    'field.storage.paragraph.field_language_text.yml',
+    'field.storage.paragraph.field_manuscripts_link.yml',
+    'field.storage.paragraph.field_manuscripts_text.yml',
+    'field.storage.paragraph.field_miscellaneous_link.yml',
+    'field.storage.paragraph.field_miscellaneous_text.yml',
+    'field.storage.paragraph.field_news_link.yml',
+    'field.storage.paragraph.field_news_text.yml',
+    'field.storage.paragraph.field_open_access_journals_link.yml',
+    'field.storage.paragraph.field_open_access_journals_text.yml',
+    'field.storage.paragraph.field_overseas_vietnamese_c_text.yml',
+    'field.storage.paragraph.field_overseas_vietnamese_commun.yml',
+    'field.storage.paragraph.field_political_and_social_issue.yml',
+    'field.storage.paragraph.field_political_and_social_text.yml',
+    'field.storage.paragraph.field_radio_links.yml',
+    'field.storage.paragraph.field_radio_text.yml',
+    'field.storage.paragraph.field_research_institutions_link.yml',
+    'field.storage.paragraph.field_research_institutions_text.yml',
+    'field.storage.paragraph.field_travel_information_link.yml',
+    'field.storage.paragraph.field_travel_information_text.yml',
+    'field.storage.paragraph.field_vietnam_war_link.yml',
+    'field.storage.paragraph.field_vietnam_war_text.yml',
+    'fixed_block_content.fixed_block_content.collection_card.yml',
+    'fixed_block_content.fixed_block_content.country_collection_card_one.yml',
+    'fixed_block_content.fixed_block_content.country_collection_card_three.yml',
+    'fixed_block_content.fixed_block_content.country_collection_card_two.yml',
+    'fixed_block_content.fixed_block_content.country_resource_card.yml',
+    'fixed_block_content.fixed_block_content.essay.yml',
+    'fixed_block_content.fixed_block_content.footer_copyright_left.yml',
+    'fixed_block_content.fixed_block_content.footer_copyright_right.yml',
+    'fixed_block_content.fixed_block_content.indonesia_card.yml',
+    'fixed_block_content.fixed_block_content.indonesia_card_collection.yml',
+    'fixed_block_content.fixed_block_content.lesson_plans.yml',
+    'fixed_block_content.fixed_block_content.niu_home.yml',
+    'fixed_block_content.fixed_block_content.region_card.yml',
+    'fixed_block_content.fixed_block_content.region_google_map.yml',
+    'fixed_block_content.fixed_block_content.region_map_links_card.yml',
+    'fixed_block_content.fixed_block_content.topic_card.yml',
+    'fixed_block_content.fixed_block_content.whats_new_card.yml',
+    'image.style.card.yml',
+    'image.style.card_country.yml',
+    'image.style.card_wn.yml',
+    'language.content_settings.block_content.collection_card.yml',
+    'language.content_settings.block_content.country_collection_one_card.yml',
+    'language.content_settings.block_content.country_collection_three_card.yml',
+    'language.content_settings.block_content.country_collection_two_card.yml',
+    'language.content_settings.block_content.country_resource_card.yml',
+    'language.content_settings.block_content.essay.yml',
+    'language.content_settings.block_content.footer_copyright_left.yml',
+    'language.content_settings.block_content.footer_copyright_right.yml',
+    'language.content_settings.block_content.indonesia_card.yml',
+    'language.content_settings.block_content.indonesia_card_collection.yml',
+    'language.content_settings.block_content.lesson_plans.yml',
+    'language.content_settings.block_content.niu_logo_footer.yml',
+    'language.content_settings.block_content.region_card.yml',
+    'language.content_settings.block_content.region_google_map_block.yml',
+    'language.content_settings.block_content.region_map_links_card.yml',
+    'language.content_settings.block_content.topic_card.yml',
+    'language.content_settings.block_content.whats_new_card.yml',
+    'language.content_settings.node.country_page.yml',
+    'language.content_settings.node.region_page.yml',
+    'language.content_settings.node.resource_page.yml',
+    'node.type.country_page.yml',
+    'node.type.region_page.yml',
+    'node.type.resource_page.yml',
+    'paragraphs.paragraphs_type.books.yml',
+    'paragraphs.paragraphs_type.digital_collections.yml',
+    'paragraphs.paragraphs_type.e_journals.yml',
+    'paragraphs.paragraphs_type.films.yml',
+    'paragraphs.paragraphs_type.general_information.yml',
+    'paragraphs.paragraphs_type.genocide.yml',
+    'paragraphs.paragraphs_type.government_institutions.yml',
+    'paragraphs.paragraphs_type.history_culture_and_religion.yml',
+    'paragraphs.paragraphs_type.language.yml',
+    'paragraphs.paragraphs_type.links_list.yml',
+    'paragraphs.paragraphs_type.manuscripts.yml',
+    'paragraphs.paragraphs_type.miscellaneous.yml',
+    'paragraphs.paragraphs_type.news.yml',
+    'paragraphs.paragraphs_type.open_access_journals.yml',
+    'paragraphs.paragraphs_type.overseas_vietnamese_communities.yml',
+    'paragraphs.paragraphs_type.political_and_social_issues.yml',
+    'paragraphs.paragraphs_type.radio.yml',
+    'paragraphs.paragraphs_type.research_institutions.yml',
+    'paragraphs.paragraphs_type.travel_information.yml',
+    'paragraphs.paragraphs_type.vietnam_war.yml',
+    'paragraphs.settings.yml',
+    'responsive_image.styles.card_image.yml',
+    'system.menu.footer-left.yml',
+    'system.menu.footer-right.yml',
+    'system.menu.global-header-menu.yml',
+    'system.menu.mobile-footer.yml',
+    'system.menu.mobile-global-header.yml',
+  ], PROFILE_PATH);
+}
+
+/**
+ * Adding more configs.
+ */
+function islandora_install_profile_demo_core_update_8237() {
+  islandora_install_profile_demo_core_import_yml_configs([
+    'block_content.type.footer_copyright_left_small',
+    'block_content.type.footer_copyright_right_small',
+    'block_content.type.footer_logo_small',
+    'fixed_block_content.fixed_block_content.footer_copyright_left_small',
+    'fixed_block_content.fixed_block_content.footer_copyright_right_small',
+    'fixed_block_content.fixed_block_content.footer_logo_small',
+    'language.content_settings.block_content.footer_copyright_left_small',
+    'language.content_settings.block_content.footer_copyright_right_small',
+    'language.content_settings.block_content.footer_logo_small',
+    'field.storage.block_content.field__niu_logo_link_small.yml',
+    'field.field.block_content.footer_logo_small.field__niu_logo_link_small',
+    'field.field.block_content.footer_logo_small.body',
+    'field.field.block_content.footer_copyright_right_small.body',
+    'field.field.block_content.footer_copyright_left_small.body',
+    'core.entity_view_display.block_content.footer_logo_small.default',
+    'core.entity_view_display.block_content.footer_copyright_right_small.default',
+    'core.entity_view_display.block_content.footer_copyright_left_small.default',
+    'core.entity_form_display.block_content.footer_logo_small.default',
+    'core.entity_form_display.block_content.footer_copyright_right_small.default',
+    'core.entity_form_display.block_content.footer_copyright_left_small.default',
+  ], PROFILE_PATH);
+}
