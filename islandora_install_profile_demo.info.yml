@@ -42,6 +42,7 @@ install:
   - drupal:pathauto
   - drupal:redirect
   - drupal:simple_sitemap
+  - drupal:content_sync
   - drupal:ctools
   - drupal:metatag
   - drupal:devel
@@ -71,6 +72,7 @@ install:
   - drupal:fontawesome
   - drupal:environment_indicator
   - drupal:environment_indicator_ui
+  - drupal:s3fs
   - drupal:svg_image_field
   - drupal:oembed_providers
   - drupal:views_bulk_operations
