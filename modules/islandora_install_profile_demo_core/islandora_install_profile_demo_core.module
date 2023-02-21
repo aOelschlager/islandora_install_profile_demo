@@ -219,6 +219,8 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
     ];
     if (in_array($view->id(), array_keys($displays))) {
       if (in_array($view->current_display, $displays[$view->id()], TRUE)) {
+      	//for viewing grid by default
+      	$view_grid_default = $view->id();
         // Get pager for view
         $pager = $view->renderPager($view->getExposedInput());
         $items_per_page = [10, 25, 50];
@@ -267,7 +269,11 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
         $currentDisplay = \Drupal::request()->query->get('display');
         if (in_array($currentDisplay, ['list', 'grid'])) {
           $urls[strtolower($currentDisplay)]['class'] = "view-{$currentDisplay}__link--is-active active";
-        } 
+        }
+	elseif ($view_grid_default == 'home_page_featured_collections') {
+	  //Set defaukt active class to "grid" for collection view
+          $urls['grid']['class'] = "view-grid__link--is-active active";
+        }
 	else {
           //Set default active class to "list"
           $urls['list']['class'] = "view-list__link--is-active active";
