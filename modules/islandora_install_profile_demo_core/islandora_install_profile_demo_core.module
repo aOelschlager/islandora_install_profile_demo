@@ -271,7 +271,7 @@ function islandora_install_profile_demo_core_views_pre_render(ViewExecutable $vi
           $urls[strtolower($currentDisplay)]['class'] = "view-{$currentDisplay}__link--is-active active";
         }
 	elseif ($view_grid_default == 'home_page_featured_collections') {
-	  //Set defaukt active class to "grid" for collection view
+	  //Set default active class to "grid" for collection view
           $urls['grid']['class'] = "view-grid__link--is-active active";
         }
 	else {
@@ -480,8 +480,14 @@ function islandora_install_profile_demo_core_preprocess_views_view_unformatted(&
   $is_admin = \Drupal::service('router.admin_context')->isAdminRoute();
   if (!$is_admin) {
     // Default
-    $variables['additional_classes'] = 'view-list';
-    $currentDisplay = \Drupal::request()->query->get('display') ?? 'list';
+    $view = $variables['view'];
+    $view_grid_default = $view->id();
+    if ($view_grid_default == 'home_page_featured_collections') {
+        $currentDisplay = \Drupal::request()->query->get('display') ?? 'grid';
+    }
+    else {
+        $currentDisplay = \Drupal::request()->query->get('display') ?? 'list';
+    }
     $variables['additional_classes'] = "view-{$currentDisplay}";
 
     $node = \Drupal::routeMatch()->getParameter('node');
