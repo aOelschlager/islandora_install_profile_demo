@@ -1,9 +1,0 @@
-langcode: en
-status: true
-dependencies:
-  module:
-    - node
-id: node.paged_content
-label: Paged
-targetEntityType: node
-cache: true

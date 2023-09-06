@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: essay
-label: Essay
-revision: 0
-description: 'Card that shows essays.'

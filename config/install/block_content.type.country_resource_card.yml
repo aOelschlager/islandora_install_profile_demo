@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: country_resource_card
-label: 'Country Resource Card'
-revision: 0
-description: 'Card for Country essays and lesson plans.'

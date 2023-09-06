@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Rights Statements'
-vid: rights_statements
-description: 'Rights statement for use of object.'
-weight: 0

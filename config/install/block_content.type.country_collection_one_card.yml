@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: country_collection_one_card
-label: 'Country Collection One Card'
-revision: 0
-description: 'A card to display 1 collection.'

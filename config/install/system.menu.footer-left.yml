@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: footer-left
-label: 'Footer Left'
-description: 'NIU footer on bottom left side'
-locked: false

@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: footer_copyright_left
-label: 'Footer: Copyright Left'
-revision: 0
-description: 'NIU left copyright footer'

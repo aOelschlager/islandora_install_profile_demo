@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: differential_access_limited
-label: 'Differential access - limited'
-weight: 6
-is_admin: null
-permissions: {  }

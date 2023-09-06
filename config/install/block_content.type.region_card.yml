@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: region_card
-label: 'Region Card'
-revision: 0
-description: 'Card with region information'

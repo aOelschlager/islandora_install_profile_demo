@@ -1,0 +1,18 @@
+name: 'Islandora Install Profile Demo Core'
+type: module
+description: "Islandora customizations"
+package: Islandora
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+ - drupal:block_class
+ - drupal:twig_tweak
+ - drupal:addtoany
+ - drupal:term_condition
+ - drupal:config_ignore
+ - drupal:ds
+ - drupal:file_download_link
+ - drupal:fixed_block_content
+ - drupal:form_options_attributes
+ - drupal:facets
+ - drupal:facets_summary
+ - drupal:islandora

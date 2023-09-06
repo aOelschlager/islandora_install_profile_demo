@@ -1,9 +1,0 @@
-langcode: en
-status: true
-dependencies:
-  module:
-    - node
-id: node.compound
-label: Compound
-targetEntityType: node
-cache: true

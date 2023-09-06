@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: global-header-menu
-label: 'Global header'
-description: 'NIU''s Top Header Menu'
-locked: false

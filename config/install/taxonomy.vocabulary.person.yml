@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: Person
-vid: person
-description: 'An individual of the human species. '
-weight: 0

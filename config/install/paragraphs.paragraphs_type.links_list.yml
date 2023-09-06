@@ -1,9 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: links_list
-label: 'Links List'
-icon_uuid: null
-icon_default: null
-description: 'Paragraph featuring link and text for Country Pages. '
-behavior_plugins: {  }

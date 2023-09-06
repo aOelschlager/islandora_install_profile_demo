@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: Subject
-vid: subject
-description: 'Subject matter to which the records pertain, such as topics, events, people, and organizations.'
-weight: 0
