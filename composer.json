@@ -31,7 +31,6 @@
         "drupal/config_ignore": "^3.0",
         "drupal/ds": "^3.13",
         "drupal/facets": "^2.0",
-        "drupal/facets_summary:": "^2.0",
         "drupal/file_download_link": "^1.1",
 	    "drupal/fixed_block_content": "^1.1",
 	    "drupal/form_options_attributes": "^1.2",
